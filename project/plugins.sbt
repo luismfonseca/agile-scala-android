@@ -8,3 +8,5 @@ resolvers += "typesafe" at "http://repo.typesafe.com/typesafe/releases"
 libraryDependencies <+= (sbtVersion) { sv =>
   "org.scala-sbt" % "scripted-plugin" % sv
 }
+
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")

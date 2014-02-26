@@ -1,0 +1,9 @@
+# check if the file gets created
+> assembly
+$ exists target/scala-2.10/foo.jar
+
+> generate Post title:String likes:Int
+
+$ exists Post.scala
+
+#http://eed3si9n.com/testing-sbt-plugins

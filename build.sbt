@@ -1,3 +1,7 @@
+import AssemblyKeys._
+
+assemblySettings
+
 sbtPlugin := true
 
 name := "agile-scala-android"

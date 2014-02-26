@@ -37,3 +37,4 @@ TaskKey[Unit]("check") <<= (crossTarget) map { (crossTarget) =>
   if (out.trim != "hello") error("unexpected output: " + out)
   ()
 }
+
