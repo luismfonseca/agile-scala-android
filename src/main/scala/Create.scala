@@ -2,6 +2,7 @@ import java.io.File
 
 object Create {
 
+  val sbtBuildPropertiesFile = new File("project\\build.properties")
   val androidManifestFile = new File("src\\main\\AndroidManifest.xml")
   val valuesStringFile = new File("src\\main\\res\\values\\string.xml")
   val layoutMainFile = new File("src\\main\\res\\layout\\main.xml")
@@ -31,6 +32,9 @@ object Create {
 
       allDirectories map(new File(_))
   }
+
+  def sbtBuildPropertiesContent(sbtVersion: String) =
+    "sbt.version=%s\n" format sbtVersion
 
 
   def manifestXML(packageName: String, minApiLevel: Int) =

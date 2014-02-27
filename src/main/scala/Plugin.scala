@@ -13,7 +13,7 @@ object Plugin extends Plugin {
   object AgileAndroidKeys {
 	  val generate = inputKey[File]("Generates stuff.")
     
-    val create = inputKey[Unit]("Generates a new android project.")
+    val npa = inputKey[Unit]("Generates a new project for android development with Scala.")
 	
 	  def generateTask: Initialize[InputTask[File]] = Def.inputTask {
       val args: Seq[String] = spaceDelimited("  className <attributes>").parsed
@@ -28,7 +28,7 @@ object Plugin extends Plugin {
 	    file
 	  }
 
-    def createTask: Initialize[InputTask[Unit]] = Def.inputTask {
+    def npaTask: Initialize[InputTask[Unit]] = Def.inputTask {
       val args: Seq[String] = spaceDelimited("package minApiLevel").parsed
       if (args.length < 2) {
         sys.error("Incorrect parameters.")
@@ -38,18 +38,18 @@ object Plugin extends Plugin {
 
       val directories = Create.directoriesWith(packageName, minApiLevel)
 
-      //IO.write(buildProps, "sbt.version=%s\n" format sbtVersion.value)
-      //streams.value.log.info("Generated build properties")
+      IO.write(Create.sbtBuildPropertiesFile, Create.sbtBuildPropertiesContent(sbtVersion.value))
+      streams.value.log.info("Generated sbt build properties")
 
       IO.write(Create.androidManifestFile, Create.manifestXML(packageName, minApiLevel))
-      streams.value.log.info("Generated manifest file.")
+      streams.value.log.info("Generated Android manifest file.")
 
       IO.createDirectories(directories)
       streams.value.log.info("Generated source directories.")
 
       IO.write(Create.valuesStringFile, Create.valuesStringXML)
       IO.write(Create.layoutMainFile, Create.layoutMainXML)
-      // Todo: class
+      // Todo: the main class
       streams.value.log.info("Generated source files.")
 
       IO.write(Create.gitignoreFile, Create.defaultGitIgnore)
@@ -59,7 +59,7 @@ object Plugin extends Plugin {
     // a group of settings ready to be added to a project
     val defaultAgileAndroidSettings : Seq[sbt.Def.Setting[_]] = Seq(
 	    generate := generateTask.evaluated,
-      create := createTask.evaluated
+      npa := npaTask.evaluated
     )
   }
 }
