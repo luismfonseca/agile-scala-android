@@ -3,6 +3,7 @@ import java.io.File
 object Create {
 
   val sbtBuildPropertiesFile = new File("project\\build.properties")
+  val sbtBuildFile = new File("build.sbt")
   val androidManifestFile = new File("src\\main\\AndroidManifest.xml")
   val valuesStringFile = new File("src\\main\\res\\values\\string.xml")
   val layoutMainFile = new File("src\\main\\res\\layout\\main.xml")
@@ -16,7 +17,9 @@ object Create {
         "src\\main\\res\\layout",
         "src\\main\\res\\menu",
         "src\\test\\scala",
-        "src\\main\\scala\\" + packageName.replace('.', '\\')
+        "src\\main\\scala\\" + packageName.replace('.', '\\'),
+        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\models",
+        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\activities"
       )
 
       val allDirectories =
@@ -35,6 +38,11 @@ object Create {
 
   def sbtBuildPropertiesContent(sbtVersion: String) =
     "sbt.version=%s\n" format sbtVersion
+
+  def sbtBuildContent =
+    """|import AgileAndroidKeys._
+       |
+       |defaultAgileAndroidSettings""".stripMargin
 
 
   def manifestXML(packageName: String, minApiLevel: Int) =

@@ -39,6 +39,8 @@ object Plugin extends Plugin {
       val directories = Create.directoriesWith(packageName, minApiLevel)
 
       IO.write(Create.sbtBuildPropertiesFile, Create.sbtBuildPropertiesContent(sbtVersion.value))
+      IO.write(Create.sbtBuildFile, Create.sbtBuildContent)
+
       streams.value.log.info("Generated sbt build properties")
 
       IO.write(Create.androidManifestFile, Create.manifestXML(packageName, minApiLevel))
@@ -53,12 +55,21 @@ object Plugin extends Plugin {
       streams.value.log.info("Generated source files.")
 
       IO.write(Create.gitignoreFile, Create.defaultGitIgnore)
-      streams.value.log.info("Generated gitignore.")
+      streams.value.log.info("Generated .gitignore file.")
+
+      //Project.addExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))
+      //Project.setExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))
+      //Project.updateCurrent(state.value)
+      Project.loadAction(state.value, Project.LoadAction.Plugins)
     }
 
-    // a group of settings ready to be added to a project
     val defaultAgileAndroidSettings : Seq[sbt.Def.Setting[_]] = Seq(
 	    generate := generateTask.evaluated,
+      npa := npaTask.evaluated
+    )
+
+    // this should be added in ~/.sbt/0.13/npa.sbt
+    val AgileAndroidNewProjectTask : Seq[sbt.Def.Setting[_]] = Seq(
       npa := npaTask.evaluated
     )
   }
