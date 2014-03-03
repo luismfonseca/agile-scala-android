@@ -8,15 +8,12 @@ import java.lang.ClassLoader
 object Scaffold
 {
 
-	def findClassesPath(baseDirectory: File): File = new File((baseDirectory / "target" ** "classes").getPaths(0))
-
-	def scaffoldFromModel(baseDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
+	def scaffoldFromModel(classDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
 	{
-		val classesPath = findClassesPath(baseDirectory)
 		val packageName = Android.findPackageName(sourceDirectory)
-		val modelsPath = new File(classesPath.toString + "/" + packageName.replace('.', '\\') + "/models/")
+		val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
 
-		val classLoader = new URLClassLoader(Array[URL](classesPath.toURL))
+		val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
 		if (modelsPath.listFiles().exists(_.getName() == modelName + ".class") == false)
 		{
@@ -31,13 +28,12 @@ object Scaffold
 		//TODO: use this knowledge to scaffold activities and layouts.
 	}
 
-	def findModels(baseDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
+	def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
 	{
-		val classesPath = findClassesPath(baseDirectory)
 		val packageName = Android.findPackageName(sourceDirectory)
-		val modelsPath = new File(classesPath.toString + "/" + packageName.replace('.', '\\') + "/models/")
+		val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
 
-		val classLoader = new URLClassLoader(Array[URL](classesPath.toURL))
+		val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
 		val models = modelsPath.listFiles().map(modelPath => {
 			modelPath.getName().split('.').head

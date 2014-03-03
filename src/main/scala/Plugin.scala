@@ -68,9 +68,9 @@ object Plugin extends Plugin
 
     def scaffoldTask: Initialize[InputTask[Unit]] = Def.inputTask {
 
-      val model = Scaffold.findModels(baseDirectory.value, sourceDirectory.value).parsed
+      val model = Scaffold.findModels((classDirectory in Compile).value, sourceDirectory.value).parsed
 
-      val dirs = Scaffold.scaffoldFromModel(baseDirectory.value, sourceDirectory.value, sourceDirectory.value, model(0))
+      val dirs = Scaffold.scaffoldFromModel((classDirectory in Compile).value, sourceDirectory.value, sourceDirectory.value, model(0))
       streams.value.log.info(dirs.toString)
     }
 
