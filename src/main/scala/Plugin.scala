@@ -24,7 +24,7 @@ object Plugin extends Plugin
       val (modelName, modelAttributes) = (args.head, args.tail)
 
       val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
-      val content = Model.generate(modelName, modelAttributes)
+      val content = Model.generate(sourceDirectory.value, modelName, modelAttributes)
 
 	    IO.writeLines(file, content, IO.utf8)
 	    file
