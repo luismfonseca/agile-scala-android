@@ -19,7 +19,7 @@ object Create {
         "src\\test\\scala",
         "src\\main\\scala\\" + packageName.replace('.', '\\'),
         "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\models",
-        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\activities"
+        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\ui"
       )
 
       val allDirectories =
