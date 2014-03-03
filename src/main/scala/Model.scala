@@ -25,6 +25,8 @@ object Model
       "TreeSet" -> "import scala.collection.immutable.TreeSet\n"
   	)).withDefaultValue("")
 
+  // A very simple approach to resolve imports.
+  // Complex cases such as Seq[Date] are not considered.
   private def resolveImports(types: Seq[String]): String = {
 
     types.foldLeft("") { _ + knownImports(_) }
@@ -37,7 +39,7 @@ object Model
   	
   def generate(sourceDirectory: File, modelName: String, fields: Seq[String]) = {
 
-  	val packageName = "package " + Android.findPackageName(sourceDirectory)
+  	val packageName = "package " + Android.findPackageName(sourceDirectory) + ".models"
 
   	val imports = resolveImports(fields.map(s => { s.split(":")(1).split("\\[")(0) }))
 
