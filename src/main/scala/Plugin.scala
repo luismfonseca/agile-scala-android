@@ -19,19 +19,14 @@ object Plugin extends Plugin
 
     val scaffold = inputKey[Unit]("Scaffolds stuff.")
 
-
-
-	
 	  def generateTask: Initialize[InputTask[File]] = Def.inputTask {
-      val args: Seq[String] = spaceDelimited("  className <attributes>").parsed
+      val args = spaceDelimited(" className <attributes>").parsed
+      val (modelName, modelAttributes) = (args.head, args.tail)
 
-      var lines = Seq[String](
-        "class " + args.head + "(val " + args.tail.reduce(_ + ", val " + _) + ") "
-        + "{\n  \n}"
-      )
+      val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
+      val content = Model.generate(modelName, modelAttributes)
 
-	    val file = new File(args.head + ".scala")
-	    IO.writeLines(file, lines, IO.utf8)
+	    IO.writeLines(file, content, IO.utf8)
 	    file
 	  }
 
@@ -75,7 +70,7 @@ object Plugin extends Plugin
 
       val model = Scaffold.findModels(baseDirectory.value, sourceDirectory.value).parsed
 
-      val dirs = Scaffold.scaffoldModel(baseDirectory.value, sourceDirectory.value, sourceDirectory.value, model(0))
+      val dirs = Scaffold.scaffoldFromModel(baseDirectory.value, sourceDirectory.value, sourceDirectory.value, model(0))
       streams.value.log.info(dirs.toString)
     }
 

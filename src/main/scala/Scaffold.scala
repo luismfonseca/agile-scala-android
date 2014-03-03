@@ -1,28 +1,19 @@
 import sbt._
+import sbt.complete._
 import java.io._
 import java.net._
 import scala.xml._
 import java.lang.ClassLoader
-import sbt.complete._
 
-object Scaffold {
-
-
-	def findPackage(baseDirectory: File, sourceDirectory: File) =
-	{
-        val manifestFile = findManifestPath(sourceDirectory)
-
-        XML.loadFile(manifestFile).attribute("package").get.head.text
-    }
+object Scaffold
+{
 
 	def findClassesPath(baseDirectory: File): File = new File((baseDirectory / "target" ** "classes").getPaths(0))
 
-	def findManifestPath(sourceDirectory: File): File = new File((sourceDirectory ** "AndroidManifest.xml").getPaths(0))
-
-	def scaffoldModel(baseDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
+	def scaffoldFromModel(baseDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
 	{
 		val classesPath = findClassesPath(baseDirectory)
-		val packageName = findPackage(baseDirectory, sourceDirectory)
+		val packageName = Android.findPackageName(sourceDirectory)
 		val modelsPath = new File(classesPath.toString + "/" + packageName.replace('.', '\\') + "/models/")
 
 		val classLoader = new URLClassLoader(Array[URL](classesPath.toURL))
@@ -42,9 +33,8 @@ object Scaffold {
 
 	def findModels(baseDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
 	{
-
 		val classesPath = findClassesPath(baseDirectory)
-		val packageName = findPackage(baseDirectory, sourceDirectory)
+		val packageName = Android.findPackageName(sourceDirectory)
 		val modelsPath = new File(classesPath.toString + "/" + packageName.replace('.', '\\') + "/models/")
 
 		val classLoader = new URLClassLoader(Array[URL](classesPath.toURL))
