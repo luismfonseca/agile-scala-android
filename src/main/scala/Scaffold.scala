@@ -15,6 +15,11 @@ object Scaffold
 
 		val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
+		if (modelsPath.listFiles() == null)
+		{
+			throw new Exception("Models folder not found.")
+		}
+
 		if (modelsPath.listFiles().exists(_.getName() == modelName + ".class") == false)
 		{
 			throw new Exception("Model '" + modelName + "' not found.")
@@ -35,11 +40,18 @@ object Scaffold
 
 		val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
-		val models = modelsPath.listFiles().map(modelPath => {
-			modelPath.getName().split('.').head
-		})
+		if (modelsPath.listFiles() == null)
+		{
+		  sbt.complete.Parsers.spaceDelimited(" modelName")
+		}
+		else
+		{
+	      val models = modelsPath.listFiles().map(modelPath => {
+	  	    modelPath.getName().split('.').head
+		  })
 
-		sbt.complete.Parsers.spaceDelimited(models mkString " ")
+		  sbt.complete.Parsers.spaceDelimited(models mkString " ")
+		}
 	}
 
 }
