@@ -35,23 +35,32 @@ object Scaffold
 
 	def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
 	{
-		val packageName = Android.findPackageName(sourceDirectory)
-		val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
-
-		val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
-
-		if (modelsPath.listFiles() == null)
+		try
 		{
-		  sbt.complete.Parsers.spaceDelimited(" modelName")
-		}
-		else
-		{
-	      val models = modelsPath.listFiles().map(modelPath => {
-	  	    modelPath.getName().split('.').head
-		  })
+          val packageName = Android.findPackageName(sourceDirectory)
+          val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
 
-		  sbt.complete.Parsers.spaceDelimited(models mkString " ")
-		}
+          val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
+
+          if (modelsPath.listFiles() != null)
+          {
+	        val models = modelsPath.listFiles().map(modelPath => {
+	  	      modelPath.getName().split('.').head
+		    })
+
+            sbt.complete.Parsers.spaceDelimited(models mkString " ")
+          }
+		  else
+		  {
+            sbt.complete.Parsers.spaceDelimited(" modelName")
+		  }
+        }
+        catch
+        {
+          // might not be an android project yet when this plugin is still just being loaded
+          case _ : Throwable =>
+            sbt.complete.Parsers.spaceDelimited(" modelName")
+        }
 	}
 
 }

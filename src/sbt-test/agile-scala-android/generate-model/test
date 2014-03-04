@@ -1,9 +1,14 @@
+> generate Post title:String likes:Int date:Date
+
 # check if the file gets created
-> assembly
-$ exists target/scala-2.10/foo.jar
+$ exists src/main/scala/pt/teste/ok/models/Post.scala
 
-> generate Post title:String likes:Int
+#check if content is the expected
+> contents fixtures/Post.scala src/main/scala/pt/teste/ok/models/Post.scala
 
-$ exists Post.scala
+# Again with another model
+> generate Event studentBranch:String points:Int link:URL calendar:Calendar
 
-#http://eed3si9n.com/testing-sbt-plugins
+$ exists src/main/scala/pt/teste/ok/models/Event.scala
+
+> contents fixtures/Event.scala src/main/scala/pt/teste/ok/models/Event.scala

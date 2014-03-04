@@ -1,7 +1,0 @@
-# check if the file gets created
-> assembly
-$ exists target/scala-2.10/foo.jar
-
-> check
-
-#http://eed3si9n.com/testing-sbt-plugins

@@ -47,9 +47,9 @@ object Model
     	packageName,
     	"",
     	imports,
-        "class " + modelName + "(val " + fields.reduce(_ + ", val " + _.replace(":", ": ")) + ") ",
+        "class " + modelName + "(val " + fields.reduce(_ + ", val " + _.replace(":", ": ")) + ")",
         "{",
-        "",
+        "  ",
         "}")
     lines
   }
