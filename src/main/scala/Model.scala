@@ -37,6 +37,7 @@ object Model
       Android.getModelsPath(sourceDirectory, scalaSourceDirectory).getPath + "/" + modelName + ".scala"
     )
   	
+  // TODO: accept only known fields
   def generate(sourceDirectory: File, modelName: String, fields: Seq[String]) = {
 
   	val packageName = "package " + Android.findPackageName(sourceDirectory) + ".models"
@@ -47,7 +48,7 @@ object Model
     	packageName,
     	"",
     	imports,
-        "class " + modelName + "(val " + fields.reduce(_ + ", val " + _.replace(":", ": ")) + ")",
+        "case class " + modelName + "(" + fields.reduce(_ + ", " + _.replace(":", ": ")) + ")",
         "{",
         "  ",
         "}")
