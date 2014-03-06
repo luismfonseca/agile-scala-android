@@ -51,7 +51,7 @@ object Create {
        |      package="%s"
        |      android:versionCode="1"
        |      android:versionName="1.0">
-	   |    <uses-sdk android:minSdkVersion="%d" />
+       |    <uses-sdk android:minSdkVersion="%d" />
        |    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
        |        <activity android:name="MainActivity"
        |                  android:label="@string/app_name">
@@ -77,7 +77,7 @@ object Create {
        |    android:orientation="vertical"
        |    android:layout_width="fill_parent"
        |    android:layout_height="fill_parent"
-	   |    >
+       |    >
        |<TextView
        |    android:layout_width="fill_parent"
        |    android:layout_height="wrap_content"
@@ -92,14 +92,14 @@ object Create {
        |*.apk
        |*.ap_
        |*.dex
-	   |*.class
+       |*.class
        |*.o
        |*.so
        |
        |# generated files
        |target/
        |
-	   |# Mac OS X clutter
-	   |*.DS_Store
-	   |""".stripMargin
+       |# Mac OS X clutter
+       |*.DS_Store
+       |""".stripMargin
 }

@@ -23,7 +23,7 @@ object Model
       "Stack" -> "import scala.collection.immutable.Stack\n",
       "TreeMap" -> "import scala.collection.immutable.TreeMap\n",
       "TreeSet" -> "import scala.collection.immutable.TreeSet\n"
-  	)).withDefaultValue("")
+    )).withDefaultValue("")
 
   // A very simple approach to resolve imports.
   // Complex cases such as Seq[Date] are not considered.
@@ -36,18 +36,18 @@ object Model
     new File(
       Android.getModelsPath(sourceDirectory, scalaSourceDirectory).getPath + "/" + modelName + ".scala"
     )
-  	
+    
   // TODO: accept only known fields
   def generate(sourceDirectory: File, modelName: String, fields: Seq[String]) = {
 
-  	val packageName = "package " + Android.findPackageName(sourceDirectory) + ".models"
+    val packageName = "package " + Android.findPackageName(sourceDirectory) + ".models"
 
-  	val imports = resolveImports(fields.map(s => { s.split(":")(1).split("\\[")(0) }))
+    val imports = resolveImports(fields.map(s => { s.split(":")(1).split("\\[")(0) }))
 
     var lines = Seq[String](
-    	packageName,
-    	"",
-    	imports,
+      packageName,
+      "",
+      imports,
         "case class " + modelName + "(" + fields.reduce(_ + ", " + _.replace(":", ": ")) + ")",
         "{",
         "  ",
