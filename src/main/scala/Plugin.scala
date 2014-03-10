@@ -79,7 +79,6 @@ object Plugin extends Plugin
 	    generate := generateTask.evaluated,
       scaffold := scaffoldTask.evaluated,
       scaffold <<= scaffold.dependsOn(compile in Compile),
-      npa := npaTask.evaluated
     )
 
     // this should be added in ~/.sbt/0.13/npa.sbt
