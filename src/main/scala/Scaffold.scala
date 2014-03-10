@@ -29,9 +29,42 @@ object Scaffold
 
     val modelClassFields = modelClass.getDeclaredFields()
 
-    IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), modelClassFields.deep.mkString("\n"))
+    IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), menuXMLPath(sourceDirectory, modelName).getPath)//modelClassFields.deep.mkString("\n"))
     //TODO: use this knowledge to scaffold activities and layouts.
+
+    val modelNameUnderscored = Util.camelToUnderscore(Util.uncapitalize(modelName))
+
+    //IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), menu(packageName, modelName).toString)
+
+    Util.saveXML(menuXMLPath(sourceDirectory, modelName), menuXML(packageName, modelName))
   }
+
+
+  private def menuXML(packageName: String, modelName: String) =
+  {
+    val toolsContext = packageName + ".ui." + modelName + "MainActivity"
+
+    val modelNameUnderscored = Util.camelToUnderscore(Util.uncapitalize(modelName))
+
+    val androidID = "@+id/menu_main_new_" + modelNameUnderscored
+
+    val androidTitle = "@string/menu_main_new_" + modelNameUnderscored
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:uiOptions="splitActionBarWhenNarrow"
+    tools:context={toolsContext} >
+
+    <item android:id={androidID}
+          android:title={androidTitle}
+          android:icon="@drawable/ic_menu_new"
+          android:showAsAction="ifRoom" />
+    </menu>
+  }
+
+  private def menuXMLPath(sourceDirectory: File, modelName: String) =
+    new File(sourceDirectory.getPath() + "/main/res/menu/main_" + Util.camelToUnderscore(Util.uncapitalize(modelName)) + ".xml")
+
 
   def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
   {
