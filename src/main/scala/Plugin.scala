@@ -63,6 +63,7 @@ object Plugin extends Plugin
       //Project.setExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))
       //Project.updateCurrent(state.value)
       //Project.loadAction(state.value, Project.LoadAction.Plugins)
+      streams.value.log.info("Please type 'reload' to allow sbt to load the new build definitions!")
       Project.defaultSettings ++ defaultAgileAndroidSettings
     }
 
@@ -78,7 +79,7 @@ object Plugin extends Plugin
     val defaultAgileAndroidSettings : Seq[sbt.Def.Setting[_]] = Seq(
 	    generate := generateTask.evaluated,
       scaffold := scaffoldTask.evaluated,
-      scaffold <<= scaffold.dependsOn(compile in Compile),
+      scaffold <<= scaffold.dependsOn(compile in Compile)
     )
 
     // this should be added in ~/.sbt/0.13/npa.sbt
