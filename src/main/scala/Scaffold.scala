@@ -4,9 +4,29 @@ import java.io._
 import java.net._
 import scala.xml._
 import java.lang.ClassLoader
+import java.lang.reflect.Field
 
 object Scaffold
 {
+
+  private def templateKeys(packageName: String, modelName: String, modelFields: Array[Field]) = {
+    Map[String, String](
+      "MENU_CONTEXT" -> menuContext(packageName, modelName),
+      "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
+      "MENU_TITLE" -> "@string/menu_main_new_CLASS_NAME_UNDERSCORED",
+      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName))
+    )
+  }
+
+  private def applyTemplate(templateKeysForModel: Map[String, String], templateString: String) = {
+
+    templateKeysForModel.foldLeft(templateString) {
+      (resultingMenu, currentMapEntry) =>
+        resultingMenu.replace(currentMapEntry._1, currentMapEntry._2)
+    }
+  }
+
+  def menuContext(packageName: String, modelName: String) = packageName + ".ui." + modelName + "MainActivity"
 
   def scaffoldFromModel(classDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
   {
@@ -27,18 +47,20 @@ object Scaffold
     
     val modelClass = classLoader.loadClass(packageName + ".models." + modelName)
 
-    val modelClassFields = modelClass.getDeclaredFields()
+    val modelFields = modelClass.getDeclaredFields()
 
-    IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), menuXMLPath(sourceDirectory, modelName).getPath)//modelClassFields.deep.mkString("\n"))
     //TODO: use this knowledge to scaffold activities and layouts.
 
-    val modelNameUnderscored = Util.camelToUnderscore(Util.uncapitalize(modelName))
+    val templateKeysForModel = templateKeys(packageName, modelName, modelFields)
 
-    //IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), menu(packageName, modelName).toString)
+    val scaffoldedMenu = applyTemplate(templateKeysForModel, menuXML(packageName, modelName))
 
-    Util.saveXML(menuXMLPath(sourceDirectory, modelName), menuXML(packageName, modelName))
+
+    IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), scaffoldedMenu)
   }
 
+  private def menuXMLPath(sourceDirectory: File, modelName: String) =
+    new File(sourceDirectory.getPath() + "/main/res/menu/main_" + Util.camelToUnderscore(Util.uncapitalize(modelName)) + ".xml")
 
   private def menuXML(packageName: String, modelName: String) =
   {
@@ -50,7 +72,7 @@ object Scaffold
 
     val androidTitle = "@string/menu_main_new_" + modelNameUnderscored
 
-    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    /*<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:uiOptions="splitActionBarWhenNarrow"
     tools:context={toolsContext} >
@@ -59,11 +81,9 @@ object Scaffold
           android:title={androidTitle}
           android:icon="@drawable/ic_menu_new"
           android:showAsAction="ifRoom" />
-    </menu>
+    </menu>*/
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/menu/main.xml"))
   }
-
-  private def menuXMLPath(sourceDirectory: File, modelName: String) =
-    new File(sourceDirectory.getPath() + "/main/res/menu/main_" + Util.camelToUnderscore(Util.uncapitalize(modelName)) + ".xml")
 
 
   def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:uiOptions="splitActionBarWhenNarrow"
+    tools:context="MENU_CONTEXT"
+    >
+    <item
+        android:id="MENU_ID"
+        android:title="MENU_TITLE"
+        android:showAsAction="ifRoom"
+        />
+
+</menu>
