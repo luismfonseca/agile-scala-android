@@ -70,7 +70,7 @@ object Create
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/main.xml"))
 
   def defaultGitIgnoreContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/.gitignore"))
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/gitignore"))
 
   def drawableHdpiByteArray =
     Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-hdpi/ic_launcher.png"))
