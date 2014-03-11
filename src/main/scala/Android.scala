@@ -1,6 +1,4 @@
 import sbt._
-import sbt.complete._
-import java.io._
 import scala.xml._
 
 object Android

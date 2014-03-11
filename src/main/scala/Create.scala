@@ -23,6 +23,9 @@ object Create
   val androidManifestFile = new File("src\\main\\AndroidManifest.xml")
   val valuesStringFile = new File("src\\main\\res\\values\\string.xml")
   val layoutMainFile = new File("src\\main\\res\\layout\\main.xml")
+  val drawableHdpiFile = new File("src\\main\\res\\drawable-hdpi\\ic_launcher.png")
+  val drawableMdpiFile = new File("src\\main\\res\\drawable-mdpi\\ic_launcher.png")
+  val drawableXHdpiFile = new File("src\\main\\res\\drawable-xhdpi\\ic_launcher.png")
   val gitignoreFile = new File(".gitignore")
 
   
@@ -44,7 +47,6 @@ object Create
         else
           commonDirectories ++ Seq[String](
             "src\\main\\res\\drawable-hdpi",
-            "src\\main\\res\\drawable-ldpi",
             "src\\main\\res\\drawable-mdpi",
             "src\\main\\res\\drawable-xhdpi"
           )
@@ -69,4 +71,13 @@ object Create
 
   def defaultGitIgnoreContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/.gitignore"))
+
+  def drawableHdpiByteArray =
+    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-hdpi/ic_launcher.png"))
+
+  def drawableMdpiByteArray =
+    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-mdpi/ic_launcher.png"))
+
+  def drawableXHdpiByteArray =
+    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-xhdpi/ic_launcher.png"))
 }

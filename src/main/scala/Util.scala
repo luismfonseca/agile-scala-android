@@ -21,6 +21,10 @@ object Util
     if (scanner.hasNext()) scanner.next() else ""
   }
 
+  def convertInputStreamToArray(inputStream: InputStream) = {
+    Stream.continually(inputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
+  }
+
   def saveXML(file: File, node: Node) = {
 
     val content = Seq(
