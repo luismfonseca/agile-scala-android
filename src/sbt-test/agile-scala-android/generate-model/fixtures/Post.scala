@@ -2,7 +2,7 @@ package pt.teste.ok.models
 
 import java.util.Date
 
-class Post(val title:String, val likes: Int, val date: Date)
+case class Post(title:String, likes: Int, date: Date)
 {
   
 }

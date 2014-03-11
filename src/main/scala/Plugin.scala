@@ -83,7 +83,7 @@ object Plugin extends Plugin
     )
 
     // this should be added in ~/.sbt/0.13/npa.sbt
-    val AgileAndroidNewProjectTask : Seq[sbt.Def.Setting[_]] = Seq(
+    val agileAndroidNewProjectTask : Seq[sbt.Def.Setting[_]] = Seq(
       npa := npaTask.evaluated
     )
   }

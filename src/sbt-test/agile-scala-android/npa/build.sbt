@@ -6,6 +6,8 @@ import AgileAndroidKeys._
 
 defaultAgileAndroidSettings
 
+agileAndroidNewProjectTask
+
 seq(SbtStartScript.startScriptForClassesSettings: _*)
 
 version := "0.1"
