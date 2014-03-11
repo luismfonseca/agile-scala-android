@@ -30,7 +30,7 @@ object Scaffold
   def scaffoldFromModel(classDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
   {
     val packageName = Android.findPackageName(sourceDirectory)
-    val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
+    val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
 
     val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
@@ -90,7 +90,7 @@ object Scaffold
     try
     {
           val packageName = Android.findPackageName(sourceDirectory)
-          val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '\\') + "/models/")
+          val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
 
           val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 

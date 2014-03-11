@@ -1,5 +1,19 @@
 > npa pt.test.ok 19
 
+#check folder structure
+$ exists src/
+$ exists src/main/
+$ exists src/main/res/
+$ exists src/main/res/drawable-hdpi/
+$ exists src/main/res/drawable-mdpi/
+$ exists src/main/res/drawable-xhdpi/
+$ exists src/main/res/layout/
+$ exists src/main/res/menu/
+$ exists src/main/res/values/
+$ exists src/main/scala/pt/test/ok/models/
+$ exists src/main/scala/pt/test/ok/ui/
+
+
 #check .gitignore
 $ exists .gitignore
 > contents fixtures/.gitignore .gitignore
@@ -18,14 +32,3 @@ $ exists project/build.properties
 #check manifest
 $ exists src/main/AndroidManifest.xml
 > contents fixtures/src/main/AndroidManifest.xml src/main/AndroidManifest.xml
-
-
-#check folder structure
-$ exists src/main/res/drawable-hdpi/
-$ exists src/main/res/drawable-mdpi/
-$ exists src/main/res/drawable-xhdpi/
-$ exists src/main/res/layout/
-$ exists src/main/res/menu/
-$ exists src/main/res/values/
-$ exists src/main/scala/pt/test/ok/models/
-$ exists src/main/scala/pt/test/ok/ui/

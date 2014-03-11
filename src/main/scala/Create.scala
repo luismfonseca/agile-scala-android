@@ -18,27 +18,27 @@ object Create
     }
   }
 
-  val sbtBuildPropertiesFile = new File("project\\build.properties")
+  val sbtBuildPropertiesFile = new File("project/build.properties")
   val sbtBuildFile = new File("build.sbt")
-  val androidManifestFile = new File("src\\main\\AndroidManifest.xml")
-  val valuesStringFile = new File("src\\main\\res\\values\\string.xml")
-  val layoutMainFile = new File("src\\main\\res\\layout\\main.xml")
-  val drawableHdpiFile = new File("src\\main\\res\\drawable-hdpi\\ic_launcher.png")
-  val drawableMdpiFile = new File("src\\main\\res\\drawable-mdpi\\ic_launcher.png")
-  val drawableXHdpiFile = new File("src\\main\\res\\drawable-xhdpi\\ic_launcher.png")
+  val androidManifestFile = new File("src/main/AndroidManifest.xml")
+  val valuesStringFile = new File("src/main/res/values/string.xml")
+  val layoutMainFile = new File("src/main/res/layout/main.xml")
+  val drawableHdpiFile = new File("src/main/res/drawable-hdpi/ic_launcher.png")
+  val drawableMdpiFile = new File("src/main/res/drawable-mdpi/ic_launcher.png")
+  val drawableXHdpiFile = new File("src/main/res/drawable-xhdpi/ic_launcher.png")
   val gitignoreFile = new File(".gitignore")
 
   
   def directoriesWith(packageName: String, minSdkVersion: Int) = {
     
       val commonDirectories = Seq[String](
-        "src\\main\\res\\values",
-        "src\\main\\res\\layout",
-        "src\\main\\res\\menu",
-        "src\\test\\scala",
-        "src\\main\\scala\\" + packageName.replace('.', '\\'),
-        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\models",
-        "src\\main\\scala\\" + packageName.replace('.', '\\') + "\\ui"
+        "src/main/res/values",
+        "src/main/res/layout",
+        "src/main/res/menu",
+        "src/test/scala",
+        "src/main/scala/" + packageName.replace('.', '/'),
+        "src/main/scala/" + packageName.replace('.', '/') + "/models",
+        "src/main/scala/" + packageName.replace('.', '/') + "/ui"
       )
 
       val allDirectories =
@@ -46,9 +46,9 @@ object Create
           commonDirectories
         else
           commonDirectories ++ Seq[String](
-            "src\\main\\res\\drawable-hdpi",
-            "src\\main\\res\\drawable-mdpi",
-            "src\\main\\res\\drawable-xhdpi"
+            "src/main/res/drawable-hdpi",
+            "src/main/res/drawable-mdpi",
+            "src/main/res/drawable-xhdpi"
           )
 
       allDirectories map(new File(_))

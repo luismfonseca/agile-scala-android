@@ -25,6 +25,6 @@ object Android
 
   def getModelsPath(sourceDirectory: File, scalaSourceDirectory: File): File =
   {
-    new File(scalaSourceDirectory.getPath + "/" + findPackageName(sourceDirectory).replace('.', '\\') + "/models/")
+    new File(scalaSourceDirectory.getPath + "/" + findPackageName(sourceDirectory).replace('.', '/') + "/models/")
   }
 }

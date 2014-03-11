@@ -69,7 +69,6 @@ object Plugin extends Plugin
       //Project.updateCurrent(state.value)
       //Project.loadAction(state.value, Project.LoadAction.Plugins)
       streams.value.log.info("Please type 'reload' to allow sbt to load the new build definitions!")
-      streams.value.log.info("sourceDirectory.value=" + sourceDirectory.value)
       Project.defaultSettings ++ defaultAgileAndroidSettings
     }
 
