@@ -19,7 +19,6 @@ object Scaffold
   }
 
   private def applyTemplate(templateKeysForModel: Map[String, String], templateString: String) = {
-
     templateKeysForModel.foldLeft(templateString) {
       (resultingMenu, currentMapEntry) =>
         resultingMenu.replace(currentMapEntry._1, currentMapEntry._2)
@@ -37,7 +36,7 @@ object Scaffold
 
     if (modelsPath.listFiles() == null)
     {
-      throw new Exception("Models folder not found.")
+      throw new Exception("Models folder not found or is empty.")
     }
 
     if (modelsPath.listFiles().exists(_.getName() == modelName + ".class") == false)

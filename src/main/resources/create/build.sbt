@@ -1,0 +1,3 @@
+import AgileAndroidKeys._
+
+defaultAgileAndroidSettings

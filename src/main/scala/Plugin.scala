@@ -31,32 +31,34 @@ object Plugin extends Plugin
 	  }
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {
-      val args: Seq[String] = spaceDelimited("package minApiLevel").parsed
+      val args: Seq[String] = spaceDelimited("package minSdkVersion").parsed
       if (args.length < 2) {
         sys.error("Incorrect parameters.")
       }
       val packageName = args(0)
-      val minApiLevel = args(1).toInt
+      val minSdkVersion = args(1).toInt
 
-      val directories = Create.directoriesWith(packageName, minApiLevel)
+      val directories = Create.directoriesWith(packageName, minSdkVersion)
 
-      IO.write(Create.sbtBuildPropertiesFile, Create.sbtBuildPropertiesContent(sbtVersion.value))
+      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, packageName, minSdkVersion)
+
+      IO.write(Create.sbtBuildPropertiesFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildPropertiesContent))
       IO.write(Create.sbtBuildFile, Create.sbtBuildContent)
 
       streams.value.log.info("Generated sbt build properties")
 
-      IO.write(Create.androidManifestFile, Create.manifestXML(packageName, minApiLevel))
+      IO.write(Create.androidManifestFile, Create.applyTemplate(templateKeysNewProject, Create.manifestXMLContent))
       streams.value.log.info("Generated Android manifest file.")
 
       IO.createDirectories(directories)
       streams.value.log.info("Generated source directories.")
 
-      IO.write(Create.valuesStringFile, Create.valuesStringXML)
-      IO.write(Create.layoutMainFile, Create.layoutMainXML)
+      IO.write(Create.valuesStringFile, Create.valuesStringXMLContent)
+      IO.write(Create.layoutMainFile, Create.layoutMainXMLContent)
       // Todo: the main class
       streams.value.log.info("Generated source files.")
 
-      IO.write(Create.gitignoreFile, Create.defaultGitIgnore)
+      IO.write(Create.gitignoreFile, Create.defaultGitIgnoreContent)
       streams.value.log.info("Generated .gitignore file.")
 
       //Project.addExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))

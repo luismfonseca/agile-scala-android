@@ -1,6 +1,22 @@
 import java.io.File
 
-object Create {
+object Create
+{
+
+  def templateKeys(sbtVersion: String, packageName: String, minSdkVersion: Int) = {
+    Map[String, String](
+      "SBT_VERSION" -> sbtVersion,
+      "PACKAGE_NAME" -> packageName,
+      "MIN_SDK_VERSION" -> minSdkVersion.toString
+    )
+  }
+
+  def applyTemplate(templateKeysNewProject: Map[String, String], templateString: String) = {
+    templateKeysNewProject.foldLeft(templateString) {
+      (resultingMenu, currentMapEntry) =>
+        resultingMenu.replace(currentMapEntry._1, currentMapEntry._2)
+    }
+  }
 
   val sbtBuildPropertiesFile = new File("project\\build.properties")
   val sbtBuildFile = new File("build.sbt")
@@ -10,7 +26,7 @@ object Create {
   val gitignoreFile = new File(".gitignore")
 
   
-  def directoriesWith(packageName: String, minApiLevel: Int) = {
+  def directoriesWith(packageName: String, minSdkVersion: Int) = {
     
       val commonDirectories = Seq[String](
         "src\\main\\res\\values",
@@ -23,7 +39,7 @@ object Create {
       )
 
       val allDirectories =
-        if (minApiLevel < 14)
+        if (minSdkVersion < 14)
           commonDirectories
         else
           commonDirectories ++ Seq[String](
@@ -36,70 +52,21 @@ object Create {
       allDirectories map(new File(_))
   }
 
-  def sbtBuildPropertiesContent(sbtVersion: String) =
-    "sbt.version=%s\n" format sbtVersion
+  def sbtBuildPropertiesContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/project/build.properties"))
 
   def sbtBuildContent =
-    """|import AgileAndroidKeys._
-       |
-       |defaultAgileAndroidSettings""".stripMargin
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/build.sbt"))
 
+  def manifestXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/AndroidManifest.xml"))
 
-  def manifestXML(packageName: String, minApiLevel: Int) =
-    """<?xml version="1.0" encoding="utf-8"?>
-       |<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-       |      package="%s"
-       |      android:versionCode="1"
-       |      android:versionName="1.0">
-       |    <uses-sdk android:minSdkVersion="%d" />
-       |    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
-       |        <activity android:name="MainActivity"
-       |                  android:label="@string/app_name">
-       |            <intent-filter>
-       |                <action android:name="android.intent.action.MAIN" />
-       |                <category android:name="android.intent.category.LAUNCHER" />
-       |            </intent-filter>
-       |        </activity>
-       |    </application>
-       |</manifest>
-       |""".stripMargin.format(packageName, minApiLevel)
+  def valuesStringXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/string.xml"))
 
-  def valuesStringXML =
-    """<?xml version="1.0" encoding="utf-8"?>
-       |<resources>"
-       |    <string name="app_name">MainActivity</string>
-       |""".stripMargin
+  def layoutMainXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/main.xml"))
 
-
-  def layoutMainXML =
-    """<?xml version="1.0" encoding="utf-8"?>
-       |<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-       |    android:orientation="vertical"
-       |    android:layout_width="fill_parent"
-       |    android:layout_height="fill_parent"
-       |    >
-       |<TextView
-       |    android:layout_width="fill_parent"
-       |    android:layout_height="wrap_content"
-       |    android:text="Hello World, from MainActivity :)"
-       |    />
-       |</LinearLayout>
-       |""".stripMargin
-
-
-  def defaultGitIgnore =
-    """|# built application files
-       |*.apk
-       |*.ap_
-       |*.dex
-       |*.class
-       |*.o
-       |*.so
-       |
-       |# generated files
-       |target/
-       |
-       |# Mac OS X clutter
-       |*.DS_Store
-       |""".stripMargin
+  def defaultGitIgnoreContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/.gitignore"))
 }

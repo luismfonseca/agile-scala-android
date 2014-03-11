@@ -1,0 +1,13 @@
+# built application files
+*.apk
+*.ap_
+*.dex
+*.class
+*.o
+*.so
+
+# generated files
+target/
+
+# Mac OS X clutter
+*.DS_Store
