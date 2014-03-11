@@ -22,7 +22,6 @@ $ exists src/main/AndroidManifest.xml
 
 #check folder structure
 $ exists src/main/res/drawable-hdpi/
-$ exists src/main/res/drawable-ldpi/
 $ exists src/main/res/drawable-mdpi/
 $ exists src/main/res/drawable-xhdpi/
 $ exists src/main/res/layout/
