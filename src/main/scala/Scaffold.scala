@@ -14,7 +14,10 @@ object Scaffold
       "MENU_CONTEXT" -> menuContext(packageName, modelName),
       "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
       "MENU_TITLE" -> "@string/menu_main_new_CLASS_NAME_UNDERSCORED",
-      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName))
+      "ID_EDIT_ACTIVITY" -> "@+id/edit_CLASS_NAME_UNDERSCORED_container",
+      "CLASS_EDIT_ACTIVITY" -> (packageName + ".ui.Edit" + modelName + "Activity"),
+      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
+      "MODEL_NAME" -> modelName
     )
   }
 
@@ -52,67 +55,92 @@ object Scaffold
 
     val templateKeysForModel = templateKeys(packageName, modelName, modelFields)
 
-    val scaffoldedMenu = applyTemplate(templateKeysForModel, menuXML(packageName, modelName))
+    IO.write(menuXMLPath(sourceDirectory, modelName), applyTemplate(templateKeysForModel, menuXMLContent))
+
+    IO.write(layoutXMLPath(sourceDirectory), layoutXMLContent)
+
+    IO.write(layoutActivityEditXMLPath(sourceDirectory, templateKeysForModel), applyTemplate(templateKeysForModel, layoutActivityEditXMLContent))
+
+    if (layoutActionBarEditCancelDoneXMLPath(sourceDirectory).exists() == false)
+    {
+      IO.write(layoutActionBarEditCancelDoneXMLPath(sourceDirectory), layoutActionBarEditCancelDoneXMLContent)
+    }
+    if (animatorSlideInPath(sourceDirectory).exists() == false)
+    {
+      IO.write(animatorSlideInPath(sourceDirectory), animatorSlideInContent)
+    }
+    if (animatorSlideOutPath(sourceDirectory).exists() == false)
+    {
+      IO.write(animatorSlideOutPath(sourceDirectory), animatorSlideOutContent)
+    }
 
 
-    IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), scaffoldedMenu)
+    //IO.write(new File(scalaSourceDirectory.getPath() + "extracted.txt"), scaffoldedMenu)
   }
 
   private def menuXMLPath(sourceDirectory: File, modelName: String) =
     new File(sourceDirectory.getPath() + "/main/res/menu/main_" + Util.camelToUnderscore(Util.uncapitalize(modelName)) + ".xml")
 
-  private def menuXML(packageName: String, modelName: String) =
-  {
-    val toolsContext = packageName + ".ui." + modelName + "MainActivity"
+  private def layoutXMLPath(sourceDirectory: File) =
+    new File(sourceDirectory.getPath() + "/main/res/layout/main_activity.xml")
 
-    val modelNameUnderscored = Util.camelToUnderscore(Util.uncapitalize(modelName))
+  private def layoutActivityEditXMLPath(sourceDirectory: File, template: Map[String, String]) =
+    new File(sourceDirectory.getPath() + applyTemplate(template, "/main/res/layout/activity_edit_CLASS_NAME_UNDERSCORED.xml"))
 
-    val androidID = "@+id/menu_main_new_" + modelNameUnderscored
+  private def layoutActionBarEditCancelDoneXMLPath(sourceDirectory: File) =
+    new File(sourceDirectory.getPath() + "/main/res/layout/actionbar_edit_cancel_done.xml")
 
-    val androidTitle = "@string/menu_main_new_" + modelNameUnderscored
+  private def animatorSlideInPath(sourceDirectory: File) =
+    new File(sourceDirectory.getPath() + "/main/res/animator/slide_in.xml")
 
-    /*<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:uiOptions="splitActionBarWhenNarrow"
-    tools:context={toolsContext} >
+  private def animatorSlideOutPath(sourceDirectory: File) =
+    new File(sourceDirectory.getPath() + "/main/res/animator/slide_out.xml")
 
-    <item android:id={androidID}
-          android:title={androidTitle}
-          android:icon="@drawable/ic_menu_new"
-          android:showAsAction="ifRoom" />
-    </menu>*/
+  private def menuXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/menu/main.xml"))
-  }
 
+  private def layoutXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/activity_main.xml"))
+
+  private def layoutActivityEditXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/activity_edit_CLASS_NAME_UNDERSCORED.xml"))
+
+  private def layoutActionBarEditCancelDoneXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/actionbar_edit_cancel_done.xml"))
+
+  private def animatorSlideInContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/animator/slide_in.xml"))
+
+  private def animatorSlideOutContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/animator/slide_out.xml"))
 
   def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
   {
     try
     {
-          val packageName = Android.findPackageName(sourceDirectory)
-          val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
+      val packageName = Android.findPackageName(sourceDirectory)
+      val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
 
-          val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
+      val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
 
-          if (modelsPath.listFiles() != null)
-          {
-          val models = modelsPath.listFiles().map(modelPath => {
-            modelPath.getName().split('.').head
+      if (modelsPath.listFiles() != null)
+      {
+        val models = modelsPath.listFiles().map(modelPath => {
+          modelPath.getName().split('.').head
         })
 
-            sbt.complete.Parsers.spaceDelimited(models mkString " ")
-          }
+        sbt.complete.Parsers.spaceDelimited(models mkString " ")
+      }
       else
       {
             sbt.complete.Parsers.spaceDelimited(" modelName")
       }
-        }
-        catch
-        {
-          // might not be an android project yet when this plugin is still just being loaded
-          case _ : Throwable =>
-            sbt.complete.Parsers.spaceDelimited(" modelName")
-        }
+    }
+    catch
+    {
+      // might not be an android project yet when this plugin is still just being loaded
+      case _ : Throwable =>
+        sbt.complete.Parsers.spaceDelimited(" modelName")
+    }
   }
-
 }
