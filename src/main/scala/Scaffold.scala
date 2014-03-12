@@ -57,7 +57,7 @@ object Scaffold
 
     IO.write(menuXMLPath(sourceDirectory, modelName), applyTemplate(templateKeysForModel, menuXMLContent))
 
-    IO.write(layoutXMLPath(sourceDirectory), layoutXMLContent)
+    //IO.write(layoutXMLPath(sourceDirectory), layoutXMLContent)
 
     IO.write(layoutActivityEditXMLPath(sourceDirectory, templateKeysForModel), applyTemplate(templateKeysForModel, layoutActivityEditXMLContent))
 
@@ -81,8 +81,8 @@ object Scaffold
   private def menuXMLPath(sourceDirectory: File, modelName: String) =
     new File(sourceDirectory.getPath() + "/main/res/menu/main_" + Util.camelToUnderscore(Util.uncapitalize(modelName)) + ".xml")
 
-  private def layoutXMLPath(sourceDirectory: File) =
-    new File(sourceDirectory.getPath() + "/main/res/layout/main_activity.xml")
+  //private def layoutXMLPath(sourceDirectory: File) =
+  //  new File(sourceDirectory.getPath() + "/main/res/layout/main_activity.xml")
 
   private def layoutActivityEditXMLPath(sourceDirectory: File, template: Map[String, String]) =
     new File(sourceDirectory.getPath() + applyTemplate(template, "/main/res/layout/activity_edit_CLASS_NAME_UNDERSCORED.xml"))
@@ -99,8 +99,8 @@ object Scaffold
   private def menuXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/menu/main.xml"))
 
-  private def layoutXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/activity_main.xml"))
+  //private def layoutXMLContent =
+  //  Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/activity_main.xml"))
 
   private def layoutActivityEditXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("scaffold/layout/activity_edit_CLASS_NAME_UNDERSCORED.xml"))
