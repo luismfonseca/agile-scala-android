@@ -2,7 +2,9 @@ import scala.xml.Node
 import scala.xml.PrettyPrinter
 import sbt.IO
 import java.util.Scanner
+import java.util.jar.{JarFile, JarEntry}
 import java.io.{File, InputStream}
+import collection.JavaConversions.enumerationAsScalaIterator
 
 object Util
 {
@@ -32,6 +34,36 @@ object Util
       new PrettyPrinter(1200, 4).format(node).trim)
 
     IO.writeLines(file, content, IO.utf8)
+  }
+
+  def getResourceFiles(path: String): Map[String, String] =
+  {
+    val jarFile = new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()))
+
+    val files = jarFile.entries().foldLeft(Map[String, String]()) {
+      (resultingList, entry) => {
+        if (entry.getName().startsWith(path))
+        {
+          val fileContent = convertStreamToString(getClass.getClassLoader().getResourceAsStream(entry.getName()))
+          if (fileContent.isEmpty() == false)
+          {
+            resultingList ++ Map((entry.getName().stripPrefix(path), fileContent))
+          }
+          else
+          {
+            resultingList
+          }
+        }
+        else
+        {
+          resultingList
+        }
+      }
+    }
+
+    jarFile.close()
+
+    files
   }
 
 }
