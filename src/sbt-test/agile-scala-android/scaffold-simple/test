@@ -1,0 +1,24 @@
+> generate Post title:String numberOfLikes:Int date:Date
+
+
+# lets just check that the file gets created
+$ exists src/main/scala/pt/teste/ok/models/Post.scala
+
+# run scaffold on Post model
+> scaffold Post
+
+
+# check if all files exist
+$ exists src/main/res/menu/main_post.xml
+$ exists src/main/res/layout/activity_edit_post.xml
+$ exists src/main/res/layout/actionbar_edit_cancel_done.xml
+$ exists src/main/res/animator/slide_in.xml
+$ exists src/main/res/animator/slide_out.xml
+
+
+#check if contents are the expected
+> contents fixtures/src/main/res/menu/main_post.xml src/main/res/menu/main_post.xml
+> contents fixtures/src/main/res/layout/activity_edit_post.xml src/main/res/layout/activity_edit_post.xml
+> contents fixtures/src/main/res/layout/actionbar_edit_cancel_done.xml src/main/res/layout/actionbar_edit_cancel_done.xml
+> contents fixtures/src/main/res/animator/slide_in.xml src/main/res/animator/slide_in.xml
+> contents fixtures/src/main/res/animator/slide_out.xml src/main/res/animator/slide_out.xml
