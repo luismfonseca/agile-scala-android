@@ -92,11 +92,12 @@ object Scaffold
           modelPath.getName().split('.').head
         })
 
-        sbt.complete.Parsers.spaceDelimited(models mkString " ")
+        val modelsWithoutInnerClasses = models.filter(_.contains('$') == false)
+        sbt.complete.Parsers.spaceDelimited(modelsWithoutInnerClasses mkString " ")
       }
       else
       {
-            sbt.complete.Parsers.spaceDelimited(" modelName")
+        sbt.complete.Parsers.spaceDelimited(" modelName")
       }
     }
     catch
