@@ -8,6 +8,8 @@ import collection.JavaConversions.enumerationAsScalaIterator
 
 object Util
 {
+  def capitalize(value: String) =
+    value(0).toString().toUpperCase() + value.tail
 
   def uncapitalize(value: String) =
     value(0).toString().toLowerCase() + value.tail
@@ -17,6 +19,9 @@ object Util
 
   def underscoreToCamel(value: String) =
     "_([a-z\\d])".r.replaceAllIn(value, _.group(1).toUpperCase())
+
+  def camelToSpace(value: String) =
+    capitalize("[A-Z\\d]".r.replaceAllIn(value, " " + _.group(0)))
 
   def convertStreamToString(inputStream: InputStream): String = {
     val scanner = new Scanner(inputStream, "UTF-8").useDelimiter("\\A")

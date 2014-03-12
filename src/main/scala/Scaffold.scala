@@ -11,11 +11,14 @@ object Scaffold
 
   private def templateKeys(packageName: String, modelName: String, modelFields: Array[Field]) = {
     Map[String, String](
+      "FRAGMENT_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/fragment_show_", modelName, modelFields),
       "MENU_CONTEXT" -> menuContext(packageName, modelName),
       "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
       "MENU_TITLE" -> "@string/menu_main_new_CLASS_NAME_UNDERSCORED",
       "ID_EDIT_ACTIVITY" -> "@+id/edit_CLASS_NAME_UNDERSCORED_container",
       "CLASS_EDIT_ACTIVITY" -> (packageName + ".ui.Edit" + modelName + "Activity"),
+      "CLASS_EDIT_FRAGMENT" -> (packageName + ".ui.Edit" + modelName + "Fragment"), 
+      "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"), 
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
       "MODEL_NAME" -> modelName
     )
@@ -52,13 +55,11 @@ object Scaffold
     val modelFields = modelClass.getDeclaredFields()
 
     // TODO: use this knowledge to scaffold activities and layouts.
-
     val templateKeysForModel = templateKeys(packageName, modelName, modelFields)
 
 
     // get list of files on the plugin's scaffold resources folder
     val filesAndContent = Util.getResourceFiles("scaffold/")
-
 
     filesAndContent.foreach {
       case (filePath, fileContent) => {
@@ -73,9 +74,37 @@ object Scaffold
       }
     }
 
-
-
   }
+
+
+  private def templateFieldKeys(modelName: String, modelField: Field) = {
+    Map[String, String](
+      "MODEL_ATTRIBUTE_NAME" -> "FIELD_NAME_PRETTY",
+      "MODEL_ATTRIBUTE_ID" -> "@+id/CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
+      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
+      "FIELD_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelField.toString.split('.').last)),
+      "FIELD_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelField.toString.split('.').last)),
+      "MODEL_NAME" -> modelName
+    )
+  }
+
+  private def applyTemplateOnFields(templateType: String, modelName: String, modelFields: Array[Field]): String =
+    modelFields.foldLeft("")
+    {
+      (lines, modelField) =>
+      {
+        val modelType: String = modelField.getType().toString().split('.').last
+
+        val template = getClass.getClassLoader().getResourceAsStream("scaffold-partial-elements/" + templateType + modelType)
+        if (template == null)
+        {
+          throw new Exception("Unsupported field type: " + modelType)
+        }
+
+        lines + applyTemplate(templateFieldKeys(modelName, modelField), Util.convertStreamToString(template))
+      }
+    }
+
 
   def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
   {
