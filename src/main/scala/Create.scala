@@ -1,17 +1,18 @@
 import java.io.File
+import collection.immutable.ListMap
 
 object Create
 {
 
   def templateKeys(sbtVersion: String, packageName: String, minSdkVersion: Int) = {
-    Map[String, String](
+    ListMap[String, String](
       "SBT_VERSION" -> sbtVersion,
       "PACKAGE_NAME" -> packageName,
       "MIN_SDK_VERSION" -> minSdkVersion.toString
     )
   }
 
-  def applyTemplate(templateKeysNewProject: Map[String, String], templateString: String) = {
+  def applyTemplate(templateKeysNewProject: ListMap[String, String], templateString: String) = {
     templateKeysNewProject.foldLeft(templateString) {
       (resultingMenu, currentMapEntry) =>
         resultingMenu.replace(currentMapEntry._1, currentMapEntry._2)

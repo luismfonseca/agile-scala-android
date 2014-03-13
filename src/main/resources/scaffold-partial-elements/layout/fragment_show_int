@@ -1,6 +1,6 @@
             <TextView
                 android:layout_column="0"
-                android:layout_row="0"
+                android:layout_row="LAYOUT_ROW"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/SecondaryText"
@@ -8,6 +8,6 @@
             <TextView
                 android:id="MODEL_ATTRIBUTE_ID"
                 android:layout_column="1"
-                android:layout_row="0"
+                android:layout_row="LAYOUT_ROW"
                 android:layout_gravity="fill_horizontal"
                 android:text=""/>

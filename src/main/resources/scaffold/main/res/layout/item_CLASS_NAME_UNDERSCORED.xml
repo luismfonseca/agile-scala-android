@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeightLarge"
+    android:background="#ddd"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_marginRight="12sp"
+        android:layout_marginLeft="12sp"
+        android:layout_marginTop="6sp"
+        android:layout_marginBottom="6sp"
+        >
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/white"
+        android:columnCount="TWO_OR_THREE_IF_ITEMS_CONTAINS_DATE"
+        android:rowCount="FIELDS_COUNT_PLUS_ONE"
+        >
+
+        <ImageView
+            android:id="ITEM_MODEL_ATTRIBUTE_PLACEHOLDER_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="6dip"
+            android:layout_row="0"
+            android:layout_rowSpan="2"
+            android:src="@drawable/ic_placeholder" />
+
+ITEM_LAYOUT_FIELDS
+    </GridLayout>
+
+    <AbsoluteLayout
+        android:layout_margin="0dp"
+        style="@style/CardBottomBar" />
+    </LinearLayout>
+
+</RelativeLayout>

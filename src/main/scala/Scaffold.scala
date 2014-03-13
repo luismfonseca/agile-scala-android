@@ -5,26 +5,32 @@ import java.net._
 import scala.xml._
 import java.lang.ClassLoader
 import java.lang.reflect.Field
+import collection.immutable.ListMap
 
 object Scaffold
 {
 
   private def templateKeys(packageName: String, modelName: String, modelFields: Array[Field]) = {
-    Map[String, String](
+    ListMap[String, String](
       "FRAGMENT_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/fragment_show_", modelName, modelFields),
+      "FRAGMENT_LAYOUT_EDIT_FIELDS" -> applyTemplateOnFields("layout/fragment_edit_", modelName, modelFields),
+      "ITEM_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/item_", modelName, modelFields),
+      "TWO_OR_THREE_IF_ITEMS_CONTAINS_DATE" -> (if (modelFields.exists(_.getType() == classOf[java.util.Date])) "2" else "3"),
+      "ITEM_MODEL_ATTRIBUTE_PLACEHOLDER_ID" -> "@+id/item_CLASS_NAME_UNDERSCORED_placeholder",
       "MENU_CONTEXT" -> menuContext(packageName, modelName),
       "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
       "MENU_TITLE" -> "@string/menu_main_new_CLASS_NAME_UNDERSCORED",
       "ID_EDIT_ACTIVITY" -> "@+id/edit_CLASS_NAME_UNDERSCORED_container",
       "CLASS_EDIT_ACTIVITY" -> (packageName + ".ui.Edit" + modelName + "Activity"),
       "CLASS_EDIT_FRAGMENT" -> (packageName + ".ui.Edit" + modelName + "Fragment"), 
-      "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"), 
+      "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"),
+      "FIELDS_COUNT_PLUS_ONE" -> (modelFields.size + 1).toString,
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
       "MODEL_NAME" -> modelName
     )
   }
 
-  private def applyTemplate(templateKeysForModel: Map[String, String], templateString: String) = {
+  private def applyTemplate(templateKeysForModel: ListMap[String, String], templateString: String) = {
     templateKeysForModel.foldLeft(templateString) {
       (resultingMenu, currentMapEntry) =>
         resultingMenu.replace(currentMapEntry._1, currentMapEntry._2)
@@ -77,22 +83,26 @@ object Scaffold
   }
 
 
-  private def templateFieldKeys(modelName: String, modelField: Field) = {
-    Map[String, String](
+  private def templateFieldKeys(modelName: String, modelField: Field, index: Integer) =
+    ListMap[String, String](
       "MODEL_ATTRIBUTE_NAME" -> "FIELD_NAME_PRETTY",
+      "ITEM_MODEL_ATTRIBUTE_ID" -> "@+id/item_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
       "MODEL_ATTRIBUTE_ID" -> "@+id/CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
+      "MODEL_ATTRIBUTE_CREATE_ID" -> "@+id/create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
+      "TEXT_BOLD_IF_FIRST_ELEMENT" -> (if (index == 0) "            android:textStyle=\"bold\"\n" else ""),
+      "LAYOUT_ROW" -> ("" + index),
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
       "FIELD_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelField.toString.split('.').last)),
       "FIELD_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelField.toString.split('.').last)),
       "MODEL_NAME" -> modelName
     )
-  }
 
   private def applyTemplateOnFields(templateType: String, modelName: String, modelFields: Array[Field]): String =
-    modelFields.foldLeft("")
+    modelFields.zipWithIndex.foldLeft("")
     {
-      (lines, modelField) =>
+      (lines, modelFieldAndIndex) =>
       {
+        val (modelField, index) = modelFieldAndIndex
         val modelType: String = modelField.getType().toString().split('.').last
 
         val template = getClass.getClassLoader().getResourceAsStream("scaffold-partial-elements/" + templateType + modelType)
@@ -101,7 +111,7 @@ object Scaffold
           throw new Exception("Unsupported field type: " + modelType)
         }
 
-        lines + applyTemplate(templateFieldKeys(modelName, modelField), Util.convertStreamToString(template))
+        lines + applyTemplate(templateFieldKeys(modelName, modelField, index), Util.convertStreamToString(template))
       }
     }
 

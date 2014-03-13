@@ -5,9 +5,11 @@
                 android:layout_height="wrap_content"
                 style="@style/SecondaryText"
                 android:text="MODEL_ATTRIBUTE_NAME"/>
-            <TextView
-                android:id="MODEL_ATTRIBUTE_ID"
+            <Button
+                android:id="MODEL_ATTRIBUTE_CREATE_ID"
                 android:layout_column="1"
+                android:layout_columnSpan="1"
                 android:layout_row="LAYOUT_ROW"
                 android:layout_gravity="fill_horizontal"
-                android:text=""/>
+                android:text=""
+                style="?android:attr/spinnerStyle"/>
