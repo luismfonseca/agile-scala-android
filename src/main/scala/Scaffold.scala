@@ -106,6 +106,20 @@ object Scaffold
       }
     }
 
+    // raw files
+    val filesAndContentRaw = Util.getResourcesFilesRaw("scaffold-raw/")
+    filesAndContentRaw.foreach {
+      case (filePath, finalFileContent) => {
+        val finalFilePath = new File(sourceDirectory.getPath() + "/" + applyTemplate(templateKeysForModel, filePath))
+
+        // TODO: enforce override\merge policies here.
+        if (finalFilePath.exists == false)
+        {
+          IO.write(finalFilePath, finalFileContent)
+        }
+      }
+    }
+
   }
 
 

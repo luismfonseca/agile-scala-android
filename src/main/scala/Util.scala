@@ -6,6 +6,7 @@ import java.util.Scanner
 import java.util.jar.{JarFile, JarEntry}
 import java.io.{File, InputStream}
 import collection.JavaConversions.enumerationAsScalaIterator
+import scala.tools.nsc.io.Streamable
 
 object Util
 {
@@ -29,9 +30,8 @@ object Util
     if (scanner.hasNext()) scanner.next() else ""
   }
 
-  def convertInputStreamToArray(inputStream: InputStream) = {
-    Stream.continually(inputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
-  }
+  def convertInputStreamToByteArray(inputStream: InputStream) =
+    Iterator.continually(inputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
 
   def mergeChildrenXML(a: xml.Elem, b: xml.Elem, attribute: String, overriding: Boolean) =
   {
@@ -55,6 +55,32 @@ object Util
     "<?xml version='1.0' encoding='UTF-8'?>" + IO.Newline,
     new PrettyPrinter(120, 4).format(node).trim
   )
+
+
+  def getResourcesFilesRaw(path: String): Map[String, Array[Byte]] = 
+  {
+
+    val jarFile = new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()))
+
+    val files = jarFile.entries().foldLeft(Map[String, Array[Byte]]()) {
+      (resultingList, entry) => {
+        if (entry.getName().startsWith(path))
+        {
+          val fileContent = convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream(entry.getName()))
+
+          resultingList ++ Map((entry.getName().stripPrefix(path), fileContent))
+        }
+        else
+        {
+          resultingList
+        }
+      }
+    }
+
+    jarFile.close()
+
+    files
+  }
 
 
   def getResourceFiles(path: String): Map[String, String] =
