@@ -26,7 +26,7 @@ object Scaffold
       "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"),
       "FIELDS_COUNT_PLUS_ONE" -> (modelFields.size + 1).toString,
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
-      "MODEL_NAME" -> modelName
+      "MODEL_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelName))
     )
   }
 
@@ -77,6 +77,32 @@ object Scaffold
         //{
           IO.write(finalFilePath, finalFileContent)
         //}
+      }
+    }
+
+    // files that need merging
+    val filesAndContentToMerge = Util.getResourceFiles("scaffold-merge/")
+    filesAndContentToMerge.foreach {
+      case (filePath, fileContent) => {
+        val finalFilePath = new File(sourceDirectory.getPath() + "/" + applyTemplate(templateKeysForModel, filePath))
+        val partialFileContent = applyTemplate(templateKeysForModel, fileContent)
+
+        // load existing file, if any
+        val finalFileContent =
+          if (finalFilePath.exists)
+          {
+            // NOTE:assuming xml files only
+            val originalFileContent = XML.loadFile(finalFilePath)
+
+            // TODO: enforce override\merge policies here.
+            Util.mergeXML(originalFileContent, XML.loadString(partialFileContent), "name", false)
+          }
+          else
+          {
+            XML.loadString(partialFileContent mkString "")
+          }
+
+        IO.write(finalFilePath, finalFileContent.toString)
       }
     }
 

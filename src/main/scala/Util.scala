@@ -1,4 +1,5 @@
 import scala.xml.Node
+import scala.xml.XML
 import scala.xml.PrettyPrinter
 import sbt.IO
 import java.util.Scanner
@@ -32,14 +33,29 @@ object Util
     Stream.continually(inputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
   }
 
-  def saveXML(file: File, node: Node) = {
-
-    val content = Seq(
-      "<?xml version='1.0' encoding='UTF-8'?>" + IO.Newline,
-      new PrettyPrinter(1200, 4).format(node).trim)
-
-    IO.writeLines(file, content, IO.utf8)
+  def mergeChildrenXML(a: xml.Elem, b: xml.Elem, attribute: String, overriding: Boolean) =
+  {
+    a.child ++
+    (
+      if (overriding)
+      {
+        b.child filterNot a.contains
+      }
+      else
+      {
+        b.child filterNot(elementb => a.child.exists(elementa => (elementa.attribute(attribute) == elementb.attribute(attribute))))
+      }
+    )
   }
+
+  def mergeXML(a: xml.Elem, b: xml.Elem, attribute: String, overriding: Boolean) =
+    XML.loadString("<" + a.label + ">\n    " + (mergeChildrenXML(a, b, attribute, overriding) filterNot(node => node.text.trim == "") mkString("\n    ")) + "\n</" + a.label + ">")
+
+  def prettyXML(node: Node) = Seq(
+    "<?xml version='1.0' encoding='UTF-8'?>" + IO.Newline,
+    new PrettyPrinter(120, 4).format(node).trim
+  )
+
 
   def getResourceFiles(path: String): Map[String, String] =
   {
