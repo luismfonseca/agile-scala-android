@@ -23,6 +23,8 @@ object Create
   val sbtBuildFile = new File("build.sbt")
   val androidManifestFile = new File("src/main/AndroidManifest.xml")
   val valuesStringFile = new File("src/main/res/values/string.xml")
+  val valuesDimensionsFile = new File("src/main/res/values/dimens.xml")
+  val valuesStylesFile = new File("src/main/res/values/styles.xml")
   val layoutMainFile = new File("src/main/res/layout/main.xml")
   val drawableHdpiFile = new File("src/main/res/drawable-hdpi/ic_launcher.png")
   val drawableMdpiFile = new File("src/main/res/drawable-mdpi/ic_launcher.png")
@@ -67,6 +69,12 @@ object Create
   def valuesStringXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/string.xml"))
 
+  def valuesDimensionsXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/dimens.xml"))
+
+  def valuesStylesXMLContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/styles.xml"))
+
   def layoutMainXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/main.xml"))
 
@@ -74,11 +82,11 @@ object Create
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/gitignore"))
 
   def drawableHdpiByteArray =
-    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-hdpi/ic_launcher.png"))
+    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-hdpi/ic_launcher.png"))
 
   def drawableMdpiByteArray =
-    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-mdpi/ic_launcher.png"))
+    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-mdpi/ic_launcher.png"))
 
   def drawableXHdpiByteArray =
-    Util.convertInputStreamToArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-xhdpi/ic_launcher.png"))
+    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-xhdpi/ic_launcher.png"))
 }
