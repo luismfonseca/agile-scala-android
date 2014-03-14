@@ -54,6 +54,8 @@ object Plugin extends Plugin
       streams.value.log.info("Generated source directories.")
 
       IO.write(Create.valuesStringFile, Create.valuesStringXMLContent)
+      IO.write(Create.valuesDimensionsFile, Create.valuesDimensionsXMLContent)
+      IO.write(Create.valuesStylesFile, Create.valuesStylesXMLContent)
       IO.write(Create.layoutMainFile, Create.layoutMainXMLContent)
       IO.write(Create.drawableHdpiFile, Create.drawableHdpiByteArray)
       IO.write(Create.drawableMdpiFile, Create.drawableMdpiByteArray)
