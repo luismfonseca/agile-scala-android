@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeightLarge"
+    android:background="#ddd"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_marginRight="12sp"
+        android:layout_marginLeft="12sp"
+        android:layout_marginTop="6sp"
+        android:layout_marginBottom="6sp"
+        >
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/white"
+        android:columnCount="2"
+        android:rowCount="4"
+        >
+
+        <ImageView
+            android:id="@+id/item_post_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="6dip"
+            android:layout_row="0"
+            android:layout_rowSpan="2"
+            android:src="@drawable/ic_placeholder" />
+
+        <TextView
+            android:id="@+id/item_post_title"
+            android:layout_width="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="18sp"
+            android:layout_marginTop="6sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/item_post_number_of_likes"
+            android:layout_width="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:layout_marginTop="6sp"
+            />
+
+        <TextView
+            android:id="@+id/item_post_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="right"
+            android:layout_row="0"
+            android:gravity="center_vertical"
+            android:layout_marginRight="6sp"
+            android:textSize="16sp" />
+
+    </GridLayout>
+
+    <AbsoluteLayout
+        android:layout_margin="0dp"
+        style="@style/CardBottomBar" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -14,11 +14,33 @@ $ exists src/main/res/layout/activity_edit_post.xml
 $ exists src/main/res/layout/actionbar_edit_cancel_done.xml
 $ exists src/main/res/animator/slide_in.xml
 $ exists src/main/res/animator/slide_out.xml
+$ exists src/main/res/values/styles.xml
+
+# check drawables
+$ exists src/main/res/drawable-hdpi/ic_menu_cancel_holo_dark.png
+$ exists src/main/res/drawable-hdpi/ic_menu_cancel_holo_light.png
+$ exists src/main/res/drawable-hdpi/ic_menu_done_holo_dark.png
+$ exists src/main/res/drawable-hdpi/ic_menu_done_holo_light.png
+$ exists src/main/res/drawable-hdpi/ic_menu_new.png
+$ exists src/main/res/drawable-hdpi/ic_placeholder.png
+$ exists src/main/res/drawable-mdpi/ic_menu_cancel_holo_dark.png
+$ exists src/main/res/drawable-mdpi/ic_menu_cancel_holo_light.png
+$ exists src/main/res/drawable-mdpi/ic_menu_done_holo_dark.png
+$ exists src/main/res/drawable-mdpi/ic_menu_done_holo_light.png
+$ exists src/main/res/drawable-mdpi/ic_menu_new.png
+$ exists src/main/res/drawable-mdpi/ic_placeholder.png
+$ exists src/main/res/drawable-xhdpi/ic_menu_cancel_holo_dark.png
+$ exists src/main/res/drawable-xhdpi/ic_menu_cancel_holo_light.png
+$ exists src/main/res/drawable-xhdpi/ic_menu_done_holo_dark.png
+$ exists src/main/res/drawable-xhdpi/ic_menu_done_holo_light.png
+$ exists src/main/res/drawable-xhdpi/ic_menu_new.png
+$ exists src/main/res/drawable-xhdpi/ic_placeholder.png
 
 
-#check if contents are the expected
+# check if contents are the expected
 > contents fixtures/src/main/res/menu/main_post.xml src/main/res/menu/main_post.xml
 > contents fixtures/src/main/res/layout/activity_edit_post.xml src/main/res/layout/activity_edit_post.xml
 > contents fixtures/src/main/res/layout/actionbar_edit_cancel_done.xml src/main/res/layout/actionbar_edit_cancel_done.xml
 > contents fixtures/src/main/res/animator/slide_in.xml src/main/res/animator/slide_in.xml
 > contents fixtures/src/main/res/animator/slide_out.xml src/main/res/animator/slide_out.xml
+> contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml

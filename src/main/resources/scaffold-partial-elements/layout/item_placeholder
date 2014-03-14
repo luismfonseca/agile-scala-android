@@ -1,0 +1,9 @@
+        <ImageView
+            android:id="ITEM_MODEL_ATTRIBUTE_PLACEHOLDER_ID" //@+id/item_post_placeholder // @+id/item_CLASS_NAME_UNDERSCORED_placeholder
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="6dip"
+            android:layout_row="LAYOUT_ROW"
+            android:layout_rowSpan="2"
+            android:src="@drawable/ic_placeholder" />
+
