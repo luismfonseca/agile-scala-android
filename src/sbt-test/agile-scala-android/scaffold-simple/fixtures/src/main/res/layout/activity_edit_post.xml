@@ -6,4 +6,4 @@
     android:layout_height="match_parent"
     tools:context="pt.teste.ok.ui.EditPostActivity"
     tools:ignore="MergeRootFrame"
-	/>
+    />
