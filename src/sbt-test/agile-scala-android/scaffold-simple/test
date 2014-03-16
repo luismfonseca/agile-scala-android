@@ -15,6 +15,7 @@ $ exists src/main/res/layout/actionbar_edit_cancel_done.xml
 $ exists src/main/res/animator/slide_in.xml
 $ exists src/main/res/animator/slide_out.xml
 $ exists src/main/res/values/styles.xml
+$ exists src/main/res/values/dimens.xml
 
 # check drawables
 $ exists src/main/res/drawable-hdpi/ic_menu_cancel_holo_dark.png
@@ -44,3 +45,4 @@ $ exists src/main/res/drawable-xhdpi/ic_placeholder.png
 > contents fixtures/src/main/res/animator/slide_in.xml src/main/res/animator/slide_in.xml
 > contents fixtures/src/main/res/animator/slide_out.xml src/main/res/animator/slide_out.xml
 > contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml
+> contents fixtures/src/main/res/values/dimens.xml src/main/res/values/dimens.xml
