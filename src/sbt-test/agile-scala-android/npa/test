@@ -1,6 +1,6 @@
 > npa pt.test.ok 19
 
-#check folder structure
+# check folder structure
 $ exists src/
 $ exists src/main/
 $ exists src/main/res/
@@ -14,21 +14,29 @@ $ exists src/main/scala/pt/test/ok/models/
 $ exists src/main/scala/pt/test/ok/ui/
 
 
-#check .gitignore
+# check .gitignore
 $ exists .gitignore
 > contents fixtures/.gitignore .gitignore
 
 
-#check build.sbt
+# check build.sbt
 $ exists build.sbt
 > contents fixtures/build.sbt build.sbt
 
 
-#check project build.properties
+# check project build.properties
 $ exists project/build.properties
 > contents fixtures/project/build.properties project/build.properties
 
 
-#check manifest
+# check android files
+$ exists src/main/res/values/string.xml
+$ exists src/main/res/values/dimens.xml
+$ exists src/main/res/values/styles.xml
+> contents fixtures/src/main/res/values/string.xml src/main/res/values/string.xml
+> contents fixtures/src/main/res/values/dimens.xml src/main/res/values/dimens.xml
+> contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml
+
+# check manifest
 $ exists src/main/AndroidManifest.xml
 > contents fixtures/src/main/AndroidManifest.xml src/main/AndroidManifest.xml
