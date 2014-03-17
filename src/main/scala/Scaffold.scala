@@ -15,6 +15,14 @@ object Scaffold
       "FRAGMENT_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/fragment_show_", modelName, modelFields),
       "FRAGMENT_LAYOUT_EDIT_FIELDS" -> applyTemplateOnFields("layout/fragment_edit_", modelName, modelFields),
       "ITEM_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/item_", modelName, modelFields),
+      "IMPORT_MODEL_FIELDS_DEPENDENCIES" -> applyTemplateOnFields("scala/imports_", modelName, modelFields),
+      "FRAGMENT_VIEW_FIELDS" -> applyTemplateOnFields("scala/fragment_view_", modelName, modelFields),
+      "FRAGMENT_VIEW_ASSIGN_FIELDS" -> applyTemplateOnFields("scala/fragment_view_assign_", modelName, modelFields),
+      "FRAGMENT_VIEW_DISPLAY_FIELDS" -> applyTemplateOnFields("scala/fragment_view_display_", modelName, modelFields),
+      "LIST_ADAPTER_VIEWHOLDER_ELEMENTS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_element_", modelName, modelFields),
+      "LIST_ADAPTER_VIEWHOLDER_PARAMETERS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_parameters_", modelName, modelFields),
+      "VIEWHOLDER_DISPLAY_FIELDS" ->  applyTemplateOnFields("scala/ListAdapter/viewholder_display_", modelName, modelFields),
+      "FRAGMENT_EDIT_FIELDS" -> applyTemplateOnFields("scala/fragment_edit_", modelName, modelFields),
       "TWO_OR_THREE_IF_ITEMS_CONTAINS_DATE" -> (if (modelFields.exists(_.getType() == classOf[java.util.Date])) "2" else "3"),
       "ITEM_MODEL_ATTRIBUTE_PLACEHOLDER_ID" -> "@+id/item_CLASS_NAME_UNDERSCORED_placeholder",
       "MENU_CONTEXT" -> menuContext(packageName, modelName),
@@ -26,7 +34,12 @@ object Scaffold
       "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"),
       "FIELDS_COUNT_PLUS_ONE" -> (modelFields.size + 1).toString,
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
-      "MODEL_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelName))
+      "CLASS_NAME_AS_IS" -> modelName,
+      "MODEL_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelName)),
+      "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
+      "PACKAGE_UI" -> (packageName + ".ui"),
+      "PACKAGE_R" -> (packageName + ".R"),
+      "PACKAGE_MODELS" -> (packageName + ".models")
     )
   }
 
@@ -130,11 +143,14 @@ object Scaffold
       "MODEL_ATTRIBUTE_ID" -> "@+id/CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
       "MODEL_ATTRIBUTE_CREATE_ID" -> "@+id/create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
       "TEXT_BOLD_IF_FIRST_ELEMENT" -> (if (index == 0) "            android:textStyle=\"bold\"\n" else ""),
+      "COMMA_IF_NOT_FIRST " -> (if (index == 0) "" else ", "),
       "LAYOUT_ROW" -> ("" + index),
       "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
       "FIELD_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelField.toString.split('.').last)),
       "FIELD_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelField.toString.split('.').last)),
-      "MODEL_NAME" -> modelName
+      "MODEL_NAME" -> modelName,
+      "FIELD_NAME_AS_IS" -> modelField.toString.split('.').last,
+      "FIELD_NAME_CAPITALIZED" -> Util.capitalize(modelField.toString.split('.').last)
     )
 
   private def applyTemplateOnFields(templateType: String, modelName: String, modelFields: Array[Field]): String =
