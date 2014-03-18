@@ -1,0 +1,17 @@
+> generate Checks password:String myUrl:String emailAddress:String pinPw:String
+
+
+# lets just check that the file gets created
+$ exists src/main/scala/pt/test/ok/models/Checks.scala
+
+
+# run scaffold on Post model
+> scaffold Checks
+
+
+# check if all files exist
+$ exists src/main/res/layout/fragment_edit_checks.xml
+
+
+# check content
+> contents fixtures/src/main/res/layout/fragment_edit_checks.xml src/main/res/layout/fragment_edit_checks.xml
