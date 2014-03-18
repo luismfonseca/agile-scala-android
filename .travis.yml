@@ -7,5 +7,8 @@ before_install:
     - export COMPONENTS=build-tools-18.1.0,android-16,sysimg-16,extra-android-support
     - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
     - source ~/.android-sdk-installer/env
+	
+  # Install required Android components
+    - android update sdk --filter platform-tools,android-19,extra-android-support --no-ui --force
 
 script: wget https://raw.github.com/paulp/sbt-extras/master/sbt && chmod u+x ./sbt && ./sbt scripted
