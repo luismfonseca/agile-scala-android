@@ -8,10 +8,11 @@
     <uses-sdk android:minSdkVersion="19" />
     
     <application
+        android:theme="@style/AppTheme"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher">
         <activity
-            android:name="MainActivity"
+            android:name="pt.test.ok.ui.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

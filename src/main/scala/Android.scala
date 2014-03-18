@@ -3,7 +3,7 @@ package agile.android
 import sbt._
 import scala.xml._
 
-object Android
+protected object Android
 {
   def findManifestPath(sourceDirectory: File): File =
   {

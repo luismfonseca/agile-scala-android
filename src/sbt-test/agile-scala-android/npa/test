@@ -1,5 +1,6 @@
 > npa pt.test.ok 19
 
+
 # check folder structure
 $ exists src/
 $ exists src/main/
@@ -24,6 +25,11 @@ $ exists build.sbt
 > contents fixtures/build.sbt build.sbt
 
 
+# check plugins.sbt
+$ exists project/plugins.sbt
+> contents fixtures/project/plugins.sbt project/plugins.sbt
+
+
 # check project build.properties
 $ exists project/build.properties
 > contents fixtures/project/build.properties project/build.properties
@@ -33,10 +39,20 @@ $ exists project/build.properties
 $ exists src/main/res/values/string.xml
 $ exists src/main/res/values/dimens.xml
 $ exists src/main/res/values/styles.xml
+$ exists src/main/res/layout/activity_main.xml
+$ exists src/main/scala/pt/test/ok/ui/MainActivity.scala
 > contents fixtures/src/main/res/values/string.xml src/main/res/values/string.xml
 > contents fixtures/src/main/res/values/dimens.xml src/main/res/values/dimens.xml
 > contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml
+> contents fixtures/src/main/res/layout/activity_main.xml src/main/res/layout/activity_main.xml
+> contents fixtures/src/main/scala/pt/test/ok/ui/MainActivity.scala src/main/scala/pt/test/ok/ui/MainActivity.scala
+
 
 # check manifest
 $ exists src/main/AndroidManifest.xml
 > contents fixtures/src/main/AndroidManifest.xml src/main/AndroidManifest.xml
+
+
+# final test to assure it compiles
+> reload
+> compile

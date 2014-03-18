@@ -42,11 +42,11 @@ object Plugin extends Plugin
 
       val directories = Create.directoriesWith(packageName, minSdkVersion)
 
-      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, packageName, minSdkVersion)
+      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, version.value, packageName, minSdkVersion)
 
       IO.write(Create.sbtBuildPropertiesFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildPropertiesContent))
-      IO.write(Create.sbtBuildFile, Create.sbtBuildContent)
-
+      IO.write(Create.sbtBuildFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildContent))
+      IO.write(Create.sbtPluginsFile, Create.applyTemplate(templateKeysNewProject, Create.sbtPluginsContent))
       streams.value.log.info("Generated sbt build properties")
 
       IO.write(Create.androidManifestFile, Create.applyTemplate(templateKeysNewProject, Create.manifestXMLContent))
@@ -59,10 +59,13 @@ object Plugin extends Plugin
       IO.write(Create.valuesDimensionsFile, Create.valuesDimensionsXMLContent)
       IO.write(Create.valuesStylesFile, Create.valuesStylesXMLContent)
       IO.write(Create.layoutMainFile, Create.layoutMainXMLContent)
+      IO.write(
+        new File(Create.applyTemplate(templateKeysNewProject, Create.mainActivityFile.getPath)),
+        Create.applyTemplate(templateKeysNewProject, Create.mainActivityContent)
+      )
       IO.write(Create.drawableHdpiFile, Create.drawableHdpiByteArray)
       IO.write(Create.drawableMdpiFile, Create.drawableMdpiByteArray)
       IO.write(Create.drawableXHdpiFile, Create.drawableXHdpiByteArray)
-      // Todo: the main class
       streams.value.log.info("Generated source files.")
 
       IO.write(Create.gitignoreFile, Create.defaultGitIgnoreContent)

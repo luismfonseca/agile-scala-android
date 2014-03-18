@@ -6,9 +6,11 @@ import collection.immutable.ListMap
 object Create
 {
 
-  def templateKeys(sbtVersion: String, packageName: String, minSdkVersion: Int) = {
+  def templateKeys(sbtVersion: String, pluginVersion: String, packageName: String, minSdkVersion: Int) = {
     ListMap[String, String](
       "SBT_VERSION" -> sbtVersion,
+      "PLUGIN_VERSION" -> pluginVersion,
+      "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_NAME" -> packageName,
       "MIN_SDK_VERSION" -> minSdkVersion.toString
     )
@@ -23,11 +25,13 @@ object Create
 
   val sbtBuildPropertiesFile = new File("project/build.properties")
   val sbtBuildFile = new File("build.sbt")
+  val sbtPluginsFile = new File("project/plugins.sbt")
   val androidManifestFile = new File("src/main/AndroidManifest.xml")
   val valuesStringFile = new File("src/main/res/values/string.xml")
   val valuesDimensionsFile = new File("src/main/res/values/dimens.xml")
   val valuesStylesFile = new File("src/main/res/values/styles.xml")
-  val layoutMainFile = new File("src/main/res/layout/main.xml")
+  val layoutMainFile = new File("src/main/res/layout/activity_main.xml")
+  val mainActivityFile = new File("src/main/scala/PACKAGE_NAME_AS_DIR/ui/MainActivity.scala")
   val drawableHdpiFile = new File("src/main/res/drawable-hdpi/ic_launcher.png")
   val drawableMdpiFile = new File("src/main/res/drawable-mdpi/ic_launcher.png")
   val drawableXHdpiFile = new File("src/main/res/drawable-xhdpi/ic_launcher.png")
@@ -65,6 +69,9 @@ object Create
   def sbtBuildContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/build.sbt"))
 
+  def sbtPluginsContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/project/plugins.sbt"))
+
   def manifestXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/AndroidManifest.xml"))
 
@@ -78,7 +85,10 @@ object Create
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/styles.xml"))
 
   def layoutMainXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/main.xml"))
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/activity_main.xml"))
+
+  def mainActivityContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/scala/PACKAGE_NAME_AS_DIR/ui/MainActivity.scala"))
 
   def defaultGitIgnoreContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/gitignore"))
