@@ -2,7 +2,9 @@
     mFIELD_NAME_CAPITALIZEDButton.onClick({
       
         val calendar = Calendar.getInstance()
-        calendar.setTime(mModel.FIELD_NAME_AS_IS)
+		if (mModel.FIELD_NAME_AS_IS != null) {
+          calendar.setTime(mModel.FIELD_NAME_AS_IS)
+		}
         val year: Int = calendar.get(Calendar.YEAR)
         val month: Int = calendar.get(Calendar.MONTH)
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)

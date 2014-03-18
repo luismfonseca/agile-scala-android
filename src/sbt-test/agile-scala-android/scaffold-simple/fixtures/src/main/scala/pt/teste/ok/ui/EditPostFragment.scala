@@ -73,7 +73,11 @@ class EditPostFragment extends Fragment {
     if (getArguments() != null) {
       if (getArguments().getBoolean(EditPostFragment.BUNDLE_CREATE_NEW))
       {
-        mModel = new Post("dummynew", 0, new Date())
+        mModel = new Post(
+          "Lorem ipsum dolor sit amet.",
+          5,
+          new Date()
+        )
       }
       else
       {
@@ -106,7 +110,9 @@ class EditPostFragment extends Fragment {
     mDateButton.onClick({
       
         val calendar = Calendar.getInstance()
-        calendar.setTime(mModel.date)
+		if (mModel.date != null) {
+          calendar.setTime(mModel.date)
+		}
         val year: Int = calendar.get(Calendar.YEAR)
         val month: Int = calendar.get(Calendar.MONTH)
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)

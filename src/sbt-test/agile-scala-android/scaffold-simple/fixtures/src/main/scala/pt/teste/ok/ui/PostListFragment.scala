@@ -41,7 +41,11 @@ class PostListFragment extends ListFragment {
     // TODO: Load real object from database
     (1 to 4).foldLeft(Array[Post]()) {
       (acc, index) => {
-        acc //:+ Post(/*write dummy data here*/) //"Title", index, new Date()
+        acc :+ Post(
+          "Lorem ipsum dolor sit amet.",
+          5,
+          new Date()
+        )
       }
     }
   }

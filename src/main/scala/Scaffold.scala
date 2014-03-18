@@ -6,6 +6,7 @@ import scala.xml._
 import java.lang.ClassLoader
 import java.lang.reflect.Field
 import collection.immutable.ListMap
+import scala.util.Random
 
 object Scaffold
 {
@@ -24,6 +25,7 @@ object Scaffold
       "FRAGMENT_VIEW_DISPLAY_FIELDS" -> applyTemplateOnFields("scala/fragment_view_display_", modelName, modelFields),
       "FRAGMENT_EDIT_VIEW_GET_FIELDS" -> applyTemplateOnFields("scala/EditFragment/view_get_", modelName, modelFields),
       "FRAGMENT_EDIT_VIEW_SET_FIELDS" -> applyTemplateOnFields("scala/EditFragment/view_set_", modelName, modelFields),
+      "RANDOM_DATA_COMMA_SEPARATED" ->  applyTemplateOnFields("scala/RandomData/comma_", modelName, modelFields),
       "LIST_ADAPTER_VIEWHOLDER_ELEMENTS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_element_", modelName, modelFields),
       "LIST_ADAPTER_VIEWHOLDER_PARAMETERS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_parameters_", modelName, modelFields),
       "VIEWHOLDER_DISPLAY_FIELDS" ->  applyTemplateOnFields("scala/ListAdapter/viewholder_display_", modelName, modelFields),
@@ -156,7 +158,8 @@ object Scaffold
       "FIELD_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelField.toString.split('.').last)),
       "MODEL_NAME" -> modelName,
       "FIELD_NAME_AS_IS" -> modelField.toString.split('.').last,
-      "FIELD_NAME_CAPITALIZED" -> Util.capitalize(modelField.toString.split('.').last)
+      "FIELD_NAME_CAPITALIZED" -> Util.capitalize(modelField.toString.split('.').last),
+      "RANDOM_INT" -> new Random(index).nextInt(10).toString()
     )
 
   private def applyTemplateOnFields(templateType: String, modelName: String, modelFields: Array[Field]): String =

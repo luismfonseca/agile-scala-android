@@ -39,7 +39,9 @@ class CLASS_NAME_AS_ISListFragment extends ListFragment {
     // TODO: Load real object from database
     (1 to 4).foldLeft(Array[CLASS_NAME_AS_IS]()) {
       (acc, index) => {
-        acc //:+ CLASS_NAME_AS_IS(/*write dummy data here*/) //"Title", index, new Date()
+        acc :+ CLASS_NAME_AS_IS(
+RANDOM_DATA_COMMA_SEPARATED
+        )
       }
     }
   }

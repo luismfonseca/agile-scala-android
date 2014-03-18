@@ -63,7 +63,9 @@ FRAGMENT_EDIT_VIEW_GET_FIELDS
     if (getArguments() != null) {
       if (getArguments().getBoolean(EditCLASS_NAME_AS_ISFragment.BUNDLE_CREATE_NEW))
       {
-        mModel = new CLASS_NAME_AS_IS("dummynew", 0, new Date())
+        mModel = new CLASS_NAME_AS_IS(
+RANDOM_DATA_COMMA_SEPARATED
+        )
       }
       else
       {
