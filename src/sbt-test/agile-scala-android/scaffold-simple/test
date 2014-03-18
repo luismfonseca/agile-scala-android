@@ -16,6 +16,15 @@ $ exists src/main/res/animator/slide_in.xml
 $ exists src/main/res/animator/slide_out.xml
 $ exists src/main/res/values/styles.xml
 $ exists src/main/res/values/dimens.xml
+$ exists src/main/scala/pt/teste/ok/ui/ChangeToFragmentHandler.scala
+$ exists src/main/scala/pt/teste/ok/ui/EditPostActivity.scala
+$ exists src/main/scala/pt/teste/ok/ui/EditPostFragment.scala
+$ exists src/main/scala/pt/teste/ok/ui/PostFragment.scala
+$ exists src/main/scala/pt/teste/ok/ui/PostListAdapter.scala
+$ exists src/main/scala/pt/teste/ok/ui/PostListFragment.scala
+$ exists src/main/scala/pt/teste/ok/ui/PostMainActivity.scala
+
+
 
 # check drawables
 $ exists src/main/res/drawable-hdpi/ic_menu_cancel_holo_dark.png
@@ -46,3 +55,10 @@ $ exists src/main/res/drawable-xhdpi/ic_placeholder.png
 > contents fixtures/src/main/res/animator/slide_out.xml src/main/res/animator/slide_out.xml
 > contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml
 > contents fixtures/src/main/res/values/dimens.xml src/main/res/values/dimens.xml
+> contents fixtures/src/main/scala/pt/teste/ok/ui/ChangeToFragmentHandler.scala src/main/scala/pt/teste/ok/ui/ChangeToFragmentHandler.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/EditPostActivity.scala src/main/scala/pt/teste/ok/ui/EditPostActivity.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/EditPostFragment.scala src/main/scala/pt/teste/ok/ui/EditPostFragment.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/PostFragment.scala src/main/scala/pt/teste/ok/ui/PostFragment.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/PostListAdapter.scala src/main/scala/pt/teste/ok/ui/PostListAdapter.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/PostListFragment.scala src/main/scala/pt/teste/ok/ui/PostListFragment.scala
+> contents fixtures/src/main/scala/pt/teste/ok/ui/PostMainActivity.scala src/main/scala/pt/teste/ok/ui/PostMainActivity.scala
