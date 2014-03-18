@@ -1,0 +1,1 @@
+      viewHolder.FIELD_NAME_AS_IS.setText(DateFormat.format("dd-MM-yyyy", items(position).FIELD_NAME_AS_IS))

@@ -1,0 +1,25 @@
+    mFIELD_NAME_CAPITALIZEDButton = view.findViewById(R.id.create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED).asInstanceOf[Button]
+    mFIELD_NAME_CAPITALIZEDButton.onClick({
+      
+        val calendar = Calendar.getInstance()
+		if (mModel.FIELD_NAME_AS_IS != null) {
+          calendar.setTime(mModel.FIELD_NAME_AS_IS)
+		}
+        val year: Int = calendar.get(Calendar.YEAR)
+        val month: Int = calendar.get(Calendar.MONTH)
+        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+
+        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+          override def onDateSet(datePickerView: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int): Unit = {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            mModel = mModel.copy(FIELD_NAME_AS_IS = calendar.getTime())
+            mFIELD_NAME_CAPITALIZEDButton.setText(DateFormat.format("dd-MM-yyyy", mModel.FIELD_NAME_AS_IS))
+          }
+        }, year, month, day).show()
+
+    })
