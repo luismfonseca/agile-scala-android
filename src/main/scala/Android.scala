@@ -1,3 +1,5 @@
+package agile.android
+
 import sbt._
 import scala.xml._
 

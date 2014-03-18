@@ -1,3 +1,5 @@
+package agile.android
+
 import java.io.File
 import collection.immutable.ListMap
 

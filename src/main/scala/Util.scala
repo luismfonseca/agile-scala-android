@@ -1,3 +1,5 @@
+package agile.android
+
 import scala.xml.Node
 import scala.xml.XML
 import scala.xml.PrettyPrinter
