@@ -29,7 +29,7 @@ object Scaffold
       "LIST_ADAPTER_VIEWHOLDER_ELEMENTS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_element_", modelName, modelFields),
       "LIST_ADAPTER_VIEWHOLDER_PARAMETERS" -> applyTemplateOnFields("scala/ListAdapter/viewholder_parameters_", modelName, modelFields),
       "VIEWHOLDER_DISPLAY_FIELDS" ->  applyTemplateOnFields("scala/ListAdapter/viewholder_display_", modelName, modelFields),
-      "TWO_OR_THREE_IF_ITEMS_CONTAINS_DATE" -> (if (modelFields.exists(_.getType() == classOf[java.util.Date])) "2" else "3"),
+      "TWO_OR_THREE_IF_ITEMS_CONTAINS_DATE" -> (if (modelFields.exists(_.getType() == classOf[java.util.Date])) "3" else "2"),
       "ITEM_MODEL_ATTRIBUTE_PLACEHOLDER_ID" -> "@+id/item_CLASS_NAME_UNDERSCORED_placeholder",
       "MENU_CONTEXT" -> menuContext(packageName, modelName),
       "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
