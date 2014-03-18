@@ -6,8 +6,9 @@
     tools:context="MENU_CONTEXT"
     >
     <item
-        android:id="MENU_ID"
-        android:title="MENU_TITLE"
+        android:id="@+id/menu_main_new_CLASS_NAME_UNDERSCORED"
+        android:title="@string/menu_main_new_CLASS_NAME_UNDERSCORED"
+        android:icon="@drawable/ic_menu_new"
         android:showAsAction="ifRoom"
         />
 
