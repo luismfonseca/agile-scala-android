@@ -1,3 +1,5 @@
+package agile.android
+
 import sbt._
 import sbt.complete._
 import java.io._
