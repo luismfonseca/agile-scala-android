@@ -6,8 +6,9 @@
     tools:context="pt.teste.ok.ui.PostMainActivity"
     >
     <item
-        android:id="@+id/menu_main_post"
+        android:id="@+id/menu_main_new_post"
         android:title="@string/menu_main_new_post"
+        android:icon="@drawable/ic_menu_new"
         android:showAsAction="ifRoom"
         />
 
