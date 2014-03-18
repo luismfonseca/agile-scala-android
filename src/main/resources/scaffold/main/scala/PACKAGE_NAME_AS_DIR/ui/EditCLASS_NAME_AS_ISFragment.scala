@@ -23,7 +23,7 @@ object EditCLASS_NAME_AS_ISFragment {
   val BUNDLE_MODEL_JSON: String = "model_json"
   val BUNDLE_CREATE_NEW: String = "create_new"
 
-  def newInstance(model: Post): EditCLASS_NAME_AS_ISFragment = {
+  def newInstance(model: CLASS_NAME_AS_IS): EditCLASS_NAME_AS_ISFragment = {
     val arguments = new Bundle()
     arguments.putString(BUNDLE_MODEL_JSON, new Gson().toJson(model))
 
@@ -40,7 +40,7 @@ FRAGMENT_EDIT_FIELDS
   private val mActionBarListener = (view: View) => {
     view.getId() match {
       case R.id.action_cancel => {
-        getActivity().setResult(EditPostActivity.RESULT_NOTHING_CHANGED)
+        getActivity().setResult(EditCLASS_NAME_AS_ISActivity.RESULT_NOTHING_CHANGED)
         getActivity().finish()
       }
       case R.id.action_done => {

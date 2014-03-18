@@ -35,6 +35,8 @@ object Scaffold
       "MENU_ID" -> "@+id/menu_main_CLASS_NAME_UNDERSCORED",
       "MENU_TITLE" -> "@string/menu_main_new_CLASS_NAME_UNDERSCORED",
       "ID_EDIT_ACTIVITY" -> "@+id/edit_CLASS_NAME_UNDERSCORED_container",
+      "ID_MAIN_ACTIVITY" -> "@+id/CLASS_NAME_UNDERSCORED_main_container",
+      "CLASS_MAIN_ACTIVITY" -> (packageName + ".ui." + modelName + "Activity"),
       "CLASS_EDIT_ACTIVITY" -> (packageName + ".ui.Edit" + modelName + "Activity"),
       "CLASS_EDIT_FRAGMENT" -> (packageName + ".ui.Edit" + modelName + "Fragment"), 
       "CLASS_FRAGMENT" -> (packageName + ".ui." + modelName + "Fragment"),
