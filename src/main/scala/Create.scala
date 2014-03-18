@@ -6,9 +6,10 @@ import collection.immutable.ListMap
 object Create
 {
 
-  def templateKeys(sbtVersion: String, packageName: String, minSdkVersion: Int) = {
+  def templateKeys(sbtVersion: String, pluginVersion: String, packageName: String, minSdkVersion: Int) = {
     ListMap[String, String](
       "SBT_VERSION" -> sbtVersion,
+      "PLUGIN_VERSION" -> pluginVersion,
       "PACKAGE_NAME" -> packageName,
       "MIN_SDK_VERSION" -> minSdkVersion.toString
     )
@@ -23,6 +24,7 @@ object Create
 
   val sbtBuildPropertiesFile = new File("project/build.properties")
   val sbtBuildFile = new File("build.sbt")
+  val sbtPluginsFile = new File("project/plugins.sbt")
   val androidManifestFile = new File("src/main/AndroidManifest.xml")
   val valuesStringFile = new File("src/main/res/values/string.xml")
   val valuesDimensionsFile = new File("src/main/res/values/dimens.xml")
@@ -64,6 +66,9 @@ object Create
 
   def sbtBuildContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/build.sbt"))
+
+  def sbtPluginsContent =
+    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/project/plugins.sbt"))
 
   def manifestXMLContent =
     Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/AndroidManifest.xml"))

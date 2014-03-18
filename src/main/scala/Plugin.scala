@@ -42,11 +42,11 @@ object Plugin extends Plugin
 
       val directories = Create.directoriesWith(packageName, minSdkVersion)
 
-      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, packageName, minSdkVersion)
+      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, version.value, packageName, minSdkVersion)
 
       IO.write(Create.sbtBuildPropertiesFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildPropertiesContent))
-      IO.write(Create.sbtBuildFile, Create.sbtBuildContent)
-
+      IO.write(Create.sbtBuildFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildContent))
+      IO.write(Create.sbtPluginsFile, Create.applyTemplate(templateKeysNewProject, Create.sbtPluginsContent))
       streams.value.log.info("Generated sbt build properties")
 
       IO.write(Create.androidManifestFile, Create.applyTemplate(templateKeysNewProject, Create.manifestXMLContent))
