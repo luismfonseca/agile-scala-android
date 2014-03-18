@@ -115,11 +115,25 @@ object Scaffold
         val finalFileContent =
           if (finalFilePath.exists)
           {
-            // NOTE:assuming xml files only
+            // NOTE: assuming xml files only
             val originalFileContent = XML.loadFile(finalFilePath)
 
             // TODO: enforce override\merge policies here.
-            Util.mergeXML(originalFileContent, XML.loadString(partialFileContent), "name", false)
+            if (finalFilePath.getPath.endsWith("AndroidManifest.xml"))
+            {
+              val originalApplicationNode = originalFileContent.child.filter(_.label == "application")(0)
+              val partialApplicationNode = XML.loadString(partialFileContent).child.filter(_.label == "application")(0).child(1)
+              val newApplicationElement = Util.appendNodesXML(
+                originalApplicationNode,
+                partialApplicationNode
+              )
+
+              originalFileContent.copy(child = originalFileContent.child.filterNot(_.label == "application") :+ newApplicationElement)
+            }
+            else
+            {
+              Util.mergeXML(originalFileContent, XML.loadString(partialFileContent), "name", false)
+            }
           }
           else
           {
