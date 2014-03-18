@@ -45,13 +45,27 @@ object Util
       }
       else
       {
-        b.child filterNot(elementb => a.child.exists(elementa => (elementa.attribute(attribute) == elementb.attribute(attribute))))
+        if (attribute contains ":")
+        {
+          val attributeName = (attribute split ":")(1)
+          b.child filterNot(elementb => a.child.exists(elementa =>
+            (elementa.attribute("http://schemas.android.com/apk/res/android", "name") == elementb.attribute("http://schemas.android.com/apk/res/android", "name"))))
+        }
+        else
+        {
+          b.child filterNot(elementb => a.child.exists(elementa => (elementa.attribute(attribute) == elementb.attribute(attribute))))
+        }
       }
     )
   }
 
   def mergeXML(a: xml.Elem, b: xml.Elem, attribute: String, overriding: Boolean) =
     XML.loadString("<" + a.label + ">\n    " + (mergeChildrenXML(a, b, attribute, overriding) filterNot(node => node.text.trim == "") mkString("\n    ")) + "\n</" + a.label + ">")
+
+  def appendNodesXML(a: xml.Node, b: xml.Node) =
+  {
+    a.asInstanceOf[scala.xml.Elem].copy(child = a.child :+ b)
+  }
 
   def prettyXML(node: Node) = Seq(
     "<?xml version='1.0' encoding='UTF-8'?>" + IO.Newline,

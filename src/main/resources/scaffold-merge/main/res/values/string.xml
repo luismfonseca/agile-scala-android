@@ -2,4 +2,5 @@
     <string name="save_label">save</string>
     <string name="cancel_label">cancel</string>
 	<string name="menu_main_new_CLASS_NAME_UNDERSCORED">New MODEL_NAME_PRETTY</string>
+	<string name="title_edit_CLASS_NAME_UNDERSCORED">Edit MODEL_NAME_PRETTY</string>
 </resources>

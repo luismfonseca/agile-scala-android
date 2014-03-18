@@ -1,0 +1,87 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dddddd"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:rowCount="5"
+            android:layout_margin="@dimen/default_layout_margin"
+            android:padding="@dimen/default_padding"
+            android:background="@android:color/white"
+            tools:context="pt.test.ok.ui.EditChecksFragment">
+
+            <TextView
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Password"/>
+            <EditText
+                android:id="@+id/create_checks_password"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_gravity="fill_horizontal"
+				android:inputType="textPassword"
+                android:text=""/>
+            <TextView
+                android:layout_column="0"
+                android:layout_row="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="My Url"/>
+            <EditText
+                android:id="@+id/create_checks_my_url"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:layout_gravity="fill_horizontal"
+				android:inputType="textUri"
+                android:text=""/>
+            <TextView
+                android:layout_column="0"
+                android:layout_row="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Email Address"/>
+            <EditText
+                android:id="@+id/create_checks_email_address"
+                android:layout_column="1"
+                android:layout_row="2"
+                android:layout_gravity="fill_horizontal"
+				android:inputType="textEmailAddress"
+                android:text=""/>
+            <TextView
+                android:layout_column="0"
+                android:layout_row="3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Pin Pw"/>
+            <EditText
+                android:id="@+id/create_checks_pin_pw"
+                android:layout_column="1"
+                android:layout_row="3"
+                android:layout_gravity="fill_horizontal"
+				android:inputType="numberPassword"
+                android:text=""/>
+
+        </GridLayout>
+
+        <AbsoluteLayout
+            style="@style/CardBottomBar"
+            />
+    </LinearLayout>
+</ScrollView>
