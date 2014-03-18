@@ -51,3 +51,8 @@ $ exists src/main/scala/pt/test/ok/ui/MainActivity.scala
 # check manifest
 $ exists src/main/AndroidManifest.xml
 > contents fixtures/src/main/AndroidManifest.xml src/main/AndroidManifest.xml
+
+
+# final test to assure it compiles
+> reload
+> compile
