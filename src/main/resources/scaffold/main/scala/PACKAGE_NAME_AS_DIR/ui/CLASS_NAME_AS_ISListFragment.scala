@@ -1,4 +1,4 @@
-package pt.pimentelfonseca.agilescalaandroid.app.ui
+package PACKAGE_UI
 
 import android.app.ListFragment
 import android.os.Bundle
@@ -9,11 +9,10 @@ import org.scaloid.common._
 
 import com.google.gson.Gson
 
-import java.util.Date
+IMPORT_MODEL_FIELDS_DEPENDENCIES
+import PACKAGE_MODELS.CLASS_NAME_AS_IS
 
-import pt.pimentelfonseca.agilescalaandroid.app.models.Post
-
-object PostListFragment {
+object CLASS_NAME_AS_ISListFragment {
   val BUNDLE_MODEL_JSON = "model_json"
 
   val MENU_ITEM_EDIT = 1
@@ -21,24 +20,26 @@ object PostListFragment {
 
   val REQUEST_EDIT = 1
 
-  def newInstance(model: Post): PostListFragment = {
+  def newInstance(model: CLASS_NAME_AS_IS): CLASS_NAME_AS_ISListFragment = {
     val arguments = new Bundle()
     arguments.putString(BUNDLE_MODEL_JSON, new Gson().toJson(model))
 
-    val fragment = new PostListFragment()
+    val fragment = new CLASS_NAME_AS_ISListFragment()
     fragment.setArguments(arguments)
     fragment
   }
 }
 
-class PostListFragment extends ListFragment {
+class CLASS_NAME_AS_ISListFragment extends ListFragment {
 
-  var mListAdapter: PostListAdapter = _
+  var mListAdapter: CLASS_NAME_AS_ISListAdapter = _
 
-  lazy val mItems: Array[Post] = {
-    (1 to 4).foldLeft(Array[Post]()) {
+  lazy val mItems: Array[CLASS_NAME_AS_IS] = {
+  
+    // TODO: Load real object from database
+    (1 to 4).foldLeft(Array[CLASS_NAME_AS_IS]()) {
       (acc, index) => {
-        acc :+ Post("Title", index, new Date())
+        acc //:+ CLASS_NAME_AS_IS(/*write dummy data here*/) //"Title", index, new Date()
       }
     }
   }
@@ -48,20 +49,14 @@ class PostListFragment extends ListFragment {
 
     getListView().setDividerHeight(0)
 
-      // TODO: Load real objects from a database
-
-      //1 to 4 foreach {
-      //    mItems.add(Post("Ok", 1, new Date()))
-      //}
-
-    mListAdapter = new PostListAdapter(getActivity(), mItems)
+    mListAdapter = new CLASS_NAME_AS_ISListAdapter(getActivity(), mItems)
     setListAdapter(mListAdapter)
   }
 
   override def onListItemClick(listView: ListView, view: View, position: Int, id: Long) {
 
-    val postFragment = PostFragment.newInstance(mItems(position))
+    val CLASS_NAME_UNCAPITALIZEDFragment = CLASS_NAME_AS_ISFragment.newInstance(mItems(position))
 
-    (getActivity().asInstanceOf[ChangeToFragmentHandler]).onChangeToFragment(postFragment)
+    (getActivity().asInstanceOf[ChangeToFragmentHandler]).onChangeToFragment(CLASS_NAME_UNCAPITALIZEDFragment)
   }
 }

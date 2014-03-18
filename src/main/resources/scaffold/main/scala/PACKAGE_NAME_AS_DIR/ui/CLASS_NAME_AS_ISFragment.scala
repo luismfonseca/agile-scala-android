@@ -17,8 +17,8 @@ import org.scaloid.common._
 import com.google.gson.Gson
 
 IMPORT_MODEL_FIELDS_DEPENDENCIES
-
 import PACKAGE_MODELS.CLASS_NAME_AS_IS
+
 import PACKAGE_R
 
 object CLASS_NAME_AS_ISFragment {
@@ -47,7 +47,6 @@ object CLASS_NAME_AS_ISFragment {
 class CLASS_NAME_AS_ISFragment extends Fragment {
 
   var mModel: CLASS_NAME_AS_IS = _
-  
 FRAGMENT_VIEW_FIELDS
   override def onCreate(bundle: Bundle): Unit = {
     super.onCreate(bundle)

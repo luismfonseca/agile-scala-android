@@ -1,4 +1,4 @@
-package pt.pimentelfonseca.agilescalaandroid.app.ui
+package PACKAGE_UI
 
 import android.app.Fragment
 import android.app.FragmentManager
@@ -9,33 +9,33 @@ import android.view.MenuItem
 
 import org.scaloid.common._
 
-import pt.pimentelfonseca.agilescalaandroid.app.R
+import PACKAGE_R
 
-class PostMainActivity
+class CLASS_NAME_AS_ISMainActivity
   extends SActivity
-  with PostFragment.PostDeleteHandler
+  with CLASS_NAME_AS_ISFragment.CLASS_NAME_AS_ISDeleteHandler
   with ChangeToFragmentHandler
   with FragmentManager.OnBackStackChangedListener {
 
   override def onCreate(savedInstanceState: Bundle): Unit = {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_post)
+    setContentView(R.layout.activity_CLASS_NAME_UNDERSCORED)
 
     if (savedInstanceState == null) {
         getFragmentManager()
           .beginTransaction()
-          .add(R.id.post_main_container, new PostListFragment())
+          .add(R.id.CLASS_NAME_UNDERSCORED_main_container, new CLASS_NAME_AS_ISListFragment())
           .commit()
     }
     getFragmentManager().addOnBackStackChangedListener(this)
   }
   
   override def onCreateOptionsMenu(menu: Menu): Boolean = {
-    val currentFragment = getFragmentManager().findFragmentById(R.id.post_main_container)
+    val currentFragment = getFragmentManager().findFragmentById(R.id.CLASS_NAME_UNDERSCORED_main_container)
 
-    if (currentFragment.getClass() == classOf[PostListFragment])
+    if (currentFragment.getClass() == classOf[CLASS_NAME_AS_ISListFragment])
     {
-        getMenuInflater().inflate(R.menu.main_post, menu)
+        getMenuInflater().inflate(R.menu.main_CLASS_NAME_UNDERSCORED, menu)
         return true
     }
     return super.onCreateOptionsMenu(menu)
@@ -49,10 +49,10 @@ class PostMainActivity
         true
       }
 
-      case R.id.menu_main_new_post => {
+      case R.id.menu_main_new_CLASS_NAME_UNDERSCORED => {
 
-        val intent = new Intent(this, classOf[EditPostActivity])
-        intent.putExtra(EditPostFragment.BUNDLE_CREATE_NEW, true)
+        val intent = new Intent(this, classOf[EditCLASS_NAME_AS_ISActivity])
+        intent.putExtra(EditCLASS_NAME_AS_ISFragment.BUNDLE_CREATE_NEW, true)
 
         startActivity(intent)
         true
@@ -62,14 +62,14 @@ class PostMainActivity
   }
 
 
-  override def onPostDeleteHandler(): Unit = {
+  override def onCLASS_NAME_AS_ISDeleteHandler(): Unit = {
     getFragmentManager().popBackStack()
   }
 
   override def onChangeToFragment(fragment: Fragment): Unit = {
     getFragmentManager().beginTransaction()
       .setCustomAnimations(R.animator.slide_in, R.animator.slide_out)
-      .replace(R.id.post_main_container, fragment)
+      .replace(R.id.CLASS_NAME_UNDERSCORED_main_container, fragment)
       .addToBackStack(null)
       .commit()
   }
