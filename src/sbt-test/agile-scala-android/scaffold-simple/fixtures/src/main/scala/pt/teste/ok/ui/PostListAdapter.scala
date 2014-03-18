@@ -49,7 +49,8 @@ class PostListAdapter(val context: Activity, val items: Array[Post]) extends Arr
     if (items(position) != null) {
       viewHolder.title.setText(items(position).title)
       viewHolder.numberOfLikes.setText("" + items(position).numberOfLikes)
-      viewHolder.date.setText("" + DateFormat.format("dd-MM-yyyy", items(position).date))
+      viewHolder.date.setText(DateFormat.format("dd-MM-yyyy", items(position).date))
+
     }
 
     return rowView

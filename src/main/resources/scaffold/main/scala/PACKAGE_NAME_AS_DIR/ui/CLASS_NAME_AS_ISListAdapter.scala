@@ -42,9 +42,7 @@ LIST_ADAPTER_VIEWHOLDER_PARAMETERS
     val viewHolder = rowView.getTag().asInstanceOf[ViewHolder]
     viewHolder.placeholder.setImageResource(R.drawable.ic_placeholder)
     if (items(position) != null) {
-      viewHolder.title.setText(items(position).title)
-      viewHolder.numberOfLikes.setText("" + items(position).numberOfLikes)
-      viewHolder.date.setText("" + DateFormat.format("dd-MM-yyyy", items(position).date))
+VIEWHOLDER_DISPLAY_FIELDS
     }
 
     return rowView
