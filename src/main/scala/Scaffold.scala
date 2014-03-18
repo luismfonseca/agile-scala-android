@@ -161,7 +161,7 @@ object Scaffold
   }
 
 
-  private def templateFieldKeys(modelName: String, modelField: Field, index: Integer) =
+  private def templateFieldKeys(fieldName: String, modelField: Field, index: Integer) =
     ListMap[String, String](
       "MODEL_ATTRIBUTE_NAME" -> "FIELD_NAME_PRETTY",
       "ITEM_MODEL_ATTRIBUTE_ID" -> "@+id/item_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED",
@@ -171,16 +171,17 @@ object Scaffold
       "COMMA_IF_NOT_FIRST " -> (if (index == 0) "" else ", "),
       "COMMA_NEW_LINE_IF_NOT_FIRST" -> (if (index == 0) "" else ",\n"),
       "LAYOUT_ROW" -> ("" + index),
-      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelName)),
+      "LINT_PROPER_INPUT_TYPE" -> getProperInputType(Util.camelToUnderscore(Util.uncapitalize(modelField.toString.split('.').last))),
+      "CLASS_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(fieldName)),
       "FIELD_NAME_UNDERSCORED" -> Util.camelToUnderscore(Util.uncapitalize(modelField.toString.split('.').last)),
       "FIELD_NAME_PRETTY" -> Util.camelToSpace(Util.uncapitalize(modelField.toString.split('.').last)),
-      "MODEL_NAME" -> modelName,
+      "MODEL_NAME" -> fieldName,
       "FIELD_NAME_AS_IS" -> modelField.toString.split('.').last,
       "FIELD_NAME_CAPITALIZED" -> Util.capitalize(modelField.toString.split('.').last),
       "RANDOM_INT" -> new Random(index).nextInt(10).toString()
     )
 
-  private def applyTemplateOnFields(templateType: String, modelName: String, modelFields: Array[Field]): String =
+  private def applyTemplateOnFields(templateType: String, fieldName: String, modelFields: Array[Field]): String =
     modelFields.zipWithIndex.foldLeft("")
     {
       (lines, modelFieldAndIndex) =>
@@ -194,10 +195,30 @@ object Scaffold
           throw new Exception("Unsupported field type: " + modelType)
         }
 
-        lines + applyTemplate(templateFieldKeys(modelName, modelField, index), Util.convertStreamToString(template))
+        lines + applyTemplate(templateFieldKeys(fieldName, modelField, index), Util.convertStreamToString(template))
       }
     }
 
+  private def getProperInputType(fieldName: String): String = 
+    if (fieldName.contains("password"))
+    {
+      "textPassword"
+    }
+    else if (fieldName.contains("url"))
+    {
+      "textUri"
+    }
+    else if (fieldName.contains("email"))
+    {
+      "textEmailAddress"
+    }
+    else if (fieldName.contains("_pin") || fieldName.contains("pin_"))
+    {
+      "numberPassword"
+    }
+    else {
+      "text"
+    }
 
   def findModels(classDirectory: File, sourceDirectory: File): Parser[Seq[String]] =
   {
