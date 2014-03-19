@@ -1,5 +1,6 @@
 package agile.android
 
+import sbt.IO
 import java.io.File
 import collection.immutable.ListMap
 
@@ -12,7 +13,8 @@ object Create
       "PLUGIN_VERSION" -> pluginVersion,
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_NAME" -> packageName,
-      "MIN_SDK_VERSION" -> minSdkVersion.toString
+      "MIN_SDK_VERSION" -> minSdkVersion.toString,
+      "GITIGNORE_FILE_NAME" -> ".gitignore"
     )
   }
 
@@ -23,82 +25,49 @@ object Create
     }
   }
 
-  val sbtBuildPropertiesFile = new File("project/build.properties")
-  val sbtBuildFile = new File("build.sbt")
-  val sbtPluginsFile = new File("project/plugins.sbt")
-  val androidManifestFile = new File("src/main/AndroidManifest.xml")
-  val valuesStringFile = new File("src/main/res/values/string.xml")
-  val valuesDimensionsFile = new File("src/main/res/values/dimens.xml")
-  val valuesStylesFile = new File("src/main/res/values/styles.xml")
-  val layoutMainFile = new File("src/main/res/layout/activity_main.xml")
-  val mainActivityFile = new File("src/main/scala/PACKAGE_NAME_AS_DIR/ui/MainActivity.scala")
-  val drawableHdpiFile = new File("src/main/res/drawable-hdpi/ic_launcher.png")
-  val drawableMdpiFile = new File("src/main/res/drawable-mdpi/ic_launcher.png")
-  val drawableXHdpiFile = new File("src/main/res/drawable-xhdpi/ic_launcher.png")
-  val gitignoreFile = new File(".gitignore")
+  def newProjectAndroid(sbtLogger: sbt.Logger, sbtVersion: String, pluginVersion: String, packageName: String, minSdkVersion: Int): Unit = {
 
-  
-  def directoriesWith(packageName: String, minSdkVersion: Int) = {
-    
-      val commonDirectories = Seq[String](
-        "src/main/res/values",
-        "src/main/res/layout",
-        "src/main/res/menu",
-        "src/test/scala",
-        "src/main/scala/" + packageName.replace('.', '/'),
-        "src/main/scala/" + packageName.replace('.', '/') + "/models",
-        "src/main/scala/" + packageName.replace('.', '/') + "/ui"
-      )
+    if (packageName.matches("""([\p{L}_$][\p{L}\p{N}_$]*\.)*[\p{L}_$][\p{L}\p{N}_$]*""") == false) {
+      throw new Exception("Given package name is not valid.")
+    }
 
-      val allDirectories =
-        if (minSdkVersion < 14)
-          commonDirectories
-        else
-          commonDirectories ++ Seq[String](
-            "src/main/res/drawable-hdpi",
-            "src/main/res/drawable-mdpi",
-            "src/main/res/drawable-xhdpi"
-          )
+    val templateKeysNewProject = templateKeys(sbtVersion, pluginVersion, packageName, minSdkVersion)
 
-      allDirectories map(new File(_))
+    Util.getResourceFiles("create/").foreach {
+      case (filePath, fileContent) => {
+        val finalFilePath = new File(applyTemplate(templateKeysNewProject, filePath))
+
+        val finalFileContent =  applyTemplate(templateKeysNewProject, fileContent)
+
+        // TODO: enforce override\merge policies here.
+        if (finalFilePath.exists == false)
+        {
+          IO.write(finalFilePath, finalFileContent)
+        }
+      }
+    }
+
+    Util.getResourceFilesRaw("create-raw/").foreach {
+      case (filePath, finalFileContent) => {
+        val finalFilePath = new File(applyTemplate(templateKeysNewProject, filePath))
+
+        // TODO: enforce override\merge policies here.
+        if (finalFilePath.exists == false)
+        {
+          IO.write(finalFilePath, finalFileContent)
+        }
+      }
+    }
+
+    // create missing folders
+    IO.createDirectories(
+      Seq("src/main/scala/PACKAGE_NAME_AS_DIR/models/")
+        map(path => new File(applyTemplate(templateKeysNewProject, path)))
+    )
+
+    sbtLogger.info("Generated sbt build definitions and the needed Android source files.")
+    sbtLogger.info("Generated a .gitignore file.")
+
+    sbtLogger.warn("Please type 'reload' to allow sbt to load the new build definitions!")
   }
-
-  def sbtBuildPropertiesContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/project/build.properties"))
-
-  def sbtBuildContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/build.sbt"))
-
-  def sbtPluginsContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/project/plugins.sbt"))
-
-  def manifestXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/AndroidManifest.xml"))
-
-  def valuesStringXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/string.xml"))
-
-  def valuesDimensionsXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/dimens.xml"))
-
-  def valuesStylesXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/values/styles.xml"))
-
-  def layoutMainXMLContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/res/layout/activity_main.xml"))
-
-  def mainActivityContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/src/main/scala/PACKAGE_NAME_AS_DIR/ui/MainActivity.scala"))
-
-  def defaultGitIgnoreContent =
-    Util.convertStreamToString(getClass.getClassLoader().getResourceAsStream("create/gitignore"))
-
-  def drawableHdpiByteArray =
-    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-hdpi/ic_launcher.png"))
-
-  def drawableMdpiByteArray =
-    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-mdpi/ic_launcher.png"))
-
-  def drawableXHdpiByteArray =
-    Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("create/res/drawable-xhdpi/ic_launcher.png"))
 }
