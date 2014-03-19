@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/luismfonseca/agile-scala-android.png?label=ready&title=Ready)](https://waffle.io/luismfonseca/agile-scala-android)
 # Towards agile Android development with Scala
 
 agile-scala-android is an extension for the Scala build tool [sbt][] which aims to make it as simple as possible to get started with Scala on Android.
