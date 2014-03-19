@@ -1,5 +1,5 @@
-[![Stories in Ready](https://badge.waffle.io/luismfonseca/agile-scala-android.png?label=ready&title=Ready)](https://waffle.io/luismfonseca/agile-scala-android)
 # Towards agile Android development with Scala
+[![Build Status](https://secure.travis-ci.org/luismfonseca/agile-scala-android.png?branch=master)](http://travis-ci.org/luismfonseca/agile-scala-android) [![Stories in Ready](https://badge.waffle.io/luismfonseca/agile-scala-android.png?label=ready&title=Ready)](https://waffle.io/luismfonseca/agile-scala-android)
 
 agile-scala-android is an extension for the Scala build tool [sbt][] which aims to make it as simple as possible to get started with Scala on Android.
 
@@ -77,9 +77,6 @@ If you need make modifications to the plugin itself, you can compile and install
 And don't forget to create and run tests:
 
     $ sbt scripted
-
-
-## Build Status from Travis CI - [![Build Status](https://secure.travis-ci.org/luismfonseca/agile-scala-android.png?branch=master)](http://travis-ci.org/luismfonseca/agile-scala-android)
 
 
 [sbt]: https://github.com/harrah/xsbt/wiki
