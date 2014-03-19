@@ -34,9 +34,15 @@ object Plugin extends Plugin
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {
       val args: Seq[String] = spaceDelimited("package minSdkVersion").parsed
+
       if (args.length < 2) {
         sys.error("Incorrect parameters.")
       }
+
+      if (args.head.matches("""([\p{L}_$][\p{L}\p{N}_$]*\.)*[\p{L}_$][\p{L}\p{N}_$]*""") == false) {
+        sys.error("Given package name is not valid.")
+      }
+
       val packageName = args(0)
       val minSdkVersion = args(1).toInt
 
