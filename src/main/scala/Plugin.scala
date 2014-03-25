@@ -83,7 +83,7 @@ object Plugin extends Plugin
 
       val model = Scaffold.findModels((classDirectory in Compile).value, sourceDirectory.value).parsed
 
-      val dirs = Scaffold.scaffoldFromModel((classDirectory in Compile).value, sourceDirectory.value, sourceDirectory.value, model(0))
+      val dirs = Scaffold.scaffoldFromModel((classDirectory in Compile).value, sourceDirectory.value, sourceDirectory.value, (externalDependencyClasspath in Runtime).value, model(0))
       streams.value.log.info(dirs.toString)
     }
 

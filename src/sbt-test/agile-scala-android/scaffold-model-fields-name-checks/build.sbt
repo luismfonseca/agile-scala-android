@@ -14,6 +14,8 @@ assemblySettings
 
 jarName in assembly := "foo.jar"
 
+libraryDependencies += "com.typesafe.slick" %% "slick" % "2.0.1"
+
 InputKey[Unit]("contents") <<= inputTask { (argsTask: TaskKey[Seq[String]]) =>
   (argsTask, streams) map {
     (args, out) =>

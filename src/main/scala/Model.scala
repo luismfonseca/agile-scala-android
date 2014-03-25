@@ -38,22 +38,52 @@ object Model
     new File(
       Android.getModelsPath(sourceDirectory, scalaSourceDirectory).getPath + "/" + modelName + ".scala"
     )
-    
+  
+  def isFieldAnId(field: String) = 
+  {
+    val fieldUnderscored = Util.camelToUnderscore(field)
+    fieldUnderscored == "id" || fieldUnderscored.startsWith("id_") || fieldUnderscored.endsWith("_id") || fieldUnderscored.endsWith("_i_d")
+  }
+
   // TODO: accept only known fields
   def generate(sourceDirectory: File, modelName: String, fields: Seq[String]) = {
 
+    val fieldsWithTypes: Seq[(String, String)] = fields.map(_.split(":") match { case Array(fieldName, fieldType) => (fieldName.trim, fieldType.trim) })
+
     val packageName = "package " + Android.findPackageName(sourceDirectory) + ".models"
 
-    val imports = resolveImports(fields.map(s => { s.split(":")(1).split("\\[")(0) }))
+    val imports = "import scala.slick.lifted.MappedTo\n" + resolveImports(fieldsWithTypes.map(_._2.split("\\[")(0)))
+
+    val (firstFieldName, firstFieldType) = fieldsWithTypes(0)
+
+    val isFirstFieldId = isFieldAnId(firstFieldName)
+
+    val finalFieldsWithTypes: Seq[(String, String)] = 
+      if (isFirstFieldId) {
+        (firstFieldName, modelName + "Id") +: fieldsWithTypes
+      }
+      else {
+        fieldsWithTypes :+ (Util.uncapitalize(modelName) + "Id", modelName + "Id = new " + modelName + "Id(-1)")
+      }
+
+    val mappedToType =
+      if (isFirstFieldId) {
+        firstFieldType
+      }
+      else {
+        "Int"
+      }
 
     var lines = Seq[String](
       packageName,
       "",
       imports,
-        "case class " + modelName + "(" + fields.reduce(_ + ", " + _.replace(":", ": ")) + ")",
-        "{",
-        "  ",
-        "}")
+      "class " + modelName + "Id(val value: " + mappedToType + ") extends MappedTo[" + mappedToType + "]",
+      "",
+      "case class " + modelName + "(" + finalFieldsWithTypes.map({case (fieldName, fieldType) => fieldName + ": " + fieldType}).reduce(_ + ", " + _) + ")",
+      "{",
+      "  ",
+      "}")
     lines
   }
 }
