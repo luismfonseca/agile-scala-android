@@ -150,7 +150,7 @@ object Scaffold
     }
 
     // raw files
-    val filesAndContentRaw = Util.getResourcesFilesRaw("scaffold-raw/")
+    val filesAndContentRaw = Util.getResourceFilesRaw("scaffold-raw/")
     filesAndContentRaw.foreach {
       case (filePath, finalFileContent) => {
         val finalFilePath = new File(sourceDirectory.getPath() + "/" + applyTemplate(templateKeysForModel, filePath))

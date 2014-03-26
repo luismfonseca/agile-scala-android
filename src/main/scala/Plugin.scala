@@ -32,48 +32,13 @@ object Plugin extends Plugin
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {
       val args: Seq[String] = spaceDelimited("package minSdkVersion").parsed
+
       if (args.length < 2) {
         sys.error("Incorrect parameters.")
       }
-      val packageName = args(0)
-      val minSdkVersion = args(1).toInt
 
-      val directories = Create.directoriesWith(packageName, minSdkVersion)
+      Create.newProjectAndroid(streams.value.log, sbtVersion.value, version.value, args(0), args(1).toInt)
 
-      val templateKeysNewProject = Create.templateKeys(sbtVersion.value, version.value, packageName, minSdkVersion)
-
-      IO.write(Create.sbtBuildPropertiesFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildPropertiesContent))
-      IO.write(Create.sbtBuildFile, Create.applyTemplate(templateKeysNewProject, Create.sbtBuildContent))
-      IO.write(Create.sbtPluginsFile, Create.applyTemplate(templateKeysNewProject, Create.sbtPluginsContent))
-      streams.value.log.info("Generated sbt build properties")
-
-      IO.write(Create.androidManifestFile, Create.applyTemplate(templateKeysNewProject, Create.manifestXMLContent))
-      streams.value.log.info("Generated Android manifest file.")
-
-      IO.createDirectories(directories)
-      streams.value.log.info("Generated source directories.")
-
-      IO.write(Create.valuesStringFile, Create.valuesStringXMLContent)
-      IO.write(Create.valuesDimensionsFile, Create.valuesDimensionsXMLContent)
-      IO.write(Create.valuesStylesFile, Create.valuesStylesXMLContent)
-      IO.write(Create.layoutMainFile, Create.layoutMainXMLContent)
-      IO.write(
-        new File(Create.applyTemplate(templateKeysNewProject, Create.mainActivityFile.getPath)),
-        Create.applyTemplate(templateKeysNewProject, Create.mainActivityContent)
-      )
-      IO.write(Create.drawableHdpiFile, Create.drawableHdpiByteArray)
-      IO.write(Create.drawableMdpiFile, Create.drawableMdpiByteArray)
-      IO.write(Create.drawableXHdpiFile, Create.drawableXHdpiByteArray)
-      streams.value.log.info("Generated source files.")
-
-      IO.write(Create.gitignoreFile, Create.defaultGitIgnoreContent)
-      streams.value.log.info("Generated .gitignore file.")
-
-      //Project.addExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))
-      //Project.setExtraBuilds(state.value, List[sbt.URI](new sbt.URI("build.sbt")))
-      //Project.updateCurrent(state.value)
-      //Project.loadAction(state.value, Project.LoadAction.Plugins)
-      streams.value.log.warn("Please type 'reload' to allow sbt to load the new build definitions!")
       Project.defaultSettings ++ defaultAgileAndroidSettings
     }
 
