@@ -73,14 +73,14 @@ object Util
   )
 
 
-  def getResourcesFilesRaw(path: String): Map[String, Array[Byte]] = 
+  def getResourceFilesRaw(path: String): Map[String, Array[Byte]] = 
   {
 
     val jarFile = new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()))
 
     val files = jarFile.entries().foldLeft(Map[String, Array[Byte]]()) {
       (resultingList, entry) => {
-        if (entry.getName().startsWith(path))
+        if (entry.getName().startsWith(path) && entry.getName() != path && entry.getName().endsWith("/") == false)
         {
           val fileContent = convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream(entry.getName()))
 
