@@ -54,7 +54,7 @@ class EditPostFragment extends Fragment {
       case R.id.action_done => {
         val finalPost = new Post(
           mTitle.getText().toString(),
-          Integer.parseInt(mNumberOfLikes.getText().toString()),
+          if (mNumberOfLikes.getText().toString().isEmpty) 0 else Integer.parseInt(mNumberOfLikes.getText().toString()),
           mModel.date
 		)
 
