@@ -16,6 +16,8 @@ proguardCache := Seq(
 
 proguardOptions in Android ++= Seq("-dontobfuscate", "-dontoptimize", "-dontwarn **")
 
+proguardOptions in Android += "-keep public class org.sqldroid.**"
+
 // External library dependecies
 resolvers += "Mandubian repository snapshots" at "https://github.com/mandubian/mandubian-mvn/raw/master/snapshots/"
 

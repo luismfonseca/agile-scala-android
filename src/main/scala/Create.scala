@@ -13,6 +13,8 @@ object Create
       "PLUGIN_VERSION" -> pluginVersion,
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_NAME" -> packageName,
+      "PACKAGE_MODELS" -> (packageName + ".models"),
+      "PACKAGE_DB" -> (packageName + ".db"),
       "MIN_SDK_VERSION" -> minSdkVersion.toString,
       "GITIGNORE_FILE_NAME" -> ".gitignore"
     )

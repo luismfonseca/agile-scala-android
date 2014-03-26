@@ -4,6 +4,8 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-start-script" % "0.10.0")
 
+addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.11")
+
 {
   val pluginVersion = System.getProperty("plugin.version")
   if (pluginVersion == null)

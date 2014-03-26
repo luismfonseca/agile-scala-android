@@ -13,11 +13,17 @@ $ exists src/main/res/menu/
 $ exists src/main/res/values/
 $ exists src/main/scala/pt/test/ok/models/
 $ exists src/main/scala/pt/test/ok/ui/
+$ exists src/main/scala/pt/test/ok/db/
+$ exists src/main/scala/pt/test/ok/db/dao/
+$ exists src/main/scala/pt/test/ok/db/tables/
 
 
 # check .gitignore
 $ exists .gitignore
 > contents fixtures/.gitignore .gitignore
+
+# check libs
+$ exists libs/sqldroid-1.0.1.dev.jar
 
 # build.sbt will be generated using npa, but it already exists, and for this test override is false, so skipped this file
 ## check build.sbt
