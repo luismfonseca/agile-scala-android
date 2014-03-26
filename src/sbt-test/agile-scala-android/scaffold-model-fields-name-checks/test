@@ -15,3 +15,6 @@ $ exists src/main/res/layout/fragment_edit_checks.xml
 
 # check content
 > contents fixtures/src/main/res/layout/fragment_edit_checks.xml src/main/res/layout/fragment_edit_checks.xml
+
+
+> compile

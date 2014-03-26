@@ -63,12 +63,15 @@ object Scaffold
 
   def menuContext(packageName: String, modelName: String) = packageName + ".ui." + modelName + "MainActivity"
 
-  def scaffoldFromModel(classDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
+  def scaffoldFromModel(classDirectory: File, sourceDirectory: File, scalaSourceDirectory: File, externalDependencyClasspath: Seq[Attributed[File]], modelName: String) =
   {
     val packageName = Android.findPackageName(sourceDirectory)
+    
     val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
 
-    val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL))
+    val externalJars: Array[URL] = externalDependencyClasspath.map(_.data.toURL).toArray
+
+    val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL) ++ externalJars)
 
     if (modelsPath.listFiles() == null)
     {
@@ -84,8 +87,10 @@ object Scaffold
 
     val modelFields = modelClass.getDeclaredFields()
 
+    val modelFieldsWithoutIds = modelFields.filter(field => Model.isFieldAnId(field.toString.split('.').last) == false)
+
     // TODO: use this knowledge to scaffold activities and layouts.
-    val templateKeysForModel = templateKeys(packageName, modelName, modelFields)
+    val templateKeysForModel = templateKeys(packageName, modelName, modelFieldsWithoutIds)
 
 
     // get list of files on the plugin's scaffold resources folder

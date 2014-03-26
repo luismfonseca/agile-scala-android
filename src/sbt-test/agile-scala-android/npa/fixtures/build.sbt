@@ -10,13 +10,13 @@ defaultAgileAndroidSettings
 
 // Proguard configuration
 proguardCache := Seq(
-  ProguardCache("org.scaloid") % "org.scaloid"
+  ProguardCache("org.scaloid") % "org.scaloid",
+  ProguardCache("slick") % "com.typesafe.slick"
 )
 
-proguardOptions in Android ++= Seq("-dontobfuscate", "-dontoptimize")
+proguardOptions in Android ++= Seq("-dontobfuscate", "-dontoptimize", "-dontwarn **")
 
-proguardOptions in Android ++= Seq("-dontwarn **")
-
+proguardOptions in Android += "-keep public class org.sqldroid.**"
 
 // External library dependecies
 resolvers += "Mandubian repository snapshots" at "https://github.com/mandubian/mandubian-mvn/raw/master/snapshots/"
@@ -24,6 +24,8 @@ resolvers += "Mandubian repository snapshots" at "https://github.com/mandubian/m
 libraryDependencies += "org.scaloid" %% "scaloid" % "3.2-8"
 
 libraryDependencies += "com.google.code.gson" % "gson" % "2.2.4"
+
+libraryDependencies += "com.typesafe.slick" %% "slick" % "2.0.1"
 
 // Tasks dependecies
 run <<= run in Android
