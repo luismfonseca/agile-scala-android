@@ -15,21 +15,19 @@ object Plugin extends Plugin
   
   object AgileAndroidKeys
   {
-	  val generate = inputKey[File]("Generates stuff.")
+	  val generate = inputKey[Seq[File]]("Generates stuff.")
     
     val npa = inputKey[Seq[Setting[_]]]("Generates a new project for android development with Scala.")
 
     val scaffold = inputKey[Unit]("Scaffolds stuff.")
 
-	  def generateTask: Initialize[InputTask[File]] = Def.inputTask {
+	  def generateTask: Initialize[InputTask[Seq[File]]] = Def.inputTask {
       val args = spaceDelimited(" className <attributes>").parsed
       val (modelName, modelAttributes) = (args.head, args.tail)
 
-      val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
-      val content = Model.generate(sourceDirectory.value, modelName, modelAttributes)
-
-	    IO.writeLines(file, content, IO.utf8)
-	    file
+      //val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
+      
+      Model.generate(sourceDirectory.value, modelName, modelAttributes)
 	  }
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {
@@ -87,11 +85,17 @@ object Plugin extends Plugin
       streams.value.log.info(dirs.toString)
     }
 
+    def databaseGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {
+
+      streams.value.log.info("Generating database support classes.")
+      DatabaseGenerator.generate(sourceDirectory.value, (sourceManaged in Compile).value, (classDirectory in Compile).value)
+    }
 
     val defaultAgileAndroidSettings : Seq[sbt.Def.Setting[_]] = Seq(
 	    generate := generateTask.evaluated,
       scaffold := scaffoldTask.evaluated,
-      scaffold <<= scaffold.dependsOn(compile in Compile)
+      scaffold <<= scaffold dependsOn(compile in Compile),
+      sourceGenerators in Compile <+= databaseGeneratorTask
     )
 
     // this should be added in ~/.sbt/0.13/npa.sbt
