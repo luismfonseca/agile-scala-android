@@ -27,7 +27,7 @@ object Plugin extends Plugin
 
       //val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
       
-      Model.generate(sourceDirectory.value, modelName, modelAttributes)
+      Model.generate(streams.value.log, sourceDirectory.value, modelName, modelAttributes)
 	  }
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {

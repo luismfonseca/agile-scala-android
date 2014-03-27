@@ -3,10 +3,11 @@ package agile.android
 import sbt._
 import java.io._
 import java.net._
-import scala.xml._
 import sbt.complete._
+import scala.annotation.tailrec
 import scala.collection.immutable.HashMap
 import scala.collection.immutable.ListMap
+import scala.xml._
 
 object Model
 {
@@ -36,8 +37,28 @@ object Model
     }
   }
 
-  private val knownImports = (HashMap
-    (
+  private val supportedTypes =
+    (Seq[String](
+      "Char",
+      "Int",
+      "Long",
+      "Float",
+      "Double",
+      "Boolean",
+      "String",
+      "Seq",
+      "List",
+      "LinkedList",
+      "Array",
+      "Vector",
+      "Date",
+      "Calendar",
+      "URL",
+      "File"
+    ))
+
+  private val knownImports =
+    (HashMap(
       "Date" -> "import java.util.Date\n",
       "Calendar" -> "import java.util.Calendar\n",
       "URL" -> "import java.net.URL\n",
@@ -115,10 +136,47 @@ object Model
     fieldUnderscored == "id" || fieldUnderscored.startsWith("id_") || fieldUnderscored.endsWith("_id") || fieldUnderscored.endsWith("_i_d")
   }
 
+  @tailrec private def getFieldTypes(fieldTypes: String, computedFieldTypes: Seq[String] = Nil): Seq[String] =
+  {
+    val startInnerType = fieldTypes.indexOf("[")
+    if (startInnerType == -1)
+    {
+      computedFieldTypes :+ fieldTypes
+    }
+    else
+    {
+      val endInnerType = fieldTypes.lastIndexOf("]")
+      val outterType = fieldTypes.substring(0, startInnerType)
+      val innerType = fieldTypes.substring(startInnerType + 1, endInnerType)
+      getFieldTypes(innerType, computedFieldTypes :+ outterType)
+    }
+  }
+
+  def checkIfFieldsAreValid(fieldsWithTypes: Seq[(String, String)]): Seq[String] = {
+    val modelFieldTypes = fieldsWithTypes.map(_._2)
+
+    val allFieldTypes = modelFieldTypes.map(getFieldTypes(_)).flatten.distinct
+
+    (allFieldTypes map {
+      _ match {
+        case "Integer" => throw new Exception("""Java type "Integer" not supported, use "Int" instead.""")
+        case "Character" => throw new Exception("""Java type "Character" not supported, use "Char" instead.""")
+        case fieldType if (supportedTypes.contains(fieldType)) => ""
+        case fieldUnkown => """Unkown field type: "%s". Ingore this warning if you are going to add this model next.""" format fieldUnkown
+      }
+    }) filter(_ != "")
+  }
+
   // TODO: accept only known fields
-  def generate(sourceDirectory: File, modelName: String, fields: Seq[String]): Seq[File] = {
+  def generate(sbtLogger: sbt.Logger, sourceDirectory: File, modelName: String, fields: Seq[String]): Seq[File] = {
 
     val fieldsWithTypes: Seq[(String, String)] = fields.map(_.split(":") match { case Array(fieldName, fieldType) => (fieldName.trim, fieldType.trim) })
+
+    val fieldTypesWarnings = checkIfFieldsAreValid(fieldsWithTypes)
+    if (fieldTypesWarnings.isEmpty == false)
+    {
+      fieldTypesWarnings foreach(sbtLogger.warn(_))
+    }
 
     val packageName = Android.findPackageName(sourceDirectory)
 
