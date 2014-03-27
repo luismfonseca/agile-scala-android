@@ -25,8 +25,22 @@ protected object Android
     XML.loadFile(manifestFile).attribute("package").get.head.text
   }
 
-  def getModelsPath(sourceDirectory: File, scalaSourceDirectory: File): File =
+  def getModelsPath(sourceDirectory: File): File =
   {
-    new File(scalaSourceDirectory.getPath + "/" + findPackageName(sourceDirectory).replace('.', '/') + "/models/")
+    new File(sourceDirectory.getPath + "/main/scala/" + findPackageName(sourceDirectory).replace('.', '/') + "/models/")
+  }
+
+  def getModels(sourceDirectory: File): Seq[String] =
+  {
+    val modelsPath = getModelsPath(sourceDirectory)
+
+    if (modelsPath.isDirectory == false)
+    {
+      Nil
+    }
+    else
+    {
+      modelsPath.listFiles().map(_.getName().split('.').head)
+    }
   }
 }

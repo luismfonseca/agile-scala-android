@@ -125,11 +125,6 @@ object Model
     implicits mkString ""
   }
 
-  def getFilePath(sourceDirectory: File, scalaSourceDirectory: File, modelName: String) =
-    new File(
-      Android.getModelsPath(sourceDirectory, scalaSourceDirectory).getPath + "/" + modelName + ".scala"
-    )
-  
   def isFieldAnId(field: String) = 
   {
     val fieldUnderscored = Util.camelToUnderscore(field)
@@ -152,7 +147,7 @@ object Model
     }
   }
 
-  def checkIfFieldsAreValid(fieldsWithTypes: Seq[(String, String)]): Seq[String] = {
+  def checkIfFieldsAreValid(fieldsWithTypes: Seq[(String, String)], existingModels: Seq[String]): Seq[String] = {
     val modelFieldTypes = fieldsWithTypes.map(_._2)
 
     val allFieldTypes = modelFieldTypes.map(getFieldTypes(_)).flatten.distinct
@@ -162,6 +157,7 @@ object Model
         case "Integer" => throw new Exception("""Java type "Integer" not supported, use "Int" instead.""")
         case "Character" => throw new Exception("""Java type "Character" not supported, use "Char" instead.""")
         case fieldType if (supportedTypes.contains(fieldType)) => ""
+        case fieldType if (existingModels.contains(fieldType)) => ""
         case fieldUnkown => """Unkown field type: "%s". Ingore this warning if you are going to add this model next.""" format fieldUnkown
       }
     }) filter(_ != "")
@@ -172,7 +168,7 @@ object Model
 
     val fieldsWithTypes: Seq[(String, String)] = fields.map(_.split(":") match { case Array(fieldName, fieldType) => (fieldName.trim, fieldType.trim) })
 
-    val fieldTypesWarnings = checkIfFieldsAreValid(fieldsWithTypes)
+    val fieldTypesWarnings = checkIfFieldsAreValid(fieldsWithTypes, Android.getModels(sourceDirectory))
     if (fieldTypesWarnings.isEmpty == false)
     {
       fieldTypesWarnings foreach(sbtLogger.warn(_))
@@ -214,17 +210,5 @@ object Model
       finalFilePath
     }
     resultingFiles.toList
-
-    /*var lines = Seq[String](
-      packageName,
-      "",
-      imports,
-      "class " + modelName + "Id(val value: " + mappedToType + ") extends MappedTo[" + mappedToType + "]",
-      "",
-      "case class " + modelName + "(" + finalFieldsWithTypes.map({case (fieldName, fieldType) => fieldName + ": " + fieldType}).reduce(_ + ", " + _) + ")",
-      "{",
-      "  ",
-      "}")
-    lines*/
   }
 }
