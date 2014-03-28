@@ -18,6 +18,7 @@ object DatabaseGenerator
       "NEW_DATABASE_SCHEMA" -> (dataAccessObjects map("applicationDB." + Util.uncapitalize(_) + ".ddl") mkString " ++ "),
       "TABLE_REPRESENTATION_INSTANCES" -> (dataAccessObjects map(dao => "  val " + Util.uncapitalize(dao) + " = TableQuery[" + dao + "]") mkString "\n"),
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
+      "PACKAGE_NAME" -> packageName,
       "PACKAGE_UI" -> (packageName + ".ui"),
       "PACKAGE_R" -> (packageName + ".R"),
       "PACKAGE_DB" -> (packageName + ".db"),
