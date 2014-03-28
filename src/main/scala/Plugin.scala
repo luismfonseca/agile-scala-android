@@ -21,6 +21,8 @@ object Plugin extends Plugin
 
     val scaffold = inputKey[Unit]("Scaffolds stuff.")
 
+    val checkPermissions = inputKey[Unit]("Checks for required Android permissions that are missing from the manifest.")
+
 	  def generateTask: Initialize[InputTask[Seq[File]]] = Def.inputTask {
       val args = spaceDelimited(" className <attributes>").parsed
       val (modelName, modelAttributes) = (args.head, args.tail)
@@ -50,6 +52,19 @@ object Plugin extends Plugin
       streams.value.log.info(dirs.toString)
     }
 
+    def checkPermissionsTask: Initialize[InputTask[Unit]] = Def.inputTask {
+      import android.Keys._
+
+      streams.value.log.info("Checking missing Android permissions.")
+
+      val classesJarFile = (classesJar in Android).value
+
+      val knownNeededPermissions = Permissions.runJavaCallGraph(taskTemporaryDirectory.value, classesJarFile.getPath.toString)
+
+      streams.value.log.warn("The following permissions need to be added:")
+      streams.value.log.warn(knownNeededPermissions mkString "\n")
+    }
+
     def databaseGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {
 
       streams.value.log.info("Generating database support classes.")
@@ -60,6 +75,7 @@ object Plugin extends Plugin
 	    generate := generateTask.evaluated,
       scaffold := scaffoldTask.evaluated,
       scaffold <<= scaffold dependsOn(compile in Compile),
+      checkPermissions <<= checkPermissionsTask dependsOn(Keys.`package` in Compile),
       sourceGenerators in Compile <+= databaseGeneratorTask
     )
 
