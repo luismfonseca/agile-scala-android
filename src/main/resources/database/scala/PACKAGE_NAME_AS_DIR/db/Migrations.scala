@@ -4,16 +4,17 @@ import slick.driver.SQLiteDriver.SchemaDescription
 import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.jdbc.meta.MTable
 
+import PACKAGE_NAME.App
 import PACKAGE_MODELS._
 IMPORT_MIGRATIONS_IF_ANY
-abstract class Migrations {
+trait Migrations {
 
   val allMigrations: Seq[Migration] =
     Seq[Migration](
 MIGRATIONS_LIST
     ).sortBy(_.version)
   
-  def migrateToLatest(applicationDB: ApplicationDB, db: Database): Database = {
+  def migrateToLatest(applicationDB: App, db: Database): Database = {
     db withSession { implicit session =>
 
       // Check if database exists
