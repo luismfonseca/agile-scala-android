@@ -30,7 +30,7 @@ libraryDependencies += "com.typesafe.slick" %% "slick" % "2.0.1"
 // Tasks dependecies
 run <<= run in Android
 
-install <<= install in Android
+install <<= (install in Android) dependsOn checkPermissions
 
 // Other settings
 platformTarget in Android := "android-19"

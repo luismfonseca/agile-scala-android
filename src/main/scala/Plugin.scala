@@ -21,7 +21,7 @@ object Plugin extends Plugin
 
     val scaffold = inputKey[Unit]("Scaffolds stuff.")
 
-    val checkPermissions = inputKey[Unit]("Checks for required Android permissions that are missing from the manifest.")
+    val checkPermissions = taskKey[Unit]("Checks for required Android permissions that are missing from the manifest.")
 
 	  def generateTask: Initialize[InputTask[Seq[File]]] = Def.inputTask {
       val args = spaceDelimited(" className <attributes>").parsed
@@ -52,7 +52,7 @@ object Plugin extends Plugin
       streams.value.log.info(dirs.toString)
     }
 
-    def checkPermissionsTask: Initialize[InputTask[Unit]] = Def.inputTask {
+    def checkPermissionsTask: Initialize[Task[Unit]] = Def.task {
       import android.Keys._
 
       streams.value.log.info("Checking missing Android permissions.")
