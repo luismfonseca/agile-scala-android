@@ -57,12 +57,12 @@ object Plugin extends Plugin
 
       streams.value.log.info("Checking missing Android permissions.")
 
-      val classesJarFile = (classesJar in Android).value
+      val classesJarPath = (classesJar in Android).value.getPath.toString
 
-      val knownNeededPermissions = Permissions.runJavaCallGraph(taskTemporaryDirectory.value, classesJarFile.getPath.toString)
+      val missingPermissions = Permissions.getMissingNeededPermissions(sourceDirectory.value, (sources in Compile).value, taskTemporaryDirectory.value, classesJarPath)
 
-      streams.value.log.warn("The following permissions need to be added:")
-      streams.value.log.warn(knownNeededPermissions mkString "\n")
+      streams.value.log.warn("The following permissions are missing and should be added:")
+      streams.value.log.warn(missingPermissions mkString "\n")
     }
 
     def databaseGeneratorTask: Initialize[Task[Seq[File]]] = Def.task {

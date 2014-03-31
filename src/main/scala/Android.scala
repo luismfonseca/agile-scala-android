@@ -29,4 +29,13 @@ protected object Android
   {
     new File(scalaSourceDirectory.getPath + "/" + findPackageName(sourceDirectory).replace('.', '/') + "/models/")
   }
+
+  def getManifestPermissions(sourceDirectory: File): Seq[String] =
+  {
+    val manifestFile = findManifestPath(sourceDirectory)
+
+    val pemissionsXML = XML.loadFile(manifestFile).child.filter(_.label == "permission")
+
+    pemissionsXML.map(_.attribute("http://schemas.android.com/apk/res/android", "name").getOrElse(new Text("")).head.text)
+  }
 }

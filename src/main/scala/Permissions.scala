@@ -1,8 +1,6 @@
 package agile.android
 
-import java.io.File
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
+import java.io.{ByteArrayOutputStream, File, FileInputStream, PrintStream}
 import java.net._
 import java.nio.charset.Charset
 
@@ -13,7 +11,7 @@ object Permissions
   val mappedPermissions: Map[Int, Array[Permission]] =
   {
     
-    Util.getResourceFiles("permissions/").map({
+    Util.getResourceFiles("permissions/methods/").map({
       case (fileName, fileContent) =>
         {
           val version = fileName.split("\\.")(0).toInt
@@ -34,6 +32,27 @@ object Permissions
           (version, loadedPermissions._1)
         }
       })
+  }
+
+  val mappedIntentPermissions: Map[Int, Array[IntentPermission]] =
+  {
+    Util.getResourceFiles("permissions/intents/").map({
+      case (fileName, fileContent) =>
+      {
+        val version = fileName.split("\\.")(0).toInt
+
+        val loadedIntentPermissions = fileContent.split("\\r?\\n").map(
+          line =>
+          {
+            val linePartitioned = line.split(" ")
+
+            IntentPermission(linePartitioned(1), linePartitioned(0))
+          }
+        )
+        
+        (version, loadedIntentPermissions)
+      }
+    })
   }
 
   private val javaCallGraphJarBytes = Util.convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream("libs/javacg-0.1-SNAPSHOT-static.jar"))
@@ -86,18 +105,76 @@ object Permissions
     knownNeededPermissions.distinct
   }
 
+  private def removeSourcecodeComments(sourceFile: String): String =
+  {
+    sourceFile.replaceAll("/\\*.*\\*/", "") // multi-line comments
+              .replaceAll("//.*(?=\\n)", "") // single line comments
+  }
+
+  def analyseSourceCode(sourceFiles: Seq[File]): Array[String] =
+  {
+    val sourceFilesNoComments = sourceFiles.map(
+      file => removeSourcecodeComments(Util.convertStreamToString(new FileInputStream(file)))
+    ).toArray
+
+    val intentPermissions = mappedIntentPermissions(16)
+
+    sourceFilesNoComments.foldLeft(Array[String]())
+    {
+      (neededPermissions, fileContent) =>
+      {
+        neededPermissions ++
+          intentPermissions.foldLeft(Array[String]())
+          {
+            (fileNeedPermissions, permission) =>
+            {
+              // minimalistic approach, could possibily yield false-positives
+
+              if (fileContent.contains(permission.shortIntentTypeName) &&
+                  fileContent.contains(permission.shortIntentTypeName + "_") == false) // checking if the name is not a part of other
+              {
+                fileNeedPermissions :+ permission.permissionType
+              }
+              else
+              {
+                fileNeedPermissions
+              }
+            }
+          }
+      }
+    }
+  }
+
+  def analyseNeededPermissions(sourceFiles: Seq[File], temporaryDirectory: File, jarPath: String): Array[String] =
+  {
+    (analyseSourceCode(sourceFiles) ++ runJavaCallGraph(temporaryDirectory, jarPath)).distinct
+  }
+
+  def getMissingNeededPermissions(sourceDirectory: File, sourceFiles: Seq[File], temporaryDirectory: File, jarPath: String): Array[String] =
+  {
+    val alreadyExistingPermissions = Android.getManifestPermissions(sourceDirectory)
+    val neededPermissions = analyseNeededPermissions(sourceFiles, temporaryDirectory, jarPath)
+
+    neededPermissions diff alreadyExistingPermissions
+  }
+
   case class Permission(permissionType: String, classAndMethod: (String, String))
   {
     def this(permissionType: String, classAndMethod: String) =
       this(permissionType, {
         val classOfPermission = classAndMethod.drop(1).takeWhile(_ != ':')
 
-        val methodCallOfPermission = classAndMethod.drop(1 + classOfPermission.length + 2).dropWhile(_ != ' ').drop(1).dropRight(3)
+        val methodCallOfPermission = classAndMethod.drop(1 + classOfPermission.length + 2).dropWhile(_ != ' ').drop(1).takeWhile(_ != '(')
 
         (classOfPermission, methodCallOfPermission)
       })
 
     def classAndMethodString = classAndMethod._1 + ':' + classAndMethod._2
+  }
+
+  case class IntentPermission(permissionType: String, intentType: String)
+  {
+    def shortIntentTypeName = intentType.reverse.takeWhile(_ != '.').reverse
   }
 
 }
