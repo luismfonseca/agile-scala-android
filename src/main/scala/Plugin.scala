@@ -26,6 +26,7 @@ object Plugin extends Plugin
     val permissionsAddAutomatically = SettingKey[Boolean](
       "permissions-add-automatically", "flag indicating whether to missing permissions are added automatically to the manifest file.")
 
+    val migrateDatabase = taskKey[Seq[File]]("Migrates the database")
 
 	  def generateTask: Initialize[InputTask[Seq[File]]] = Def.inputTask {
       val args = spaceDelimited(" className <attributes>").parsed
@@ -91,12 +92,24 @@ object Plugin extends Plugin
       DatabaseGenerator.generate(sourceDirectory.value, (sourceManaged in Compile).value, (classDirectory in Compile).value)
     }
 
+    def migrateDatabaseTask: Initialize[Task[Seq[File]]] = Def.task {
+
+      streams.value.log.info("Migrating database.")
+      val models: Array[DatabaseGenerator.Model] =
+        DatabaseGenerator.loadModels((classDirectory in Compile).value, Android.findPackageName(sourceDirectory.value), (externalDependencyClasspath in Runtime).value)
+
+      //val tables = DatabaseGenerator.modelsToTables(models)
+      //throw new Exception("\n" + (tables.map(table => table.name + ": \n" + (table.fields mkString "\n")) mkString "\n"))
+      DatabaseGenerator.migrateTables(sourceDirectory.value, (sourceManaged in Compile).value, (classDirectory in Compile).value, (externalDependencyClasspath in Runtime).value)
+    }
+
     val defaultAgileAndroidSettings : Seq[sbt.Def.Setting[_]] = Seq(
 	    generate := generateTask.evaluated,
       scaffold := scaffoldTask.evaluated,
       scaffold <<= scaffold dependsOn(compile in Compile),
       checkPermissions <<= checkPermissionsTask dependsOn(Keys.`package` in Compile),
       permissionsAddAutomatically := true,
+      migrateDatabase <<= migrateDatabaseTask dependsOn(compile in Compile),
       sourceGenerators in Compile <+= databaseGeneratorTask
     )
 

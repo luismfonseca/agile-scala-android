@@ -145,7 +145,7 @@ object Model
 
     val templateKeysForModel = templateKeys(packageName, modelName, finalFieldsWithTypes, mappedToType)
 
-    val filesAndContent = Util.getResourceFiles("model/")
+    val filesAndContent = Util.getResourceFiles("generate-model/")
 
     val resultingFiles = for ((filePath, fileContent) <- filesAndContent)
     yield {

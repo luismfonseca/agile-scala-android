@@ -92,7 +92,6 @@ object Scaffold
     // TODO: use this knowledge to scaffold activities and layouts.
     val templateKeysForModel = templateKeys(packageName, modelName, modelFieldsWithoutIds)
 
-
     // get list of files on the plugin's scaffold resources folder
     val filesAndContent = Util.getResourceFiles("scaffold/")
 
