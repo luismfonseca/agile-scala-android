@@ -51,31 +51,86 @@ object DatabaseGenerator
     }
   }
 
-  //TODO
   private def createTableRowHelpers(table: Table, allTables: Array[Table]): String =
   {
-    // check all 1-1
+    if (table.isJoin)
+    {
+      ""
+    }
+    else
+    {
+      // check all 1-1
+      val oneToOneRelations = table.fields.foldLeft("")
+      {
+        (tableHelpers, field) =>
+        {
+          val helperMethod =
+            if (field.foreignModel != null && field.isArray == false)
+            {
+              val modelName = Util.uncapitalize(field.foreignModel.name)
+              """  def %s(implicit session: Session): Option[%s] =
+                |    App.%s.filter(_.%s === %sId).firstOption
+                |
+                |""".stripMargin
+                .format(modelName, Util.capitalize(modelName + "Row"), modelName + "s", field.name, modelName)
+            }
+            else
+            {
+              ""
+            }
 
-    // check all 1-n
+          tableHelpers + helperMethod
+        }
+      }
 
-    // check all n-n
-    ""
+      // check 1-n
+      val oneToManyRelations = allTables.filter(_.isJoin == false).foldLeft("")
+      {
+        (tableHelpers, currentTable) =>
+        {
+          val helperMethod =
+            currentTable.fields.find(field => field.foreignModel != null && field.foreignModel.name == table.name) match {
+              case Some(field: TableField) =>
+              {
+                if (field.isArray == false)
+                {
+                  // doesn't belong here
+                  ""
+                }
+                else
+                {
+                  val defName = field.foreignModel.fields.find(modelField => modelField.typeSimple == currentTable.name).get.name
+                  """  def %s(implicit session: Session): Seq[%sRow] =
+                    |    App.%s.filter(_.%s === %s).list
+                    |
+                    |""".stripMargin
+                    .format(defName, currentTable.name, Util.uncapitalize(currentTable.name) + "s", Util.uncapitalize(table.name + "Id"), field.name)
+                }
+              }
+              case _ => ""
+            }
+
+          tableHelpers + helperMethod
+        }
+      }
+      // TODO: check n-n
+      (oneToOneRelations + oneToManyRelations)
+    }
   }
 
   private def resolveTableFieldsImports(fields: Array[TableField]): String =
   {
-    "\n" + fields.foldLeft("")
+    fields.foldLeft("")
     {
       (imports, field) =>
       {
-        imports + field.typeSimple match {
-          case "Date" => "import java.util.Date\n"
+        imports + (field.typeSimple match {
+          case "Date" => "\nimport java.util.Date"
           case _ => ""
-        }
+        })
       }
     }
   }
-
 
   private def getFieldName(field: TableField): String =
   {
