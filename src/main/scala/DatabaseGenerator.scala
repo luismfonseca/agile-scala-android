@@ -114,7 +114,61 @@ object DatabaseGenerator
         }
       }
       // TODO: check n-n
-      (oneToOneRelations + oneToManyRelations)
+      val manyToManyRelations = allTables.filter(_.isJoin).foldLeft("")
+      {
+        (tableHelpers, currentTable) =>
+        {
+          val helperMethod =
+            currentTable.fields.find(field => field.foreignModel != null && field.foreignModel.name == table.name) match {
+              case Some(field: TableField) =>
+              {
+                if (field.isArray == false)
+                {
+                  val tablesModel = field.foreignModel
+                  val tablesModelName = Util.uncapitalize(tablesModel.name)
+
+                  val otherModel = currentTable.fields.find(tableField => tableField.foreignModel.name != table.name).get.foreignModel
+                  val otherModelName = Util.uncapitalize(otherModel.name)
+                  
+                  // maybe not the best way to do this, what if another field has id but is not the main id?
+                  val otherField = allTables.find(table => table.name == otherModel.name).get.fields.find(tableField => isFieldNameAnId(tableField.name)).get
+
+                  val defName = tablesModel.fields.find(modelField => modelField.typeSimple == otherModel.name).get.name
+                  val tableJoin =  Util.uncapitalize(currentTable.name)
+                  """  def %s(implicit session: Session): List[%sRow] =
+                    |  {
+                    |    val query = for
+                    |      {
+                    |        %s <- App.%s
+                    |        %s <- App.%s if %s.%s === %s.%s
+                    |        %s <- App.%s if %s.%s === %s.%s
+                    |      } yield %s
+                    |
+                    |    query.list
+                    |  }
+                    |""".stripMargin
+                    .format(
+                      defName, otherModel.name,
+                      tableJoin, tableJoin,
+                      tablesModelName, tablesModelName + "s", tablesModelName, field.name, tableJoin, tablesModelName + "Id",
+                      otherModelName, otherModelName + "s", otherModelName, otherField.name, tableJoin, otherModelName + "Id",
+                      otherModelName)
+
+                  // currentTable.name, Util.uncapitalize(currentTable.name) + "s", Util.uncapitalize(table.name + "Id"), field.name)
+                }
+                else
+                {
+                  throw new Exception("Badly formed Tables and TableFields.")
+                }
+              }
+              case _ => ""
+            }
+
+          tableHelpers + helperMethod
+        }
+      }
+
+      (oneToOneRelations + oneToManyRelations + manyToManyRelations)
     }
   }
 
