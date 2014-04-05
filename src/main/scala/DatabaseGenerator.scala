@@ -65,7 +65,7 @@ object DatabaseGenerator
         (tableHelpers, field) =>
         {
           val helperMethod =
-            if (field.foreignModel != null && field.isArray == false)
+            if (field.foreignModel != null && field.belognsToModel)
             {
               val modelName = Util.uncapitalize(field.foreignModel.name)
               """  def %s(implicit session: Session): Option[%s] =
@@ -153,8 +153,6 @@ object DatabaseGenerator
                       tablesModelName, tablesModelName + "s", tablesModelName, field.name, tableJoin, tablesModelName + "Id",
                       otherModelName, otherModelName + "s", otherModelName, otherField.name, tableJoin, otherModelName + "Id",
                       otherModelName)
-
-                  // currentTable.name, Util.uncapitalize(currentTable.name) + "s", Util.uncapitalize(table.name + "Id"), field.name)
                 }
                 else
                 {
