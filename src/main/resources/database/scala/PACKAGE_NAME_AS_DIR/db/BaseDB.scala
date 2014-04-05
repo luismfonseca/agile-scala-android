@@ -5,9 +5,12 @@ import scala.slick.jdbc.meta.MTable
 
 import PACKAGE_DB.dao._
 
-abstract class BaseDB extends Migrations {
+trait BaseDB extends Migrations
+{
+  val applicationFilesDirectory: String
+  val databaseName: String
 
-  val db: Database
+  val DB: Database
 
   // Table representation instances
 TABLE_REPRESENTATION_INSTANCES

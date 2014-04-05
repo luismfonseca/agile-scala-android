@@ -4,7 +4,11 @@ import AssemblyKeys._
 
 import AgileAndroidKeys._
 
-defaultAgileAndroidSettings
+import android.Keys._
+
+//android.Plugin.androidBuild
+
+//defaultAgileAndroidSettings
 
 agileAndroidNewProjectTask
 
@@ -15,6 +19,8 @@ version := "0.1"
 assemblySettings
 
 jarName in assembly := "foo.jar"
+
+platformTarget in Android := "android-19"
 
 InputKey[Unit]("contents") <<= inputTask { (argsTask: TaskKey[Seq[String]]) =>
   (argsTask, streams) map {
