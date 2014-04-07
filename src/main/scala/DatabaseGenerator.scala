@@ -422,8 +422,7 @@ object DatabaseGenerator
 
     val tables = modelsToTables(models)
 
-    //throw new Exception("\n" + (tables.map(table => table.name + ": \n" + (table.fields mkString "\n")) mkString "\n"))
-    val filesAndContent = Util.getResourceFiles("database-generate/")
+    val filesAndContent = Util.getResourceFiles("database-migration/")
     tables flatMap (table =>
       {
         val keys = templateMigrationTableKeys(packageName, table, tables)
