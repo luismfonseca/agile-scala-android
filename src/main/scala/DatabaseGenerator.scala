@@ -39,6 +39,7 @@ object DatabaseGenerator
       "DEFS_OF_FIELDS" -> defsOfFields(table.fields drop(if (table.isJoin) 0 else 1)),
       "DEF_OF_ID" -> (if (table.isJoin) "" else defOfId(table.fields head)),
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
+      "PACKAGE_NAME" -> packageName,
       "PACKAGE_DB" -> (packageName + ".db"),
       "PACKAGE_MODELS" -> (packageName + ".models")
     )

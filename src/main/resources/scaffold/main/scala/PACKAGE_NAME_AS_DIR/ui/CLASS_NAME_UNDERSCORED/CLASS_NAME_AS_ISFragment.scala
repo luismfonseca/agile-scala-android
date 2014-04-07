@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.FrameLayout
 
 import org.scaloid.common._
 
@@ -72,6 +73,11 @@ FRAGMENT_VIEW_FIELDS
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
     val view = inflater.inflate(R.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
+    
+    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(R.layout.fragment_view_CLASS_NAME_UNDERSCORED, container, false)
+    
+    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findViewById(R.id.CLASS_NAME_UNDERSCORED_container).asInstanceOf[FrameLayout]
+    CLASS_NAME_UNCAPITALIZEDFrameLayout.addView(CLASS_NAME_UNCAPITALIZEDView)
 
 FRAGMENT_VIEW_ASSIGN_FIELDS
     display()

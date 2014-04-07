@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.FrameLayout
 
 import org.scaloid.common._
 
@@ -76,10 +77,8 @@ RANDOM_DATA_COMMA_SEPARATED
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val view = inflater.inflate(R.layout.fragment_edit_CLASS_NAME_UNDERSCORED, container, false)
 
     val actionBarButtons = inflater.inflate(R.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
-
 
     val cancelActionView = actionBarButtons.findViewById(R.id.action_cancel)
     cancelActionView.setOnClickListener(mActionBarListener)
@@ -91,6 +90,13 @@ RANDOM_DATA_COMMA_SEPARATED
     getActivity().getActionBar().setDisplayOptions(
         ActionBar.DISPLAY_SHOW_CUSTOM,
         ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM)
+
+    val view = inflater.inflate(R.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
+
+    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(R.layout.fragment_edit_CLASS_NAME_UNDERSCORED, container, false)
+    
+    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findViewById(R.id.CLASS_NAME_UNDERSCORED_container).asInstanceOf[FrameLayout]
+    CLASS_NAME_UNCAPITALIZEDFrameLayout.addView(CLASS_NAME_UNCAPITALIZEDView)
 
 FRAGMENT_EDIT_VIEW_ASSIGN_FIELDS
     if (mModel != null)

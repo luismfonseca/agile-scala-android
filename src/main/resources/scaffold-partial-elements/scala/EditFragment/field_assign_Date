@@ -1,4 +1,4 @@
-    mFIELD_NAME_CAPITALIZEDButton = view.findViewById(R.id.create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED).asInstanceOf[Button]
+    mFIELD_NAME_CAPITALIZEDButton = CLASS_NAME_UNCAPITALIZEDFrameLayout.findViewById(R.id.create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED).asInstanceOf[Button]
     mFIELD_NAME_CAPITALIZEDButton.onClick({
       
         val calendar = Calendar.getInstance()
