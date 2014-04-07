@@ -1,0 +1,1 @@
+    mModelFIELD_NAME_CAPITALIZED.setText(if (mModel.FIELD_NAME_AS_IS) "Yes" else "No")
