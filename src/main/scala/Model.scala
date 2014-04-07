@@ -166,7 +166,11 @@ object Model
   // TODO: accept only known fields
   def generate(sbtLogger: sbt.Logger, sourceDirectory: File, modelName: String, fields: Seq[String]): Seq[File] = {
 
-    val fieldsWithTypes: Seq[(String, String)] = fields.map(_.split(":") match { case Array(fieldName, fieldType) => (fieldName.trim, fieldType.trim) })
+    val fieldsWithTypes: Seq[(String, String)] = fields.map(field => field.split(":") match
+      {
+        case Array(fieldName, fieldType) => (fieldName.trim, fieldType.trim)
+        case badInput => throw new Exception("Wrong specification on field: " + field)
+      })
 
     val fieldTypesWarnings = checkIfFieldsAreValid(fieldsWithTypes, Android.getModels(sourceDirectory))
     if (fieldTypesWarnings.isEmpty == false)
