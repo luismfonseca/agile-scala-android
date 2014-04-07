@@ -1,4 +1,4 @@
-package PACKAGE_UI
+package PACKAGE_UI.CLASS_NAME_UNDERSCORED
 
 import android.app.ListFragment
 import android.os.Bundle
@@ -10,6 +10,7 @@ import org.scaloid.common._
 import com.google.gson.Gson
 
 IMPORT_MODEL_FIELDS_DEPENDENCIES
+import PACKAGE_UI.ChangeToFragmentHandler
 import PACKAGE_MODELS.CLASS_NAME_AS_IS
 
 object CLASS_NAME_AS_ISListFragment {

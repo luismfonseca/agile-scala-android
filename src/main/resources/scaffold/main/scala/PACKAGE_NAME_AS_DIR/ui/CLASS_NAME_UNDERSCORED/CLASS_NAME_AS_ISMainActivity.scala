@@ -1,4 +1,4 @@
-package PACKAGE_UI
+package PACKAGE_UI.CLASS_NAME_UNDERSCORED
 
 import android.app.Fragment
 import android.app.FragmentManager
@@ -9,6 +9,7 @@ import android.view.MenuItem
 
 import org.scaloid.common._
 
+import PACKAGE_UI.ChangeToFragmentHandler
 import PACKAGE_R
 
 class CLASS_NAME_AS_ISMainActivity

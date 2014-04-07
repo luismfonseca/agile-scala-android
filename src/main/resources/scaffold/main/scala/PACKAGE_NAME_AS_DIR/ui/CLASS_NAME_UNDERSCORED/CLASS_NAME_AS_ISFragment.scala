@@ -1,4 +1,4 @@
-package PACKAGE_UI
+package PACKAGE_UI.CLASS_NAME_UNDERSCORED
 
 import android.app.Fragment
 import android.content.Intent
