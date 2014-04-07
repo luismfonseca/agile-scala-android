@@ -1,4 +1,4 @@
-package pt.teste.ok.ui
+package pt.teste.ok.ui.post
 
 import android.app.ActionBar
 import android.app.Fragment

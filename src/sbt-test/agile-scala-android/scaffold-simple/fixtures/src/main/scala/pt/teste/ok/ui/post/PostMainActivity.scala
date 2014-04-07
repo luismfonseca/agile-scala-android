@@ -1,4 +1,4 @@
-package pt.teste.ok.ui
+package pt.teste.ok.ui.post
 
 import android.app.Fragment
 import android.app.FragmentManager
@@ -9,6 +9,7 @@ import android.view.MenuItem
 
 import org.scaloid.common._
 
+import pt.teste.ok.ui.ChangeToFragmentHandler
 import pt.teste.ok.R
 
 class PostMainActivity

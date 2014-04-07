@@ -1,4 +1,4 @@
-package pt.teste.ok.ui
+package pt.teste.ok.ui.post
 
 import android.app.ListFragment
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import android.text.format.DateFormat
 import java.util.Date
 
+import pt.teste.ok.ui.ChangeToFragmentHandler
 import pt.teste.ok.models.Post
 
 object PostListFragment {

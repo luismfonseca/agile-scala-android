@@ -9,7 +9,7 @@ import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.jdbc.meta.MTable
 import scala.slick.lifted.AbstractTable
 IMPORT_TABLE_FIELDS_DEPENDENCIES
-import pt.test.ok.App
+import PACKAGE_NAME.App
 import PACKAGE_MODELS._
 
 case class MODEL_NAME_AS_ISRow(TABLE_ROW_FIELDS)

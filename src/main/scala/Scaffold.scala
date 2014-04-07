@@ -18,8 +18,8 @@ object Scaffold
       "FRAGMENT_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/fragment_show_", modelName, modelFields),
       "FRAGMENT_LAYOUT_EDIT_FIELDS" -> applyTemplateOnFields("layout/fragment_edit_", modelName, modelFields),
       "ITEM_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/item_", modelName, modelFields),
-      "IMPORT_MODEL_FIELDS_DEPENDENCIES" -> applyTemplateOnFields("scala/import_", modelName, modelFields),
-      "IMPORT_EDIT_FRAGMENT_FIELDS_DEPENDENCIES" ->  applyTemplateOnFields("scala/EditFragment/import_", modelName, modelFields),
+      "IMPORT_MODEL_FIELDS_DEPENDENCIES" -> applyTemplateOnFields("scala/import_", modelName, modelFields), // do import only once
+      "IMPORT_EDIT_FRAGMENT_FIELDS_DEPENDENCIES" ->  applyTemplateOnFields("scala/EditFragment/import_", modelName, modelFields), // do import only once
       "FRAGMENT_VIEW_FIELDS" -> applyTemplateOnFields("scala/fragment_view_", modelName, modelFields),
       "FRAGMENT_EDIT_FIELDS" -> applyTemplateOnFields("scala/EditFragment/field_", modelName, modelFields),
       "FRAGMENT_VIEW_ASSIGN_FIELDS" -> applyTemplateOnFields("scala/fragment_view_assign_", modelName, modelFields),
