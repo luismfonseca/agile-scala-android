@@ -12,18 +12,16 @@ import scala.xml._
 object Model
 {
 
-  private def templateKeys(packageName: String, modelName: String, modelFieldsNameAndType: Seq[(String, String)], mappedIdType: String): ListMap[String, String] = 
+  private def templateKeys(packageName: String, modelName: String, modelFieldsNameAndType: Seq[(String, String)]) = 
     ListMap[String, String](
-      "MODEL_IMPORTS" -> ("import scala.slick.lifted.MappedTo\n" + resolveImports(modelFieldsNameAndType.map(_._2.split("\\[")(0)))),
+      "MODEL_IMPORTS" -> resolveImports(modelFieldsNameAndType.map(_._2.split("\\[")(0))),
       "IMPORTS_TABLE" -> (resolveImports(modelFieldsNameAndType.map(_._2.split("\\[")(0)))),
       "INJECT_IMPLICITS_IF_NEEDED" -> implicitsForFields(modelFieldsNameAndType),
       "MODEL_FIELDS_COMMA_SEPERATED" -> (modelFieldsNameAndType.map({case (fieldName, fieldType) => fieldName + ": " + fieldType}).reduce(_ + ", " + _)),
       "TABLE_FIELDS_TUPLE" -> (modelFieldsNameAndType map(_._1) mkString ", "),
       "MODEL_NAME_AS_IS" -> modelName,
-      "MAPPED_ID_TYPE" -> mappedIdType,
       "MODEL_NAME_PLURAL" -> (modelName + "s"),
       "DEFS_OF_FIELDS" -> defsOfFields(modelFieldsNameAndType dropRight 1),
-      "DEF_OF_ID" -> defOfId(modelFieldsNameAndType last, mappedIdType),
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_DB" -> (packageName + ".db"),
       "PACKAGE_MODELS" -> (packageName + ".models")
@@ -59,27 +57,35 @@ object Model
 
   private val knownImports =
     (HashMap(
-      "Date" -> "import java.util.Date\n",
-      "Calendar" -> "import java.util.Calendar\n",
-      "URL" -> "import java.net.URL\n",
-      "File" -> "import java.io.File\n",
-      "HashMap" -> "import scala.collection.immutable.HashMap\n",
-      "HashSet" -> "import scala.collection.immutable.HashSet\n",
-      "IntMap" -> "import scala.collection.immutable.IntMap\n",
-      "ListMap" -> "import scala.collection.immutable.ListMap\n",
-      "ListSet" -> "import scala.collection.immutable.ListSet\n",
-      "LongMap" -> "import scala.collection.immutable.LongMap\n",
-      "NumericRange" -> "import scala.collection.immutable.NumericRange\n",
-      "Stack" -> "import scala.collection.immutable.Stack\n",
-      "TreeMap" -> "import scala.collection.immutable.TreeMap\n",
-      "TreeSet" -> "import scala.collection.immutable.TreeSet\n"
+      "Date" -> "\nimport java.util.Date",
+      "Calendar" -> "\nimport java.util.Calendar",
+      "URL" -> "\nimport java.net.URL",
+      "File" -> "\nimport java.io.File",
+      "HashMap" -> "\nimport scala.collection.immutable.HashMap",
+      "HashSet" -> "\nimport scala.collection.immutable.HashSet",
+      "IntMap" -> "\nimport scala.collection.immutable.IntMap",
+      "ListMap" -> "\nimport scala.collection.immutable.ListMap",
+      "ListSet" -> "\nimport scala.collection.immutable.ListSet",
+      "LongMap" -> "\nimport scala.collection.immutable.LongMap",
+      "NumericRange" -> "\nimport scala.collection.immutable.NumericRange",
+      "Stack" -> "\nimport scala.collection.immutable.Stack",
+      "TreeMap" -> "\nimport scala.collection.immutable.TreeMap",
+      "TreeSet" -> "\nimport scala.collection.immutable.TreeSet"
     )).withDefaultValue("")
 
   // A very simple approach to resolve imports.
   // Complex cases such as Seq[Date] are not considered.
   private def resolveImports(types: Seq[String]): String = {
 
-    types.foldLeft("") { _ + knownImports(_) }
+    val imports = types.foldLeft("") { _ + knownImports(_) }
+    if (imports.isEmpty)
+    {
+      ""
+    }
+    else
+    {
+      imports + "\n"
+    }
   }
 
   private def defsOfFields(fieldsNameAndType: Seq[(String, String)]): String =
@@ -147,6 +153,9 @@ object Model
     }
   }
 
+  def isValidModelName(modelName: String): Boolean =
+    Util.uncapitalize(modelName) != modelName
+
   def checkIfFieldsAreValid(fieldsWithTypes: Seq[(String, String)], existingModels: Seq[String]): Seq[String] = {
     val modelFieldTypes = fieldsWithTypes.map(_._2)
 
@@ -178,30 +187,14 @@ object Model
       fieldTypesWarnings foreach(sbtLogger.warn(_))
     }
 
+    if (isValidModelName(modelName) == false)
+    {
+      sbtLogger.warn("Model name should start with an uppercase letter.")
+    }
+
     val packageName = Android.findPackageName(sourceDirectory)
 
-    val (firstFieldName, firstFieldType) = fieldsWithTypes(0)
-
-    val isFirstFieldId = isFieldAnId(firstFieldName)
-
-    val finalFieldsWithTypes: Seq[(String, String)] = 
-      if (isFirstFieldId) {
-        (firstFieldName, modelName + "Id") +: fieldsWithTypes
-      }
-      else {
-        fieldsWithTypes :+ (Util.uncapitalize(modelName) + "Id", modelName + "Id = new " + modelName + "Id(-1)")
-      }
-
-    val mappedToType =
-      if (isFirstFieldId) {
-        firstFieldType
-      }
-      else {
-        "Int"
-      }
-
-
-    val templateKeysForModel = templateKeys(packageName, modelName, finalFieldsWithTypes, mappedToType)
+    val templateKeysForModel = templateKeys(packageName, modelName, fieldsWithTypes)
 
     val filesAndContent = Util.getResourceFiles("generate-model/")
 
