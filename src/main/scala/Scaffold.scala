@@ -18,8 +18,8 @@ object Scaffold
       "FRAGMENT_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/fragment_show_", modelName, modelFields),
       "FRAGMENT_LAYOUT_EDIT_FIELDS" -> applyTemplateOnFields("layout/fragment_edit_", modelName, modelFields),
       "ITEM_LAYOUT_FIELDS" -> applyTemplateOnFields("layout/item_", modelName, modelFields),
-      "IMPORT_MODEL_FIELDS_DEPENDENCIES" -> applyTemplateOnFields("scala/import_", modelName, modelFields), // do import only once
-      "IMPORT_EDIT_FRAGMENT_FIELDS_DEPENDENCIES" ->  applyTemplateOnFields("scala/EditFragment/import_", modelName, modelFields), // do import only once
+      "IMPORT_MODEL_FIELDS_DEPENDENCIES" -> applyTemplateOnFieldsUniqueType("scala/import_", modelName, modelFields),
+      "IMPORT_EDIT_FRAGMENT_FIELDS_DEPENDENCIES" ->  applyTemplateOnFieldsUniqueType("scala/EditFragment/import_", modelName, modelFields),
       "FRAGMENT_VIEW_FIELDS" -> applyTemplateOnFields("scala/fragment_view_", modelName, modelFields),
       "FRAGMENT_EDIT_FIELDS" -> applyTemplateOnFields("scala/EditFragment/field_", modelName, modelFields),
       "FRAGMENT_VIEW_ASSIGN_FIELDS" -> applyTemplateOnFields("scala/fragment_view_assign_", modelName, modelFields),
@@ -202,6 +202,14 @@ object Scaffold
         lines + applyTemplate(templateFieldKeys(fieldName, modelField, index), Util.convertStreamToString(template))
       }
     }
+
+  private def applyTemplateOnFieldsUniqueType(templateType: String, fieldName: String, modelFields: Array[Field]): String =
+  {
+    val distinctModelFieldsByType = modelFields.groupBy(_.getType().toString().split('.').last).map(_._2.head)
+
+    applyTemplateOnFields(templateType, fieldName, distinctModelFieldsByType.toArray)
+  }
+
 
   private def getProperInputType(fieldName: String): String = 
     if (fieldName.contains("password"))
