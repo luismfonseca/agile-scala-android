@@ -1,0 +1,75 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="3"
+        android:layout_margin="@dimen/default_layout_margin"
+        android:padding="@dimen/default_padding"
+        android:background="@android:color/white"
+        tools:context="pt.testing.whaa.ui.comment.EditCommentFragment">
+
+		<TextView
+			android:layout_column="0"
+			android:layout_row="0"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/SecondaryText"
+			android:text="Date"/>
+		<Button
+			android:id="@+id/create_comment_date"
+			android:layout_column="1"
+			android:layout_columnSpan="1"
+			android:layout_row="0"
+			android:layout_gravity="fill_horizontal"
+			android:text=""
+			style="?android:attr/spinnerStyle"/>
+		<TextView
+			android:layout_column="0"
+			android:layout_row="1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/SecondaryText"
+			android:text="Text"/>
+		<EditText
+			android:id="@+id/create_comment_text"
+			android:layout_column="1"
+			android:layout_row="1"
+			android:layout_gravity="fill_horizontal"
+			android:inputType="text"
+			android:text=""/>
+
+    </GridLayout>
+
+    <AbsoluteLayout
+        style="@style/CardBottomBar"
+        />
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:layout_marginLeft="8dp"
+		android:textStyle="bold"
+		android:text="Author:"
+		/>
+	<FrameLayout
+		android:id="@+id/comment_author_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		/>	
+    <Button
+        android:id="@+id/comment_change_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Change the Author"/>
+
+</LinearLayout>

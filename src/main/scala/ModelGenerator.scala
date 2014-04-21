@@ -9,7 +9,7 @@ import scala.collection.immutable.HashMap
 import scala.collection.immutable.ListMap
 import scala.xml._
 
-object Model
+object ModelGenerator
 {
 
   private def templateKeys(packageName: String, modelName: String, modelFieldsNameAndType: Seq[(String, String)]) = 
@@ -172,7 +172,44 @@ object Model
     }) filter(_ != "")
   }
 
-  // TODO: accept only known fields
+  private def simpleName(fullCanonicalName: String): String =
+  {
+    val lastDot = fullCanonicalName.lastIndexOf('.')
+    val name =
+      if (lastDot == -1)
+      {
+        fullCanonicalName
+      }
+      else
+      {
+        fullCanonicalName.substring(lastDot + 1, fullCanonicalName.length)
+      }
+
+    Util.capitalize(name)
+  }
+
+  def loadModel(classLoader: ClassLoader, packageName: String, modelName: String): Model =
+  {
+    val modelClass = classLoader.loadClass(packageName + ".models." + modelName)
+
+    val modelFields = modelClass.getDeclaredFields()
+
+    new Model(modelClass.getSimpleName, modelFields.map(
+      field =>
+      {
+        val fieldName = simpleName(field.toString.split(' ').takeRight(2)(0))
+        if (field.getType.isArray)
+        {
+          ModelField(field.getName, fieldName.dropRight(2), true)
+        }
+        else
+        {
+          ModelField(field.getName, fieldName, false)
+        }
+      }
+    ))
+  }
+
   def generate(sbtLogger: sbt.Logger, sourceDirectory: File, modelName: String, fields: Seq[String]): Seq[File] = {
 
     val fieldsWithTypes: Seq[(String, String)] = fields.map(field => field.split(":") match
@@ -208,4 +245,8 @@ object Model
     }
     resultingFiles.toList
   }
+
+  case class Model(name: String, fields: Array[ModelField])
+
+  case class ModelField(name: String, typeSimple: String, isArray: Boolean)
 }

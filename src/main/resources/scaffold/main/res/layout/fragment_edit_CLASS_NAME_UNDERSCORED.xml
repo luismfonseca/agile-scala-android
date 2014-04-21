@@ -21,4 +21,6 @@ FRAGMENT_LAYOUT_EDIT_FIELDS
     <AbsoluteLayout
         style="@style/CardBottomBar"
         />
+
+FRAGMENT_LAYOUT_EDIT_FIELDS_OTHER_MODELS
 </LinearLayout>

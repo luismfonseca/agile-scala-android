@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:uiOptions="splitActionBarWhenNarrow"
+    tools:context="pt.testing.whaa.ui.PostMainActivity"
+    >
+    <item
+        android:id="@+id/menu_main_new_post"
+        android:title="@string/menu_main_new_post"
+        android:icon="@drawable/ic_menu_new"
+        android:showAsAction="ifRoom"
+        />
+
+</menu>

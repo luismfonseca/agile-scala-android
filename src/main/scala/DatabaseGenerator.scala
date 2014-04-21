@@ -8,6 +8,9 @@ import sbt.complete._
 import collection.immutable.ListMap
 import scala.collection.immutable.HashMap
 
+import ModelGenerator.Model
+import ModelGenerator.ModelField
+
 object DatabaseGenerator
 {
 
@@ -268,29 +271,13 @@ object DatabaseGenerator
     }
   }
 
-  private def simpleName(fullCanonicalName: String): String =
-  {
-    val lastDot = fullCanonicalName.lastIndexOf('.')
-    val name =
-      if (lastDot == -1)
-      {
-        fullCanonicalName
-      }
-      else
-      {
-        fullCanonicalName.substring(lastDot + 1, fullCanonicalName.length)
-      }
-
-    Util.capitalize(name)
-  }
-
   def loadModels(classDirectory: File, packageName: String, externalDependencyClasspath: Seq[Attributed[File]]): Array[Model] =
   {
-    val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
-
     val externalJars: Array[URL] = externalDependencyClasspath.map(_.data.toURL).toArray
 
     val classLoader = new URLClassLoader(Array[URL](classDirectory.toURL) ++ externalJars)
+
+    val modelsPath = new File(classDirectory.toString + "/" + packageName.replace('.', '/') + "/models/")
 
     val modelsFile = modelsPath.listFiles() filterNot(_.getName contains('$'))
 
@@ -303,24 +290,7 @@ object DatabaseGenerator
       {
         val modelName = modelFile.getName.takeWhile(_ != '.')
 
-        val modelClass = classLoader.loadClass(packageName + ".models." + modelName)
-
-        val modelFields = modelClass.getDeclaredFields()
-
-        new Model(modelClass.getSimpleName, modelFields.map(
-          field =>
-          {
-            val fieldName = simpleName(field.toString.split(' ').takeRight(2)(0))
-            if (field.getType.isArray)
-            {
-              ModelField(field.getName, fieldName.dropRight(2), true)
-            }
-            else
-            {
-              ModelField(field.getName, fieldName, false)
-            }
-          }
-        ))
+        ModelGenerator.loadModel(classLoader, packageName, modelName)
       }
     )
   }
@@ -466,11 +436,7 @@ object DatabaseGenerator
     resultingFiles.toList
   }
 
-  case class ModelField(name: String, typeSimple: String, isArray: Boolean)
+  case class Table(name: String, fields: Array[TableField], isJoin: Boolean = false)
 
   case class TableField(name: String, typeSimple: String, isArray: Boolean, belognsToModel: Boolean = true, foreignModel: Model = null)
-
-  case class Model(name: String, fields: Array[ModelField])
-
-  case class Table(name: String, fields: Array[TableField], isJoin: Boolean = false)
 }

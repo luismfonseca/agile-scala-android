@@ -10,17 +10,20 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Button
 import android.widget.Toast
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 
 import org.scaloid.common._
 
 import com.google.gson.Gson
 
 IMPORT_MODEL_FIELDS_DEPENDENCIES
-import PACKAGE_MODELS.CLASS_NAME_AS_IS
-
 import PACKAGE_R
+import PACKAGE_MODELS.CLASS_NAME_AS_IS
+IMPORT_OTHER_MODELS
+IMPORT_OTHER_MODELS_UI
 
 object CLASS_NAME_AS_ISFragment {
   val BUNDLE_MODEL_JSON = "model_json"
@@ -40,15 +43,15 @@ object CLASS_NAME_AS_ISFragment {
   }
 
   trait CLASS_NAME_AS_ISDeleteHandler {
-    def onCLASS_NAME_AS_ISDeleteHandler: Unit
+    def onCLASS_NAME_AS_ISDeleteHandler()
   }
-
 }
 
 class CLASS_NAME_AS_ISFragment extends Fragment {
 
   var mModel: CLASS_NAME_AS_IS = _
 FRAGMENT_VIEW_FIELDS
+FRAGMENT_VIEW_OTHER_MODELS_FIELDS
   override def onCreate(bundle: Bundle): Unit = {
     super.onCreate(bundle)
 
@@ -58,9 +61,9 @@ FRAGMENT_VIEW_FIELDS
         mModel = new Gson().fromJson(json, classOf[CLASS_NAME_AS_IS])
     }
     else {
-	  throw new RuntimeException("Arguments bundle not were not included in the fragment!")
-	  
-	  // If you want, you can implement a default view.
+      throw new RuntimeException("Arguments bundle not were not included in the fragment!")
+      
+      // If you want, you can implement a default view.
       //mModel = new CLASS_NAME_AS_IS(/* use model constructor here */)
     }
 
@@ -80,12 +83,15 @@ FRAGMENT_VIEW_FIELDS
     CLASS_NAME_UNCAPITALIZEDFrameLayout.addView(CLASS_NAME_UNCAPITALIZEDView)
 
 FRAGMENT_VIEW_ASSIGN_FIELDS
+FRAGMENT_VIEW_ASSIGN_FIELDS_OTHER_MODELS
+
     display()
     return view
   }
 
   private def display(): Unit = {
 FRAGMENT_VIEW_DISPLAY_FIELDS
+FRAGMENT_VIEW_DISPLAY_OTHER_MODELS_FIELDS
   }
 
   override def onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater): Unit = {
@@ -119,7 +125,10 @@ FRAGMENT_VIEW_DISPLAY_FIELDS
             // TODO: Actually remove the object from database
             toast("The MODEL_NAME_PRETTY was deleted.")
 
-            getActivity().asInstanceOf[CLASS_NAME_AS_ISFragment.CLASS_NAME_AS_ISDeleteHandler].onCLASS_NAME_AS_ISDeleteHandler
+            getActivity() match {
+              case deleteHandler: CLASS_NAME_AS_ISFragment.CLASS_NAME_AS_ISDeleteHandler => deleteHandler.onCLASS_NAME_AS_ISDeleteHandler
+              case activity => activity.getFragmentManager().popBackStack()
+            }
           })
           negativeButton(android.R.string.cancel)
         }.show()

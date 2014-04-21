@@ -2,6 +2,7 @@ package pt.teste.ok.ui.post
 
 import android.app.ActionBar
 import android.app.Fragment
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.FrameLayout
 
 import org.scaloid.common._
 
@@ -21,12 +23,14 @@ import android.text.format.DateFormat
 import java.util.Date
 import java.util.Calendar
 
-import pt.teste.ok.models.Post
 import pt.teste.ok.R
+import pt.teste.ok.models.Post
+
+
 
 object EditPostFragment {
-  val BUNDLE_MODEL_JSON: String = "model_json"
-  val BUNDLE_CREATE_NEW: String = "create_new"
+  val BUNDLE_MODEL_JSON = "model_json"
+  val BUNDLE_CREATE_NEW = "create_new"
 
   def newInstance(model: Post): EditPostFragment = {
     val arguments = new Bundle()
@@ -41,9 +45,10 @@ object EditPostFragment {
 class EditPostFragment extends Fragment {
 
   var mModel: Post = _
-  var mTitle: TextView = _
-  var mNumberOfLikes: TextView = _
-  var mDateButton: Button = _
+  var mPostTitle: TextView = _
+  var mPostNumberOfLikes: TextView = _
+  var mPostDateButton: Button = _
+
 
   private val mActionBarListener = (view: View) => {
     view.getId() match {
@@ -53,10 +58,10 @@ class EditPostFragment extends Fragment {
       }
       case R.id.action_done => {
         val finalPost = new Post(
-          mTitle.getText().toString(),
-          if (mNumberOfLikes.getText().toString().isEmpty) 0 else Integer.parseInt(mNumberOfLikes.getText().toString()),
+          mPostTitle.getText().toString(),
+          if (mPostNumberOfLikes.getText().toString().isEmpty) 0 else Integer.parseInt(mPostNumberOfLikes.getText().toString()),
           mModel.date
-		)
+        )
 
         val data = new Intent()
         data.putExtra(EditPostFragment.BUNDLE_MODEL_JSON, new Gson().toJson(finalPost))
@@ -88,10 +93,8 @@ class EditPostFragment extends Fragment {
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val view = inflater.inflate(R.layout.fragment_edit_post, container, false)
 
     val actionBarButtons = inflater.inflate(R.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
-
 
     val cancelActionView = actionBarButtons.findViewById(R.id.action_cancel)
     cancelActionView.setOnClickListener(mActionBarListener)
@@ -104,10 +107,17 @@ class EditPostFragment extends Fragment {
         ActionBar.DISPLAY_SHOW_CUSTOM,
         ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM)
 
-    mTitle = view.findViewById(R.id.create_post_title).asInstanceOf[TextView]
-    mNumberOfLikes = view.findViewById(R.id.create_post_number_of_likes).asInstanceOf[TextView]
-    mDateButton = view.findViewById(R.id.create_post_date).asInstanceOf[Button]
-    mDateButton.onClick({
+    val view = inflater.inflate(R.layout.fragment_post, container, false)
+
+    val postView = inflater.inflate(R.layout.fragment_edit_post, container, false)
+    
+    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    postFrameLayout.addView(postView)
+
+    mPostTitle = postFrameLayout.findViewById(R.id.create_post_title).asInstanceOf[TextView]
+    mPostNumberOfLikes = postFrameLayout.findViewById(R.id.create_post_number_of_likes).asInstanceOf[TextView]
+    mPostDateButton = postFrameLayout.findViewById(R.id.create_post_date).asInstanceOf[Button]
+    mPostDateButton.onClick({
       
         val calendar = Calendar.getInstance()
 		if (mModel.date != null) {
@@ -126,22 +136,24 @@ class EditPostFragment extends Fragment {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
             mModel = mModel.copy(date = calendar.getTime())
-            mDateButton.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
+            mPostDateButton.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
           }
         }, year, month, day).show()
 
     })
 
+
     if (mModel != null)
     {
-      mTitle.setText(mModel.title)
-      mNumberOfLikes.setText("" + mModel.numberOfLikes)
-      mDateButton.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
-
+      mPostTitle.setText(mModel.title)
+      mPostNumberOfLikes.setText("" + mModel.numberOfLikes)
+      mPostDateButton.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
     }
 
     return view
   }
+  
+
 
   override def onDestroyView(): Unit = {
     super.onDestroyView()

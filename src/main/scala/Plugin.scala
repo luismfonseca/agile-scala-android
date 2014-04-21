@@ -6,7 +6,10 @@ import complete.DefaultParsers._
 import scala.collection.mutable
 import scala.io.Source
 import Def.Initialize
-import java.io.{IOException, PrintWriter, FileOutputStream, File}
+import java.io.IOException
+import java.io.PrintWriter
+import java.io.FileOutputStream
+import java.io.File
 import java.security.MessageDigest
 
 object Plugin extends Plugin
@@ -32,9 +35,9 @@ object Plugin extends Plugin
       val args = spaceDelimited(" className <attributes>").parsed
       val (modelName, modelAttributes) = (args.head, args.tail)
 
-      //val file = Model.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
+      //val file = ModelGenerator.getFilePath(sourceDirectory.value, (scalaSource in Compile).value, modelName)
       
-      Model.generate(streams.value.log, sourceDirectory.value, modelName, modelAttributes)
+      ModelGenerator.generate(streams.value.log, sourceDirectory.value, modelName, modelAttributes)
 	  }
 
     def npaTask: Initialize[InputTask[Seq[Setting[_]]]] = Def.inputTask {
@@ -95,7 +98,7 @@ object Plugin extends Plugin
     def migrateDatabaseTask: Initialize[Task[Seq[File]]] = Def.task {
 
       streams.value.log.info("Migrating database.")
-      val models: Array[DatabaseGenerator.Model] =
+      val models: Array[ModelGenerator.Model] =
         DatabaseGenerator.loadModels((classDirectory in Compile).value, Android.findPackageName(sourceDirectory.value), (externalDependencyClasspath in Runtime).value)
 
       //val tables = DatabaseGenerator.modelsToTables(models)

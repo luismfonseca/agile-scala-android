@@ -32,6 +32,8 @@ class PostMainActivity
   }
   
   override def onCreateOptionsMenu(menu: Menu): Boolean = {
+    setHomeButton()
+
     val currentFragment = getFragmentManager().findFragmentById(R.id.post_main_container)
 
     if (currentFragment.getClass() == classOf[PostListFragment])
@@ -76,6 +78,10 @@ class PostMainActivity
   }
 
   override def onBackStackChanged(): Unit = {
+    setHomeButton()
+  }
+  
+  def setHomeButton(): Unit = {
     val enableBack = getFragmentManager().getBackStackEntryCount() != 0
 
     getActionBar().setHomeButtonEnabled(enableBack)

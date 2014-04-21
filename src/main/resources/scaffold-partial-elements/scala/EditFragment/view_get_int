@@ -1,1 +1,1 @@
-COMMA_NEW_LINE_IF_NOT_FIRST          if (mFIELD_NAME_CAPITALIZED.getText().toString().isEmpty) 0 else Integer.parseInt(mFIELD_NAME_CAPITALIZED.getText().toString())
+COMMA_NEW_LINE_IF_NOT_FIRST          if (mMODEL_PREFIXFIELD_NAME_CAPITALIZED.getText().toString().isEmpty) 0 else Integer.parseInt(mMODEL_PREFIXFIELD_NAME_CAPITALIZED.getText().toString())

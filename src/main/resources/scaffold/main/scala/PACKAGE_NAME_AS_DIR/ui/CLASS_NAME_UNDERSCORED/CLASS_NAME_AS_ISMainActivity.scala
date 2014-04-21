@@ -32,6 +32,8 @@ class CLASS_NAME_AS_ISMainActivity
   }
   
   override def onCreateOptionsMenu(menu: Menu): Boolean = {
+    setHomeButton()
+
     val currentFragment = getFragmentManager().findFragmentById(R.id.CLASS_NAME_UNDERSCORED_main_container)
 
     if (currentFragment.getClass() == classOf[CLASS_NAME_AS_ISListFragment])
@@ -76,6 +78,10 @@ class CLASS_NAME_AS_ISMainActivity
   }
 
   override def onBackStackChanged(): Unit = {
+    setHomeButton()
+  }
+  
+  def setHomeButton(): Unit = {
     val enableBack = getFragmentManager().getBackStackEntryCount() != 0
 
     getActionBar().setHomeButtonEnabled(enableBack)

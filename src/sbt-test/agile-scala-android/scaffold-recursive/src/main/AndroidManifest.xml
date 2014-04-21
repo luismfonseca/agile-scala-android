@@ -1,0 +1,22 @@
+<manifest package="pt.testing.whaa" android:versionCode="1" android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <uses-sdk android:minSdkVersion="19"/>
+    
+    
+<application android:name="pt.testing.whaa.App" android:theme="@style/AppTheme" android:label="@string/app_name" android:icon="@drawable/ic_launcher">
+        <activity android:name="pt.testing.whaa.ui.MainActivity" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+    <activity android:name="pt.testing.whaa.ui.post.EditPostActivity" android:label="@string/title_edit_post" android:parentActivityName="pt.testing.whaa.ui.post.PostMainActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="PostMainActivity"/>
+        </activity><activity android:parentActivityName="pt.testing.whaa.ui.author.AuthorMainActivity" android:label="@string/title_edit_author" android:name="pt.testing.whaa.ui.author.EditAuthorActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+            <meta-data android:value="AuthorMainActivity" android:name="android.support.PARENT_ACTIVITY"/>
+        </activity><activity android:name="pt.testing.whaa.ui.comment.EditCommentActivity" android:label="@string/title_edit_comment" android:parentActivityName="pt.testing.whaa.ui.comment.CommentMainActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="CommentMainActivity"/>
+        </activity><activity android:parentActivityName="pt.testing.whaa.ui.author.AuthorMainActivity" android:label="@string/title_edit_author" android:name="pt.testing.whaa.ui.author.EditAuthorActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+            <meta-data android:value="AuthorMainActivity" android:name="android.support.PARENT_ACTIVITY"/>
+        </activity></application></manifest>

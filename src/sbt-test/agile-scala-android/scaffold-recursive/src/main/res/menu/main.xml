@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:uiOptions="splitActionBarWhenNarrow"
+    tools:context="pt.test.ok.ui.SimpleMainActivity"
+    >
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        />
+
+</menu>

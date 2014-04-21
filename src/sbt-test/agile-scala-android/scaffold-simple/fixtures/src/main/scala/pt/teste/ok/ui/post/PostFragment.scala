@@ -10,7 +10,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Button
 import android.widget.Toast
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 
 import org.scaloid.common._
 
@@ -19,9 +22,10 @@ import com.google.gson.Gson
 import android.text.format.DateFormat
 import java.util.Date
 
+import pt.teste.ok.R
 import pt.teste.ok.models.Post
 
-import pt.teste.ok.R
+
 
 object PostFragment {
   val BUNDLE_MODEL_JSON = "model_json"
@@ -41,17 +45,17 @@ object PostFragment {
   }
 
   trait PostDeleteHandler {
-    def onPostDeleteHandler: Unit
+    def onPostDeleteHandler()
   }
-
 }
 
 class PostFragment extends Fragment {
 
   var mModel: Post = _
-  var mModelTitle: TextView = _
-  var mModelNumberOfLikes: TextView = _
-  var mModelDate: TextView = _
+  var mPostTitle: TextView = _
+  var mPostNumberOfLikes: TextView = _
+  var mPostDate: TextView = _
+
 
   override def onCreate(bundle: Bundle): Unit = {
     super.onCreate(bundle)
@@ -62,9 +66,9 @@ class PostFragment extends Fragment {
         mModel = new Gson().fromJson(json, classOf[Post])
     }
     else {
-	  throw new RuntimeException("Arguments bundle not were not included in the fragment!")
-	  
-	  // If you want, you can implement a default view.
+      throw new RuntimeException("Arguments bundle not were not included in the fragment!")
+      
+      // If you want, you can implement a default view.
       //mModel = new Post(/* use model constructor here */)
     }
 
@@ -77,19 +81,27 @@ class PostFragment extends Fragment {
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
     val view = inflater.inflate(R.layout.fragment_post, container, false)
+    
+    val postView = inflater.inflate(R.layout.fragment_view_post, container, false)
+    
+    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    postFrameLayout.addView(postView)
 
-    mModelTitle = view.findViewById(R.id.post_title).asInstanceOf[TextView]
-    mModelNumberOfLikes = view.findViewById(R.id.post_number_of_likes).asInstanceOf[TextView]
-    mModelDate = view.findViewById(R.id.post_date).asInstanceOf[TextView]
+    mPostTitle = postFrameLayout.findViewById(R.id.post_title).asInstanceOf[TextView]
+    mPostNumberOfLikes = postFrameLayout.findViewById(R.id.post_number_of_likes).asInstanceOf[TextView]
+    mPostDate = postFrameLayout.findViewById(R.id.post_date).asInstanceOf[TextView]
+
+
 
     display()
     return view
   }
 
   private def display(): Unit = {
-    mModelTitle.setText(mModel.title)
-    mModelNumberOfLikes.setText("" + mModel.numberOfLikes)
-    mModelDate.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
+    mPostTitle.setText(mModel.title)
+    mPostNumberOfLikes.setText("" + mModel.numberOfLikes)
+    mPostDate.setText(DateFormat.format("dd-MM-yyyy", mModel.date))
+
 
   }
 
@@ -124,7 +136,10 @@ class PostFragment extends Fragment {
             // TODO: Actually remove the object from database
             toast("The Post was deleted.")
 
-            getActivity().asInstanceOf[PostFragment.PostDeleteHandler].onPostDeleteHandler
+            getActivity() match {
+              case deleteHandler: PostFragment.PostDeleteHandler => deleteHandler.onPostDeleteHandler
+              case activity => activity.getFragmentManager().popBackStack()
+            }
           })
           negativeButton(android.R.string.cancel)
         }.show()

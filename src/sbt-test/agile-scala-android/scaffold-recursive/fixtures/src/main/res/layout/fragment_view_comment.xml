@@ -1,0 +1,65 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="3"
+        android:layout_margin="@dimen/default_layout_margin"
+        android:padding="@dimen/default_padding"
+        android:background="@android:color/white"
+        tools:context="pt.testing.whaa.ui.comment.CommentFragment">
+
+            <TextView
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Date"/>
+            <TextView
+                android:id="@+id/comment_date"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_gravity="fill_horizontal"
+                android:text=""/>
+            <TextView
+                android:layout_column="0"
+                android:layout_row="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Text"/>
+            <TextView
+                android:id="@+id/comment_text"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:layout_gravity="fill_horizontal"
+                android:text=""/>
+
+    </GridLayout>
+
+    <AbsoluteLayout
+        style="@style/CardBottomBar"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:textStyle="bold"
+        android:text="Author:"
+        />
+    <FrameLayout
+        android:id="@+id/comment_author_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+</LinearLayout>
