@@ -97,6 +97,7 @@ Now we get the following:
 As with the database, the current main known limitation is a model with an array of primitive types. The current workaround is to create a new model and use it as the array.
 
 **Automatic Android permissions**
+
 When programming in Android, writing code that requires a specific permission is very common. However, there are 3 possible situations: (i) you remembered you needed the permission and manually added; (ii) the application crashed and you got a descriptive error message; (iii) the application crashed and you had to go to stackoverflow to get your awnser. In any of these cases, work is placed on the developer --- this is far from ideal.
 
 [PScout][] is a tool that maps the Android API function calls to the required permission(s). This plugin makes use of this information and checks if the application being developed calls a permission that is missing from the manifest.
