@@ -1,6 +1,0 @@
-  override def onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Unit = {
-    
-	requestCode match {
-FRAGMENT_EDIT_ON_ACTIVITY_RESULT_HANDLERS	  case _ => super.onActivityResult(requestCode, resultCode, data)
-	}
-  }

@@ -1,1 +1,0 @@
-    mMODEL_PREFIXFIELD_NAME_CAPITALIZED.setText(DateFormat.format("dd-MM-yyyy", mModel.FIELD_NAME_FULLY_QUALIFIED))

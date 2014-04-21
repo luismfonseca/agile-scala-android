@@ -1,1 +1,0 @@
-      viewHolder.FIELD_NAME_AS_IS.setText(if (items(position).FIELD_NAME_AS_IS) "Yes" else "No")
