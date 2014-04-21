@@ -1,0 +1,15 @@
+    mFIELD_NAME_CAPITALIZEDView.removeAllViews
+    for (i <- 0 until mFIELD_NAME_CAPITALIZEDListAdapter.getCount) {
+      val view = mFIELD_NAME_CAPITALIZEDListAdapter.getView(i, null, null)
+      
+      view.setOnClickListener(new View.OnClickListener() {
+        override def onClick(view: View): Unit = {
+          
+          val fragment = FIELD_TYPE_AS_ISFragment.newInstance(mFIELD_NAME_CAPITALIZEDListAdapter.getItem(i))
+          
+          (getActivity().asInstanceOf[ChangeToFragmentHandler]).onChangeToFragment(fragment)
+        }
+      })
+      
+      mFIELD_NAME_CAPITALIZEDView.addView(view)
+    }

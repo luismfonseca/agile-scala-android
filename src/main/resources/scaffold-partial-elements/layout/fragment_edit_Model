@@ -1,0 +1,20 @@
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:layout_marginLeft="8dp"
+		android:textStyle="bold"
+		android:text="MODEL_ATTRIBUTE_NAME:"
+		/>
+	<FrameLayout
+		android:id="MODEL_ATTRIBUTE_ID_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		/>	
+    <Button
+        android:id="@+id/CLASS_NAME_UNDERSCORED_change_FIELD_NAME_UNDERSCORED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Change the FIELD_TYPE_PRETTY"/>
