@@ -1,0 +1,52 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="3"
+        android:layout_margin="@dimen/default_layout_margin"
+        android:padding="@dimen/default_padding"
+        android:background="@android:color/white"
+        tools:context="pt.testing.whaa.ui.author.AuthorFragment">
+
+            <TextView
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Name"/>
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_gravity="fill_horizontal"
+                android:text=""/>
+            <TextView
+                android:layout_column="0"
+                android:layout_row="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SecondaryText"
+                android:text="Age"/>
+            <TextView
+                android:id="@+id/author_age"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:layout_gravity="fill_horizontal"
+                android:text=""/>
+
+    </GridLayout>
+
+    <AbsoluteLayout
+        style="@style/CardBottomBar"
+        />
+
+
+</LinearLayout>

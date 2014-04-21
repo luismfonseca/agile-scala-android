@@ -1,6 +1,9 @@
 package agile.android
 
-import java.io.{ByteArrayOutputStream, File, FileInputStream, PrintStream}
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.PrintStream
 import java.net._
 import java.nio.charset.Charset
 

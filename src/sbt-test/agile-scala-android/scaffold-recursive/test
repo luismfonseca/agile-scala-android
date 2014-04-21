@@ -1,0 +1,78 @@
+# generating models
+> generate Author name:String age:Int
+> generate Comment author:Author date:Date text:String
+> "generate Post author:Author date:Date title:String content:String coments:Array[Comment]"
+
+# scaffolding all models
+> scaffold Post
+
+# check if all files exist
+$ exists src/main/res/menu/main_author.xml
+$ exists src/main/res/menu/main_comment.xml
+$ exists src/main/res/menu/main_post.xml
+$ exists src/main/res/layout/activity_edit_author.xml
+$ exists src/main/res/layout/activity_edit_comment.xml
+$ exists src/main/res/layout/activity_edit_post.xml
+$ exists src/main/res/layout/actionbar_edit_cancel_done.xml
+$ exists src/main/res/animator/slide_in.xml
+$ exists src/main/res/animator/slide_out.xml
+$ exists src/main/res/values/styles.xml
+$ exists src/main/res/values/dimens.xml
+$ exists src/main/scala/pt/testing/whaa/ui/ChangeToFragmentHandler.scala
+$ exists src/main/scala/pt/testing/whaa/ui/author/EditAuthorActivity.scala
+$ exists src/main/scala/pt/testing/whaa/ui/author/EditAuthorFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/author/AuthorFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/author/AuthorListAdapter.scala
+$ exists src/main/scala/pt/testing/whaa/ui/author/AuthorListFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/CommentMainActivity.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/EditCommentActivity.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/EditCommentFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/CommentFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/CommentListAdapter.scala
+$ exists src/main/scala/pt/testing/whaa/ui/comment/CommentListFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/PostMainActivity.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/EditPostActivity.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/EditPostFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/PostFragment.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/PostListAdapter.scala
+$ exists src/main/scala/pt/testing/whaa/ui/post/PostListFragment.scala
+
+# check if contents are the expected
+> contents fixtures/src/main/res/menu/main_author.xml src/main/res/menu/main_author.xml
+> contents fixtures/src/main/res/menu/main_comment.xml src/main/res/menu/main_comment.xml
+> contents fixtures/src/main/res/menu/main_post.xml src/main/res/menu/main_post.xml
+> contents fixtures/src/main/res/layout/activity_edit_author.xml src/main/res/layout/activity_edit_author.xml
+> contents fixtures/src/main/res/layout/activity_edit_comment.xml src/main/res/layout/activity_edit_comment.xml
+> contents fixtures/src/main/res/layout/activity_edit_post.xml src/main/res/layout/activity_edit_post.xml
+> contents fixtures/src/main/res/layout/actionbar_edit_cancel_done.xml src/main/res/layout/actionbar_edit_cancel_done.xml
+> contents fixtures/src/main/res/animator/slide_in.xml src/main/res/animator/slide_in.xml
+> contents fixtures/src/main/res/animator/slide_out.xml src/main/res/animator/slide_out.xml
+> contents fixtures/src/main/res/values/styles.xml src/main/res/values/styles.xml
+> contents fixtures/src/main/res/values/dimens.xml src/main/res/values/dimens.xml
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/ChangeToFragmentHandler.scala src/main/scala/pt/testing/whaa/ui/ChangeToFragmentHandler.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/AuthorMainActivity.scala   src/main/scala/pt/testing/whaa/ui/author/AuthorMainActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/EditAuthorActivity.scala   src/main/scala/pt/testing/whaa/ui/author/EditAuthorActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/EditAuthorFragment.scala   src/main/scala/pt/testing/whaa/ui/author/EditAuthorFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/AuthorFragment.scala       src/main/scala/pt/testing/whaa/ui/author/AuthorFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/AuthorListAdapter.scala    src/main/scala/pt/testing/whaa/ui/author/AuthorListAdapter.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/author/AuthorListFragment.scala   src/main/scala/pt/testing/whaa/ui/author/AuthorListFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/CommentMainActivity.scala src/main/scala/pt/testing/whaa/ui/comment/CommentMainActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/EditCommentActivity.scala src/main/scala/pt/testing/whaa/ui/comment/EditCommentActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/EditCommentFragment.scala src/main/scala/pt/testing/whaa/ui/comment/EditCommentFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/CommentFragment.scala     src/main/scala/pt/testing/whaa/ui/comment/CommentFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/CommentListAdapter.scala  src/main/scala/pt/testing/whaa/ui/comment/CommentListAdapter.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/comment/CommentListFragment.scala src/main/scala/pt/testing/whaa/ui/comment/CommentListFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/PostMainActivity.scala       src/main/scala/pt/testing/whaa/ui/post/PostMainActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/EditPostActivity.scala       src/main/scala/pt/testing/whaa/ui/post/EditPostActivity.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/EditPostFragment.scala       src/main/scala/pt/testing/whaa/ui/post/EditPostFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/PostFragment.scala           src/main/scala/pt/testing/whaa/ui/post/PostFragment.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/PostListAdapter.scala        src/main/scala/pt/testing/whaa/ui/post/PostListAdapter.scala
+> contents fixtures/src/main/scala/pt/testing/whaa/ui/post/PostListFragment.scala       src/main/scala/pt/testing/whaa/ui/post/PostListFragment.scala
+
+#checking if compiles and recompiles (using cache, the last command should be instant)
+> android:dex
+> android:dex
+
+# TODO: Create a file with timestamp here
+> android:dex
+# TODO: Check that the different between timestamp and now is very small, even on slow computers <3 seconds

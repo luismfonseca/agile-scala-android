@@ -1,1 +1,0 @@
-      mFIELD_NAME_CAPITALIZED.setText("" + mModel.FIELD_NAME_AS_IS)

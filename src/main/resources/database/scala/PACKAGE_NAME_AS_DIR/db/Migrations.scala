@@ -6,6 +6,7 @@ import scala.slick.jdbc.meta.MTable
 
 import PACKAGE_NAME.App
 import PACKAGE_MODELS._
+import PACKAGE_DB.tables.DatabaseVersionRow
 IMPORT_MIGRATIONS_IF_ANY
 trait Migrations {
 
@@ -35,7 +36,7 @@ MIGRATIONS_LIST
 		    allMigrations.last.version
 		  }
         
-        applicationDB.databaseVersions += DatabaseVersion(latestVersion, System.currentTimeMillis())
+        applicationDB.databaseVersions += DatabaseVersionRow(-1, latestVersion, System.currentTimeMillis())
       }
       else
       {
@@ -46,7 +47,7 @@ MIGRATIONS_LIST
              if (migration.version > lastPerformedMigration.version))
         {
           migration.up
-          applicationDB.databaseVersions += DatabaseVersion(migration.version, System.currentTimeMillis())
+          applicationDB.databaseVersions += DatabaseVersionRow(-1, migration.version, System.currentTimeMillis())
         }
       }
     }

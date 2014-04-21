@@ -5,8 +5,10 @@ import scala.xml.XML
 import scala.xml.PrettyPrinter
 import sbt.IO
 import java.util.Scanner
-import java.util.jar.{JarFile, JarEntry}
-import java.io.{File, InputStream}
+import java.util.jar.JarFile
+import java.util.jar.JarEntry
+import java.io.File
+import java.io.InputStream
 import collection.JavaConversions.enumerationAsScalaIterator
 import scala.tools.nsc.io.Streamable
 
@@ -72,6 +74,12 @@ object Util
     new PrettyPrinter(120, 4).format(node).trim
   )
 
+  def getResourceFileRaw(path: String): Array[Byte] =
+    convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream(path))
+
+
+  def getResourceFile(path: String): String =
+    convertStreamToString(getClass.getClassLoader().getResourceAsStream(path))
 
   def getResourceFilesRaw(path: String): Map[String, Array[Byte]] = 
   {
@@ -82,7 +90,7 @@ object Util
       (resultingList, entry) => {
         if (entry.getName().startsWith(path) && entry.getName() != path && entry.getName().endsWith("/") == false)
         {
-          val fileContent = convertInputStreamToByteArray(getClass.getClassLoader().getResourceAsStream(entry.getName()))
+          val fileContent = getResourceFileRaw(entry.getName())
 
           resultingList ++ Map((entry.getName().stripPrefix(path), fileContent))
         }
@@ -98,7 +106,6 @@ object Util
     files
   }
 
-
   def getResourceFiles(path: String): Map[String, String] =
   {
     val jarFile = new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()))
@@ -107,7 +114,7 @@ object Util
       (resultingList, entry) => {
         if (entry.getName().startsWith(path))
         {
-          val fileContent = convertStreamToString(getClass.getClassLoader().getResourceAsStream(entry.getName()))
+          val fileContent = getResourceFile(entry.getName())
           if (fileContent.isEmpty() == false)
           {
             resultingList ++ Map((entry.getName().stripPrefix(path), fileContent))

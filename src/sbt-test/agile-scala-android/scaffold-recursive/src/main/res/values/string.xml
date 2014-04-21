@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Main Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="save_label">save</string>
+    <string name="cancel_label">cancel</string>
+    <string name="menu_main_new_post">New Post</string>
+    <string name="title_edit_post">Edit Post</string>
+    <string name="menu_main_new_author">New Author</string>
+    <string name="title_edit_author">Edit Author</string>
+    <string name="menu_main_new_comment">New Comment</string>
+    <string name="title_edit_comment">Edit Comment</string>
+</resources>

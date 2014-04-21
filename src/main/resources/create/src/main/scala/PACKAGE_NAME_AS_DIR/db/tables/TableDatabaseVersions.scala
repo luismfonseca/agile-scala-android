@@ -9,13 +9,20 @@ import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.jdbc.meta.MTable
 import scala.slick.lifted.AbstractTable
 
+import PACKAGE_NAME.App
 import PACKAGE_MODELS._
 
-class TableDatabaseVersions(tag: Tag) extends Table[DatabaseVersion](tag, "DatabaseVersion") {
+case class DatabaseVersionRow(databaseVersionId: Int, version: Long, appliedIn: Long)
+{
+}
 
+class TableDatabaseVersions(tag: Tag) extends Table[DatabaseVersionRow](tag, "DatabaseVersion")
+{
   def version = column[Long]("VERSION")
 
   def appliedIn = column[Long]("APPLIED_IN")
 
-  def * = (version, appliedIn) <> (DatabaseVersion.tupled, DatabaseVersion.unapply)
+  def databaseVersionId = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+
+  def * = (databaseVersionId, version, appliedIn) <> (DatabaseVersionRow.tupled, DatabaseVersionRow.unapply)
 }

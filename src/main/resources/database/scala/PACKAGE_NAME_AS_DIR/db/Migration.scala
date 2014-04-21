@@ -1,5 +1,6 @@
 package PACKAGE_DB
 
+import scala.language.implicitConversions
 import java.text.SimpleDateFormat
 
 trait Migration {
@@ -9,7 +10,7 @@ trait Migration {
 
   def version: Long = ???
 
-  def up: Unit = ???
+  def up() = ???
 
-  def down: Unit = ???
+  def down() = ???
 }

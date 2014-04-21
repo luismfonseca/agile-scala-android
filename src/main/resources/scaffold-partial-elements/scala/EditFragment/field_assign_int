@@ -1,1 +1,0 @@
-    mFIELD_NAME_CAPITALIZED = view.findViewById(R.id.create_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED).asInstanceOf[TextView]
