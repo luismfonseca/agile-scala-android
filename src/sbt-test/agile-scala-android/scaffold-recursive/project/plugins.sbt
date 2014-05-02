@@ -8,6 +8,6 @@ addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.11")
                                   |Specify this property using the scriptedLaunchOpts -D.""".stripMargin)
   }
   else {
-    addSbtPlugin("pt.pimentelfonseca.luis" % "agile-scala-android" % pluginVersion)
+    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % pluginVersion)
   }
 }

@@ -13,6 +13,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-start-script" % "0.10.0")
   }
   else {
     //addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")
-    addSbtPlugin("pt.pimentelfonseca.luis" % "agile-scala-android" % pluginVersion)
+    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % pluginVersion)
   }
 }

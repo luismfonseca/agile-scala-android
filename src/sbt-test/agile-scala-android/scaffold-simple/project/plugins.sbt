@@ -15,6 +15,6 @@ addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.11")
   }
   else {
     //addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")
-    addSbtPlugin("pt.pimentelfonseca.luis" % "agile-scala-android" % pluginVersion)
+    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % pluginVersion)
   }
 }
