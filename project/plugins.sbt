@@ -1,16 +1,17 @@
-//resolvers += Resolver.url("publishTo", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
-
-//resolvers += Resolver.url("publishTo", new URL("https://repo.typesafe.com/typesafe/releases/"))(Resolver.ivyStylePatterns)
 resolvers += "typesafe" at "http://repo.typesafe.com/typesafe/releases"
 
-//libraryDependencies <+= sbtVersion ("org.scala-sbt" % "scripted-plugin" % _)
+resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
-libraryDependencies <+= (sbtVersion) { sv =>
-  "org.scala-sbt" % "scripted-plugin" % sv
-}
+libraryDependencies <+= sbtVersion ("org.scala-sbt" % "scripted-plugin" % _)
+
+//libraryDependencies <+= (sbtVersion) { sv =>
+//  "org.scala-sbt" % "scripted-plugin" % sv
+//}
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.4.0")
 
-resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "0.2.1")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.2")
