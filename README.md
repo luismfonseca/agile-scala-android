@@ -48,9 +48,20 @@ As an example, the following command is valid:
 
 This will create the Post class inside the models package with the specified attributes. The result can naturally be modified afterwards. 
 
-## Current work
+**Database generation**
 
-Scaffolding is being implemented, very similar to what [Ruby on Rails][] has, only applied in the context of Android development. This means that layouts and activities+fragments are generated automatically from a model, by looking at its public fields and implementing the [CRUD][] and list operations.
+Just like most web application frameworks, database is now a core built-in part of the application. This means, that every model will have a correspondent SQL table automatically created.
+
+To perform a migration you can use the following command:
+
+    $ migrateDatabase
+
+This feature is currently under development and there are some known limitations: models can't have arrays of a primitive type; models can't have an array of themselves.
+
+
+**Scaffolding**
+
+Scaffolding is implemented in a very similar way to [Ruby on Rails][], only applied in the context of Android development. This means that layouts and activities+fragments are generated automatically from a model, by looking at its public fields and implementing the [CRUD][] and list operations.
 
 Continuing the previous example, running the following:
 
@@ -65,6 +76,38 @@ Would result in the something similar to this:
   <img alt="Scaffold Example #3" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/media-20140310_3_.png?cache=" height="320" width="200"><span> </span>
   <img alt="Scaffold Example #4" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/media-20140310_4_.png?cache=" height="320" width="200">
 </p>
+
+
+We can elaborate a bit more our Post model and also add the Author and Comment models:
+
+    $ generate Author name:String age:Int
+    $ generate Comment author:Author date:Date text:String
+    $ generate Post author:Author title:String content:String coments:Array[Comment] date:Date
+    $ scaffold Post
+
+Now we get the following:
+<p align="center">
+  <img alt="Scaffold Example #1" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/screenshot_2014-04-21-17-53-27.png?w=200&amp;tok=d6def1" height="320" width="200"><span> </span>
+  <img alt="Scaffold Example #2" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/screenshot_2014-04-21-17-54-23.png?w=200&amp;tok=2391de" height="320" width="200"><span> </span>
+  <img alt="Scaffold Example #3" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/screenshot_2014-04-21-17-54-38.png?w=200&amp;tok=f057fe" height="320" width="200"><span> </span>
+  <img alt="Scaffold Example #4" src="http://paginas.fe.up.pt/~ei10139/pdis/_media/screenshot_2014-04-21-17-55-24.png?w=200&amp;tok=8e3c2e" height="320" width="200">
+</p>
+
+
+As with the database, the current main known limitation is a model with an array of primitive types. The current workaround is to create a new model and use it as the array.
+
+**Automatic Android permissions**
+When programming in Android, writing code that requires a specific permission is very common. However, there are 3 possible situations: (i) you remembered you needed the permission and manually added; (ii) the application crashed and you got a descriptive error message; (iii) the application crashed and you had to go to stackoverflow to get your awnser. In any of these cases, work is placed on the developer --- this is far from ideal.
+
+[PScout][] is a tool that maps the Android API function calls to the required permission(s). This plugin makes use of this information and checks if the application being developed calls a permission that is missing from the manifest.
+
+You can run this command using:
+
+    $ checkPermissions
+
+But by default, this is performed everytime you run\install an application. The permissions are added automatically to the manifest file (or not) according to the setting key <i>permissionsAddAutomatically</i>.
+
+Not all permissions are caught, and some false-positives might occur. Nonetheless, most cases are covered.
 
 ## Hacking on the plugin
 
@@ -83,4 +126,5 @@ And don't forget to create and run tests:
 [np]: https://github.com/softprops/np
 [Ruby on Rails]: http://rubyonrails.org
 [CRUD]: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
+[PScout]: http://pscout.csl.toronto.edu/PScout-CCS2012-slides.pdf
 
