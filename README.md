@@ -11,7 +11,7 @@ In most cases, a global installation will make the most sense. This is strongly 
 
 If you don't already have one, create an `~/.sbt/0.13/plugins` directory. And inside of it, create an `agile-scala-android.sbt` (it doesn't matter what you call it) file containing the line:
 
-    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "0.1-SNAPSHOT")
+    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "0.2")
     
 Next, you can add the settings `agileAndroidNewProjectTask` globally, which will add just a single task: `npa`. To do this, create a file under `~/.sbt/0.13` called `npa.sbt` (it doesn't matter what you call this either) containing the line:
 
