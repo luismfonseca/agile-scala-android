@@ -33,9 +33,9 @@ object DatabaseGenerator
       "IMPORT_TABLE_FIELDS_DEPENDENCIES" -> resolveTableFieldsImports(table.fields),
       "INJECT_IMPLICITS_IF_NEEDED" -> implicitsForFields(table.fields),
       "TABLE_ROW_HELPERS" -> createTableRowHelpers(table, allTables),
-      "MODEL_FIELDS_COMMA_SEPERATED" -> (table.fields.map(tableField => tableField.name + ": " + tableField.typeSimple).foldLeft("")(_ + ", " + _)),
+      "MODEL_FIELDS_COMMA_SEPERATED" -> (table.fields.map(field => field.name + ": " + fieldTypeWithArray(field)).foldLeft("")(_ + ", " + _)),
       "TABLE_FIELDS_TUPLE" -> (table.fields map(getFieldName(_)) mkString ", "),
-      "TABLE_ROW_FIELDS" ->  (table.fields map(field => getFieldName(field) + ": " + field.typeSimple) mkString ", "),
+      "TABLE_ROW_FIELDS" ->  (table.fields map(field => getFieldName(field) + ": " + fieldTypeWithArray(field)) mkString ", "),
       "MODEL_NAME_AS_IS" -> table.name,
       "TUPLED_IF_NEEDED" -> (if (table.fields.size > 1) ".tupled" else ""),
       "TABLE_NAME" -> (if (table.isJoin) table.name else (table.name + "s")),
@@ -206,16 +206,29 @@ object DatabaseGenerator
 
   private def resolveTableFieldsImports(fields: Array[TableField]): String =
   {
-    fields.foldLeft("")
-    {
-      (imports, field) =>
+    val importGson =
+      if (fields.exists(_.isArray))
       {
-        imports + (field.typeSimple match {
-          case "Date" => "\nimport java.util.Date"
-          case _ => ""
-        })
+        "\nimport com.google.gson.Gson"
       }
-    }
+      else
+      {
+        ""
+      }
+
+    val importsComplexTypes =
+      fields.foldLeft("")
+      {
+        (imports, field) =>
+        {
+          imports + (field.typeSimple match {
+            case "Date" => "\nimport java.util.Date"
+            case _ => ""
+          })
+        }
+      }
+
+    importGson + importsComplexTypes
   }
 
   private def getFieldName(field: TableField): String =
@@ -229,6 +242,18 @@ object DatabaseGenerator
       Util.uncapitalize(field.foreignModel.name) + "Id"
     }*/
     field.name
+  }
+
+  private def fieldTypeWithArray(field: TableField): String =
+  {
+    if (field.isArray && field.foreignModel == null)
+    {
+      "%s[%s]".format("Array", field.typeSimple)
+    }
+    else
+    {
+      field.typeSimple
+    }
   }
 
   private def defsOfFields(fields: Array[TableField]): String =
@@ -251,7 +276,7 @@ object DatabaseGenerator
         else
         {
           "  def %s = column[%s](\"%s\")"
-            .format(field.name, field.typeSimple, Util.camelToUnderscore(Util.uncapitalize(field.name)).toUpperCase) 
+            .format(field.name, fieldTypeWithArray(field), Util.camelToUnderscore(Util.uncapitalize(field.name)).toUpperCase) 
         }
       }
     ) mkString "\n\n"
@@ -261,19 +286,36 @@ object DatabaseGenerator
 
   def implicitsForFields(fields: Array[TableField]): String =
   {
-    val implicits = for (field <- fields)
-    yield {
-      field.typeSimple match {
-        case "Date" =>
-          """  implicit def string2Date = MappedColumnType.base[Date, String](
-            |    d => d.toString,
-            |    string => new Date()
-            |  )
-            |""".stripMargin
-        case _ => ""
-      }
-    }
-    implicits mkString ""
+    val fieldsArrayTypes = fields.filter(_.isArray).map(_.typeSimple).distinct
+
+    val implicits =
+      (for (field <- fields if field.isArray == false)
+      yield {
+        field.typeSimple match {
+          case "Date" =>
+            """
+              |  implicit def string2Date = MappedColumnType.base[Date, String](
+              |    d => d.toString,
+              |    string => new Date()
+              |  )
+              |""".stripMargin
+          case _ => ""
+        }
+      }) mkString ""
+
+    val impliticsOfArrays =
+      (for (fieldType <- fieldsArrayTypes)
+      yield {
+        """
+           |  implicit def string2Array%s = MappedColumnType.base[Array[%s], String](
+           |    array => new Gson().toJson(array),
+           |    jsonString => new Gson().fromJson(jsonString, classOf[Array[%s]])
+           |  )
+           |""".stripMargin
+           .format(fieldType, fieldType, fieldType)
+      }) mkString ""
+
+    implicits + impliticsOfArrays
   }
 
   def migrations(packagePath: String): Array[String] =
@@ -428,7 +470,7 @@ object DatabaseGenerator
             {
               val otherTables = tablesWithFields.filter(table => table.name != model.name)
 
-              val tableField = TableField(field.name, field.typeSimple, false)
+              val tableField = TableField(field.name, field.typeSimple, field.isArray)
               otherTables :+ tableOfModel.copy(fields = tableOfModel.fields :+ tableField)
             }
           }
