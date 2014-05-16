@@ -1,8 +1,8 @@
 resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
-addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "0.2")
+addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "PLUGIN_VERSION")
 
-addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.15")
+addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.16")
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 

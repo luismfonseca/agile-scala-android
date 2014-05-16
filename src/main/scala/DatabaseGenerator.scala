@@ -33,10 +33,11 @@ object DatabaseGenerator
       "IMPORT_TABLE_FIELDS_DEPENDENCIES" -> resolveTableFieldsImports(table.fields),
       "INJECT_IMPLICITS_IF_NEEDED" -> implicitsForFields(table.fields),
       "TABLE_ROW_HELPERS" -> createTableRowHelpers(table, allTables),
-      "MODEL_FIELDS_COMMA_SEPERATED" -> (table.fields.map(tableField => tableField.name + ": " + tableField.typeSimple).reduce(_ + ", " + _)),
+      "MODEL_FIELDS_COMMA_SEPERATED" -> (table.fields.map(field => field.name + ": " + fieldTypeWithArray(field)).foldLeft("")(_ + ", " + _)),
       "TABLE_FIELDS_TUPLE" -> (table.fields map(getFieldName(_)) mkString ", "),
-      "TABLE_ROW_FIELDS" ->  (table.fields map(field => getFieldName(field) + ": " + field.typeSimple) mkString ", "),
+      "TABLE_ROW_FIELDS" ->  (table.fields map(field => getFieldName(field) + ": " + fieldTypeWithArray(field)) mkString ", "),
       "MODEL_NAME_AS_IS" -> table.name,
+      "TUPLED_IF_NEEDED" -> (if (table.fields.size > 1) ".tupled" else ""),
       "TABLE_NAME" -> (if (table.isJoin) table.name else (table.name + "s")),
       "MODEL_NAME_PLURAL" -> (if (table.isJoin) table.name else (table.name + "s")),
       "DEFS_OF_FIELDS" -> defsOfFields(table.fields drop(if (table.isJoin) 0 else 1)),
@@ -117,7 +118,7 @@ object DatabaseGenerator
           tableHelpers + helperMethod
         }
       }
-      // TODO: check n-n
+      // check n-n
       val manyToManyRelations = allTables.filter(_.isJoin).foldLeft("")
       {
         (tableHelpers, currentTable) =>
@@ -130,33 +131,62 @@ object DatabaseGenerator
                 {
                   val tablesModel = field.foreignModel
                   val tablesModelName = Util.uncapitalize(tablesModel.name)
-
-                  val otherModel = currentTable.fields.find(tableField => tableField.foreignModel.name != table.name).get.foreignModel
-                  val otherModelName = Util.uncapitalize(otherModel.name)
-                  
-                  // maybe not the best way to do this, what if another field has id but is not the main id?
-                  val otherField = allTables.find(table => table.name == otherModel.name).get.fields.find(tableField => isFieldNameAnId(tableField.name)).get
-
-                  val defName = tablesModel.fields.find(modelField => modelField.typeSimple == otherModel.name).get.name
                   val tableJoin =  Util.uncapitalize(currentTable.name)
-                  """  def %s(implicit session: Session): List[%sRow] =
-                    |  {
-                    |    val query = for
-                    |      {
-                    |        %s <- App.%s
-                    |        %s <- App.%s if %s.%s === %s.%s
-                    |        %s <- App.%s if %s.%s === %s.%s
-                    |      } yield %s
-                    |
-                    |    query.list
-                    |  }
-                    |""".stripMargin
-                    .format(
-                      defName, otherModel.name,
-                      tableJoin, tableJoin,
-                      tablesModelName, tablesModelName + "s", tablesModelName, field.name, tableJoin, tablesModelName + "Id",
-                      otherModelName, otherModelName + "s", otherModelName, otherField.name, tableJoin, otherModelName + "Id",
-                      otherModelName)
+
+                  if (currentTable.isSelfJoin)
+                  {
+                    val defName = tablesModel.fields.find(modelField => modelField.typeSimple == tablesModel.name).get.name
+                    val otherFieldName = currentTable.fields.find(tableField => tableField.foreignModel == field.foreignModel && tableField != field).get.name
+
+                    """
+                      |  def %s(implicit session: Session): List[%sRow] =
+                      |  {
+                      |    val query = for
+                      |      {
+                      |        %s <- App.%s
+                      |        %s <- App.%s if %s.%s === %s.%s && %s.%s === %s
+                      |        %s <- App.%s if %s.%s === %s.%s
+                      |      } yield %s
+                      |
+                      |    query.list
+                      |  }
+                      |""".stripMargin
+                      .format(
+                        defName, tablesModel.name,
+                        tableJoin, tableJoin,
+                        tablesModelName, tablesModelName + "s", tablesModelName, field.name, tableJoin, tablesModelName + "Id", tablesModelName, field.name, field.name,
+                        tablesModelName + "2", tablesModelName + "s", tablesModelName, field.name, tableJoin, otherFieldName,
+                        tablesModelName + "2")
+                  }
+                  else
+                  {
+                    val otherModel = currentTable.fields.find(tableField => tableField.foreignModel.name != table.name).get.foreignModel
+                    val otherModelName = Util.uncapitalize(otherModel.name)
+                    
+                    // maybe not the best way to do this, what if another field has id but is not the main id?
+                    val otherField = allTables.find(table => table.name == otherModel.name).get.fields.find(tableField => isFieldNameAnId(tableField.name)).get
+
+                    val defName = tablesModel.fields.find(modelField => modelField.typeSimple == otherModel.name).get.name
+                    """
+                      |  def %s(implicit session: Session): List[%sRow] =
+                      |  {
+                      |    val query = for
+                      |      {
+                      |        %s <- App.%s
+                      |        %s <- App.%s if %s.%s === %s.%s && %s.%s === %s
+                      |        %s <- App.%s if %s.%s === %s.%s
+                      |      } yield %s
+                      |
+                      |    query.list
+                      |  }
+                      |""".stripMargin
+                      .format(
+                        defName, otherModel.name,
+                        tableJoin, tableJoin,
+                        tablesModelName, tablesModelName + "s", tablesModelName, field.name, tableJoin, tablesModelName + "Id", tablesModelName, field.name, field.name,
+                        otherModelName, otherModelName + "s", otherModelName, otherField.name, tableJoin, otherModelName + "Id",
+                        otherModelName)
+                    }
                 }
                 else
                 {
@@ -176,20 +206,33 @@ object DatabaseGenerator
 
   private def resolveTableFieldsImports(fields: Array[TableField]): String =
   {
-    fields.foldLeft("")
-    {
-      (imports, field) =>
+    val importGson =
+      if (fields.exists(_.isArray))
       {
-        imports + (field.typeSimple match {
-          case "Date" => "\nimport java.util.Date"
-          case _ => ""
-        })
+        "\nimport com.google.gson.Gson"
       }
-    }
+      else
+      {
+        ""
+      }
+
+    val importsComplexTypes =
+      fields.foldLeft("")
+      {
+        (imports, field) =>
+        {
+          imports + (field.typeSimple match {
+            case "Date" => "\nimport java.util.Date"
+            case _ => ""
+          })
+        }
+      }
+
+    importGson + importsComplexTypes
   }
 
   private def getFieldName(field: TableField): String =
-  {
+  {/*
     if (field.foreignModel == null)
     {
       field.name
@@ -197,6 +240,19 @@ object DatabaseGenerator
     else
     {
       Util.uncapitalize(field.foreignModel.name) + "Id"
+    }*/
+    field.name
+  }
+
+  private def fieldTypeWithArray(field: TableField): String =
+  {
+    if (field.isArray && field.foreignModel == null)
+    {
+      "%s[%s]".format("Array", field.typeSimple)
+    }
+    else
+    {
+      field.typeSimple
     }
   }
 
@@ -205,20 +261,22 @@ object DatabaseGenerator
       {
         if (field.foreignModel != null)
         {
-          val fieldNameWithoutId = Util.uncapitalize(field.foreignModel.name)
+          val fieldNameWithoutId = Util.uncapitalize(field.name)//Util.uncapitalize(field.foreignModel.name)
 
-          val defId = "  def %sId = column[%s](\"%s\")"
+          val defId = "  def %s = column[%s](\"%s\")"
             .format(fieldNameWithoutId, field.typeSimple, Util.camelToUnderscore(Util.uncapitalize(fieldNameWithoutId)).toUpperCase)
 
-          val defFk = "\n  def %sFK = foreignKey(\"%s_FK\", %sId, App.%s)(_.%s)"
-            .format(fieldNameWithoutId, Util.camelToUnderscore(fieldNameWithoutId).toUpperCase, fieldNameWithoutId, Util.uncapitalize(field.foreignModel.name + "s"), field.name)
+          val defFk = "\n  def %sFK = foreignKey(\"%s_FK\", %s, App.%s)(_.%s)"
+            .format(fieldNameWithoutId, Util.camelToUnderscore(fieldNameWithoutId).toUpperCase,
+              fieldNameWithoutId, Util.uncapitalize(field.foreignModel.name + "s"),
+              getModelIdField(field.foreignModel).name)
 
           defId + defFk
         }
         else
         {
           "  def %s = column[%s](\"%s\")"
-            .format(field.name, field.typeSimple, Util.camelToUnderscore(Util.uncapitalize(field.name)).toUpperCase) 
+            .format(field.name, fieldTypeWithArray(field), Util.camelToUnderscore(Util.uncapitalize(field.name)).toUpperCase) 
         }
       }
     ) mkString "\n\n"
@@ -228,19 +286,36 @@ object DatabaseGenerator
 
   def implicitsForFields(fields: Array[TableField]): String =
   {
-    val implicits = for (field <- fields)
-    yield {
-      field.typeSimple match {
-        case "Date" =>
-          """  implicit def string2Date = MappedColumnType.base[Date, String](
-            |    d => d.toString,
-            |    string => new Date()
-            |  )
-            |""".stripMargin
-        case _ => ""
-      }
-    }
-    implicits mkString ""
+    val fieldsArrayTypes = fields.filter(_.isArray).map(_.typeSimple).distinct
+
+    val implicits =
+      (for (field <- fields if field.isArray == false)
+      yield {
+        field.typeSimple match {
+          case "Date" =>
+            """
+              |  implicit def string2Date = MappedColumnType.base[Date, String](
+              |    d => d.toString,
+              |    string => new Date()
+              |  )
+              |""".stripMargin
+          case _ => ""
+        }
+      }) mkString ""
+
+    val impliticsOfArrays =
+      (for (fieldType <- fieldsArrayTypes)
+      yield {
+        """
+           |  implicit def string2Array%s = MappedColumnType.base[Array[%s], String](
+           |    array => new Gson().toJson(array),
+           |    jsonString => new Gson().fromJson(jsonString, classOf[Array[%s]])
+           |  )
+           |""".stripMargin
+           .format(fieldType, fieldType, fieldType)
+      }) mkString ""
+
+    implicits + impliticsOfArrays
   }
 
   def migrations(packagePath: String): Array[String] =
@@ -302,13 +377,18 @@ object DatabaseGenerator
     fieldUnderscored == "id" || fieldUnderscored.startsWith("id_") || fieldUnderscored.endsWith("_id") || fieldUnderscored.endsWith("_i_d")
   }
 
+  def getModelIdField(model: Model): ModelField =
+  {
+    model.fields.find(field => isFieldNameAnId(field.name)).getOrElse(ModelField(Util.uncapitalize(model.name) + "Id", "Int", false))
+  }
+
   def modelsToTables(models: Array[Model]): Array[Table] =
   {
     // get model ids fields, add them if not found
     val tablesIdField =
       models.map(model =>
         {
-          val modelIdField = model.fields.find(field => isFieldNameAnId(field.name)).getOrElse(ModelField(Util.uncapitalize(model.name) + "Id", "Int", false))
+          val modelIdField = getModelIdField(model)//model.fields.find(field => isFieldNameAnId(field.name)).getOrElse(ModelField(Util.uncapitalize(model.name) + "Id", "Int", false))
           val tableIdField = TableField(modelIdField.name, modelIdField.typeSimple, false, true, model)
           (model.name, tableIdField)
         }
@@ -341,10 +421,24 @@ object DatabaseGenerator
 
                 val fieldA = tablesIdField(otherModel.name)
                 val fieldB = tablesIdField(model.name)
-                val newMiddleTable = Table(otherModel.name + "s" + model.name + "s", Array[TableField](fieldA, fieldB), true)
+
+                val isSelfJoin = fieldA == fieldB
+
+                val finalFieldB = if (isSelfJoin) fieldB.copy(name = fieldB.name + "2") else fieldB
+
+                val newMiddleTable = Table(otherModel.name + "s" + model.name + "s", Array[TableField](fieldA, finalFieldB), true, isSelfJoin)
 
                 // remove the extra field previously added when doing 1-n relationship
-                val newTableOfModel = tableOfModel.copy(fields = tableOfModel.fields.filter(tableField => tableField.name != tablesIdField(otherModel.name).name))
+                val newTableOfModel =
+                  if (isSelfJoin)
+                  {
+                    tableOfModel
+                  }
+                  else
+                  {
+                    tableOfModel.copy(fields = tableOfModel.fields.filter(tableField => tableField.name != tablesIdField(otherModel.name).name))
+                  }
+
                 otherTables :+ newTableOfModel :+ newMiddleTable
               }
               // 1-n
@@ -376,7 +470,7 @@ object DatabaseGenerator
             {
               val otherTables = tablesWithFields.filter(table => table.name != model.name)
 
-              val tableField = TableField(field.name, field.typeSimple, false)
+              val tableField = TableField(field.name, field.typeSimple, field.isArray)
               otherTables :+ tableOfModel.copy(fields = tableOfModel.fields :+ tableField)
             }
           }
@@ -436,7 +530,7 @@ object DatabaseGenerator
     resultingFiles.toList
   }
 
-  case class Table(name: String, fields: Array[TableField], isJoin: Boolean = false)
+  case class Table(name: String, fields: Array[TableField], isJoin: Boolean = false, isSelfJoin: Boolean = false)
 
   case class TableField(name: String, typeSimple: String, isArray: Boolean, belognsToModel: Boolean = true, foreignModel: Model = null)
 }
