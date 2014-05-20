@@ -11,7 +11,7 @@ In most cases, a global installation will make the most sense. This is strongly 
 
 If you don't already have one, create an `~/.sbt/0.13/plugins` directory. And inside of it, create an `agile-scala-android.sbt` (it doesn't matter what you call it) file containing the line:
 
-    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "0.2")
+    addSbtPlugin("pt.pimentelfonseca" % "agile-scala-android" % "0.3")
     
 Next, you can add the settings `agileAndroidNewProjectTask` globally, which will add just a single task: `npa`. To do this, create a file under `~/.sbt/0.13` called `npa.sbt` (it doesn't matter what you call this either) containing the line:
 
@@ -109,6 +109,14 @@ You can run this command using:
 But by default, this is performed everytime you run\install an application. The permissions are added automatically to the manifest file (or not) according to the setting key <i>permissionsAddAutomatically</i>.
 
 Not all permissions are caught, and some false-positives might occur. Nonetheless, most cases are covered.
+
+## Usage statistics
+
+To better understand the usability and usefulness of this tool, the commands issued are submitted anonymously by default. However, you can control this behaviour with the following setting key:
+
+    $ sendAnonymousUsageStatistics
+
+Your feedback is important, so please feel free to add a project issue here.
 
 ## Hacking on the plugin
 
