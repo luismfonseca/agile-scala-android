@@ -27,9 +27,12 @@ object Plugin extends Plugin
     val checkPermissions = taskKey[Unit]("Checks for required Android permissions that are missing from the manifest.")
 
     val permissionsAddAutomatically = SettingKey[Boolean](
-      "permissions-add-automatically", "flag indicating whether to missing permissions are added automatically to the manifest file.")
+      "permissions-add-automatically", "flag indicating whether missing permissions are added automatically to the manifest file.")
 
     val migrateDatabase = taskKey[Seq[File]]("Migrates the database")
+
+    val sendAnonymousUsageStatistics = SettingKey[Boolean](
+      "send-anonymous-usage-statistics", "flag indicating if anonymous usage statistics should be sent")
 
 	  def generateTask: Initialize[InputTask[Seq[File]]] = Def.inputTask {
       val args = spaceDelimited(" className <attributes>").parsed
@@ -38,7 +41,10 @@ object Plugin extends Plugin
         val (modelName, modelAttributes) = (args.head, args.tail)
 
         val files = ModelGenerator.generate(streams.value.log, sourceDirectory.value, modelName, modelAttributes)
-        UsageStatistics.log(sourceDirectory.value, "generate", args mkString " ")
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "generate", args mkString " ")
+        }
 
         files
       }
@@ -46,7 +52,10 @@ object Plugin extends Plugin
       {
         case exception: Throwable =>
         {
-          UsageStatistics.log(sourceDirectory.value, "generate", args mkString " ", false)          
+          if (sendAnonymousUsageStatistics.value)
+          {
+            UsageStatistics.log(sourceDirectory.value, "generate", args mkString " ", false)          
+          }
           throw exception
         }
       }
@@ -56,14 +65,20 @@ object Plugin extends Plugin
       val args: Seq[String] = spaceDelimited("package minSdkVersion").parsed
 
       if (args.length < 2) {
-        UsageStatistics.log(sourceDirectory.value, "npa", args mkString " ", false)
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "npa", args mkString " ", false)
+        }
         sys.error("Incorrect parameters.")
       }
       else
       {
         Create.newProjectAndroid(streams.value.log, sbtVersion.value, version.value, args(0), args(1).toInt)
 
-        UsageStatistics.log(sourceDirectory.value, "npa", args mkString " ")
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "npa", args mkString " ")
+        }
       }
 
       Project.defaultSettings ++ defaultAgileAndroidSettings
@@ -76,15 +91,21 @@ object Plugin extends Plugin
       try
       {
         val dirs = Scaffold.scaffoldFromModel((classDirectory in Compile).value, sourceDirectory.value, sourceDirectory.value, (externalDependencyClasspath in Runtime).value, model(0))
-
-        UsageStatistics.log(sourceDirectory.value, "scaffold", model(0))
+        
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "scaffold", model(0))
+        }
         streams.value.log.info(dirs.toString)
       }
       catch
       {
         case exception: Throwable =>
         {
-          UsageStatistics.log(sourceDirectory.value, "scaffold", model(0), false)
+          if (sendAnonymousUsageStatistics.value)
+          {
+            UsageStatistics.log(sourceDirectory.value, "scaffold", model(0), false)
+          }
           throw exception
         }
       }
@@ -119,13 +140,19 @@ object Plugin extends Plugin
             streams.value.log.warn(missingPermissions mkString "\n")
           }
         }
-        UsageStatistics.log(sourceDirectory.value, "checkPermissions")
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "checkPermissions")
+        }
       }
       catch
       {
         case exception: Throwable =>
         {
-          UsageStatistics.log(sourceDirectory.value, "checkPermissions", "", false)
+          if (sendAnonymousUsageStatistics.value)
+          {
+            UsageStatistics.log(sourceDirectory.value, "checkPermissions", "", false)
+          }
           throw exception
         }
       }
@@ -137,14 +164,20 @@ object Plugin extends Plugin
       {
         streams.value.log.info("Generating database support classes.")
         val files = DatabaseGenerator.generate(sourceDirectory.value, (sourceManaged in Compile).value, (classDirectory in Compile).value)
-        UsageStatistics.log(sourceDirectory.value, "databaseGenerator")
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "databaseGenerator")
+        }
         files
       }
       catch
       {
         case exception: Throwable =>
         {
-          UsageStatistics.log(sourceDirectory.value, "databaseGenerator", "", false)
+          if (sendAnonymousUsageStatistics.value)
+          {
+            UsageStatistics.log(sourceDirectory.value, "databaseGenerator", "", false)
+          }
           throw exception
         }
       }
@@ -162,14 +195,21 @@ object Plugin extends Plugin
         //val tables = DatabaseGenerator.modelsToTables(models)
         //throw new Exception("\n" + (tables.map(table => table.name + ": \n" + (table.fields mkString "\n")) mkString "\n"))
         val files = DatabaseGenerator.migrateTables(sourceDirectory.value, (sourceManaged in Compile).value, (classDirectory in Compile).value, (externalDependencyClasspath in Runtime).value)
-        UsageStatistics.log(sourceDirectory.value, "migrateDatabase")
+
+        if (sendAnonymousUsageStatistics.value)
+        {
+          UsageStatistics.log(sourceDirectory.value, "migrateDatabase")
+        }
         files
       }
       catch
       {
         case exception: Throwable =>
         {
-          UsageStatistics.log(sourceDirectory.value, "migrateDatabase", "", false)
+          if (sendAnonymousUsageStatistics.value)
+          {
+            UsageStatistics.log(sourceDirectory.value, "migrateDatabase", "", false)
+          }
           throw exception
         }
       }
@@ -182,13 +222,15 @@ object Plugin extends Plugin
       scaffold <<= scaffold dependsOn(compile in Compile),
       checkPermissions <<= checkPermissionsTask dependsOn(Keys.`package` in Compile),
       permissionsAddAutomatically := true,
+      sendAnonymousUsageStatistics := true,
       migrateDatabase <<= migrateDatabaseTask dependsOn(compile in Compile),
       sourceGenerators in Compile <+= databaseGeneratorTask
     )
 
     // this should be added in ~/.sbt/0.13/npa.sbt
     val agileAndroidNewProjectTask : Seq[sbt.Def.Setting[_]] = Seq(
-      npa := npaTask.evaluated
+      npa := npaTask.evaluated,
+      sendAnonymousUsageStatistics := true
     )
   }
 }
