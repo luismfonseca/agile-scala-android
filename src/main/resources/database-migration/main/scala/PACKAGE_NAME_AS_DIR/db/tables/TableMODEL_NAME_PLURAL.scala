@@ -14,8 +14,8 @@ import PACKAGE_NAME.App
 import PACKAGE_MODELS._
 
 case class MODEL_NAME_AS_ISRow(TABLE_ROW_FIELDS)
-{TABLE_ROW_HELPERS
-}
+{
+TABLE_ROW_HELPERS}
 
 class TableTABLE_NAME(tag: Tag) extends Table[MODEL_NAME_AS_ISRow](tag, "MODEL_NAME_AS_IS")
 {
