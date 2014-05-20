@@ -8,6 +8,8 @@ android.Plugin.androidBuild
 
 defaultAgileAndroidSettings
 
+sendAnonymousUsageStatistics := false
+
 // Proguard configuration
 proguardCache in Android ++= Seq(
   ProguardCache("org.scaloid") % "org.scaloid",
