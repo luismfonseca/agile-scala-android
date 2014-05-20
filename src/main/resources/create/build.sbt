@@ -26,7 +26,8 @@ proguardOptions in Android ++= Seq(
   "-keep public class org.sqldroid.**",
   "-keep class scala.collection.Seq.**",
   "-keep class scala.concurrent.Future$.**",
-  "-keep class scala.slick.driver.JdbcProfile$Implicits"
+  "-keep class scala.slick.driver.JdbcProfile$Implicits",
+  "-keep class org.scaloid.*"
 )
 
 // External library dependecies
