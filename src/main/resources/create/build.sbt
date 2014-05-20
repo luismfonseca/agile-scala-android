@@ -38,7 +38,7 @@ resolvers += "Mandubian repository snapshots" at "https://github.com/mandubian/m
 libraryDependencies ++= Seq(
   "org.scaloid" %% "scaloid" % "3.3-8",
   "com.google.code.gson" % "gson" % "2.2.4",
-  "com.typesafe.slick" %% "slick" % "2.0.1",
+  "com.typesafe.slick" %% "slick" % "2.0.2",
   "org.slf4j" % "slf4j-nop" % "1.6.4"
 )
 
