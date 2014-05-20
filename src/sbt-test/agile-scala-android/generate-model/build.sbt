@@ -10,6 +10,8 @@ android.Plugin.androidBuild
 
 defaultAgileAndroidSettings
 
+sendAnonymousUsageStatistics := false
+
 seq(SbtStartScript.startScriptForClassesSettings: _*)
 
 version := "0.1"

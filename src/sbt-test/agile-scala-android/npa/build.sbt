@@ -12,6 +12,8 @@ import android.Keys._
 
 agileAndroidNewProjectTask
 
+sendAnonymousUsageStatistics := false
+
 seq(SbtStartScript.startScriptForClassesSettings: _*)
 
 version := "0.1"

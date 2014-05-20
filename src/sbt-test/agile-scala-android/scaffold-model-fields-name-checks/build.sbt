@@ -8,6 +8,8 @@ import AgileAndroidKeys._
 
 defaultAgileAndroidSettings
 
+sendAnonymousUsageStatistics := false
+
 android.Plugin.androidBuild
 
 seq(SbtStartScript.startScriptForClassesSettings: _*)
