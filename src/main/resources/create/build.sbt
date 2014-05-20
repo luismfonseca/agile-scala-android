@@ -8,6 +8,8 @@ android.Plugin.androidBuild
 
 defaultAgileAndroidSettings
 
+scalariformSettings
+
 // Proguard configuration
 proguardCache in Android ++= Seq(
   ProguardCache("org.scaloid") % "org.scaloid",
