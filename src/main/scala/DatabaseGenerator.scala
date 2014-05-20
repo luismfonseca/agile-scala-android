@@ -266,7 +266,7 @@ object DatabaseGenerator
           val defId = "  def %s = column[%s](\"%s\")"
             .format(fieldNameWithoutId, field.typeSimple, Util.camelToUnderscore(Util.uncapitalize(fieldNameWithoutId)).toUpperCase)
 
-          val defFk = "\n  def %sFK = foreignKey(\"%s_FK\", %s, App.%s)(_.%s)"
+          val defFk = "\n  def %sFK = foreignKey(\"%s_FK\", %s, App.%s)(_.%s, onDelete=ForeignKeyAction.Cascade)"
             .format(fieldNameWithoutId, Util.camelToUnderscore(fieldNameWithoutId).toUpperCase,
               fieldNameWithoutId, Util.uncapitalize(field.foreignModel.name + "s"),
               getModelIdField(field.foreignModel).name)

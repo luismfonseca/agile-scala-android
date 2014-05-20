@@ -248,5 +248,5 @@ object ModelGenerator
 
   case class Model(name: String, fields: Array[ModelField])
 
-  case class ModelField(name: String, typeSimple: String, isArray: Boolean)
+  case class ModelField(name: String, typeSimple: String, isArray: Boolean, isOption: Boolean = false)
 }

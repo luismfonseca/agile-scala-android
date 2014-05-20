@@ -8,6 +8,7 @@ import slick.driver.SQLiteDriver.SchemaDescription
 import scala.slick.driver.SQLiteDriver.simple._
 import scala.slick.jdbc.meta.MTable
 import scala.slick.lifted.AbstractTable
+import scala.slick.model.ForeignKeyAction
 IMPORT_TABLE_FIELDS_DEPENDENCIES
 import PACKAGE_NAME.App
 import PACKAGE_MODELS._
