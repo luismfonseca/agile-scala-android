@@ -18,7 +18,7 @@ protected object Android
     }
   }
 
-  def findPackageName(sourceDirectory: File) =
+  def findPackageName(sourceDirectory: File): String =
   {
     val manifestFile = findManifestPath(sourceDirectory)
 
