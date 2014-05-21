@@ -20,6 +20,8 @@ import org.scaloid.common._
 import com.google.gson.Gson
 
 IMPORT_MODEL_FIELDS_DEPENDENCIES
+import PACKAGE_TYPEDRESOURCE_IMPLICITS
+import PACKAGE_TR
 import PACKAGE_R
 import PACKAGE_MODELS.CLASS_NAME_AS_IS
 IMPORT_OTHER_MODELS
@@ -75,16 +77,15 @@ FRAGMENT_VIEW_OTHER_MODELS_FIELDS
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val view = inflater.inflate(R.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
+    val view = inflater.inflate(TR.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
     
-    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(R.layout.fragment_view_CLASS_NAME_UNDERSCORED, container, false)
+    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(TR.layout.fragment_view_CLASS_NAME_UNDERSCORED, container, false)
     
-    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findViewById(R.id.CLASS_NAME_UNDERSCORED_container).asInstanceOf[FrameLayout]
+    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findView(TR.CLASS_NAME_UNDERSCORED_container)
     CLASS_NAME_UNCAPITALIZEDFrameLayout.addView(CLASS_NAME_UNCAPITALIZEDView)
 
 FRAGMENT_VIEW_ASSIGN_FIELDS
 FRAGMENT_VIEW_ASSIGN_FIELDS_OTHER_MODELS
-
     display()
     return view
   }

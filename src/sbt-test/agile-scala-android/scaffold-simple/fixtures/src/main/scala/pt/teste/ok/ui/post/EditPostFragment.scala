@@ -1,5 +1,7 @@
 package pt.teste.ok.ui.post
 
+import scala.util.Try
+
 import android.app.ActionBar
 import android.app.Fragment
 import android.content.DialogInterface
@@ -23,6 +25,8 @@ import android.text.format.DateFormat
 import java.util.Date
 import java.util.Calendar
 
+import pt.teste.ok.TypedResource._
+import pt.teste.ok.TR
 import pt.teste.ok.R
 import pt.teste.ok.models.Post
 
@@ -59,7 +63,7 @@ class EditPostFragment extends Fragment {
       case R.id.action_done => {
         val finalPost = new Post(
           mPostTitle.getText().toString(),
-          if (mPostNumberOfLikes.getText().toString().isEmpty) 0 else Integer.parseInt(mPostNumberOfLikes.getText().toString()),
+          Try(mPostNumberOfLikes.getText().toString().toInt).getOrElse(0),
           mModel.date
         )
 
@@ -94,12 +98,12 @@ class EditPostFragment extends Fragment {
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
 
-    val actionBarButtons = inflater.inflate(R.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
+    val actionBarButtons = inflater.inflate(TR.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
 
-    val cancelActionView = actionBarButtons.findViewById(R.id.action_cancel)
+    val cancelActionView = actionBarButtons.findView(TR.action_cancel)
     cancelActionView.setOnClickListener(mActionBarListener)
 
-    val doneActionView = actionBarButtons.findViewById(R.id.action_done)
+    val doneActionView = actionBarButtons.findView(TR.action_done)
     doneActionView.setOnClickListener(mActionBarListener)
 
     getActivity().getActionBar().setCustomView(actionBarButtons)
@@ -107,16 +111,16 @@ class EditPostFragment extends Fragment {
         ActionBar.DISPLAY_SHOW_CUSTOM,
         ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM)
 
-    val view = inflater.inflate(R.layout.fragment_post, container, false)
+    val view = inflater.inflate(TR.layout.fragment_post, container, false)
 
-    val postView = inflater.inflate(R.layout.fragment_edit_post, container, false)
+    val postView = inflater.inflate(TR.layout.fragment_edit_post, container, false)
     
-    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    val postFrameLayout = view.findView(TR.post_container)
     postFrameLayout.addView(postView)
 
-    mPostTitle = postFrameLayout.findViewById(R.id.create_post_title).asInstanceOf[TextView]
-    mPostNumberOfLikes = postFrameLayout.findViewById(R.id.create_post_number_of_likes).asInstanceOf[TextView]
-    mPostDateButton = postFrameLayout.findViewById(R.id.create_post_date).asInstanceOf[Button]
+    mPostTitle = postFrameLayout.findView(TR.create_post_title)
+    mPostNumberOfLikes = postFrameLayout.findView(TR.create_post_number_of_likes)
+    mPostDateButton = postFrameLayout.findView(TR.create_post_date)
     mPostDateButton.onClick({
       
         val calendar = Calendar.getInstance()

@@ -22,6 +22,8 @@ import com.google.gson.Gson
 import android.text.format.DateFormat
 import java.util.Date
 
+import pt.testing.whaa.TypedResource._
+import pt.testing.whaa.TR
 import pt.testing.whaa.R
 import pt.testing.whaa.models.Post
 import pt.testing.whaa.models.Author
@@ -88,24 +90,24 @@ class PostFragment extends Fragment {
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val view = inflater.inflate(R.layout.fragment_post, container, false)
+    val view = inflater.inflate(TR.layout.fragment_post, container, false)
     
-    val postView = inflater.inflate(R.layout.fragment_view_post, container, false)
+    val postView = inflater.inflate(TR.layout.fragment_view_post, container, false)
     
-    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    val postFrameLayout = view.findView(TR.post_container)
     postFrameLayout.addView(postView)
 
-    mPostDate = postFrameLayout.findViewById(R.id.post_date).asInstanceOf[TextView]
-    mPostTitle = postFrameLayout.findViewById(R.id.post_title).asInstanceOf[TextView]
-    mPostContent = postFrameLayout.findViewById(R.id.post_content).asInstanceOf[TextView]
+    mPostDate = postFrameLayout.findView(TR.post_date)
+    mPostTitle = postFrameLayout.findView(TR.post_title)
+    mPostContent = postFrameLayout.findView(TR.post_content)
 
-    val postAuthorView = inflater.inflate(R.layout.fragment_view_author, container, false)
+    val postAuthorView = inflater.inflate(TR.layout.fragment_view_author, container, false)
 
-    val authorFrameLayout = postFrameLayout.findViewById(R.id.post_author_container).asInstanceOf[FrameLayout]
+    val authorFrameLayout = postFrameLayout.findView(TR.post_author_container)
     authorFrameLayout.addView(postAuthorView)
 
-    mAuthorName = authorFrameLayout.findViewById(R.id.author_name).asInstanceOf[TextView]
-    mAuthorAge = authorFrameLayout.findViewById(R.id.author_age).asInstanceOf[TextView]
+    mAuthorName = authorFrameLayout.findView(TR.author_name)
+    mAuthorAge = authorFrameLayout.findView(TR.author_age)
 
     mComentsView = new LinearLayout(getActivity())
     mComentsView.setOrientation(LinearLayout.VERTICAL)
@@ -113,10 +115,10 @@ class PostFragment extends Fragment {
 	// TODO: Load actual values from database
 	mComentsListAdapter = new CommentListAdapter(getActivity(), Array[Comment]())
 
-    val comentsFrameLayout = postFrameLayout.findViewById(R.id.post_coments_container).asInstanceOf[FrameLayout]
+    val comentsFrameLayout = postFrameLayout.findView(TR.post_coments_container)
     comentsFrameLayout.addView(mComentsView)
 
-    mComentsAddButton = postFrameLayout.findViewById(R.id.post_add_to_coments).asInstanceOf[Button]
+    mComentsAddButton = postFrameLayout.findView(TR.post_add_to_coments)
 	mComentsAddButton.setOnClickListener(new View.OnClickListener() {
     
 	  override def onClick(view: View): Unit = {
@@ -126,7 +128,6 @@ class PostFragment extends Fragment {
         startActivity(intent)
 	  }
 	})
-
 
     display()
     return view

@@ -4,10 +4,10 @@
 	// TODO: Load actual values from database
 	mFIELD_NAME_CAPITALIZEDListAdapter = new FIELD_TYPE_AS_ISListAdapter(getActivity(), Array[FIELD_TYPE_AS_IS]())
 
-    val FIELD_NAME_AS_ISFrameLayout = CLASS_NAME_UNCAPITALIZEDFrameLayout.findViewById(R.id.CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED_container).asInstanceOf[FrameLayout]
+    val FIELD_NAME_AS_ISFrameLayout = CLASS_NAME_UNCAPITALIZEDFrameLayout.findView(TR.CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED_container)
     FIELD_NAME_AS_ISFrameLayout.addView(mFIELD_NAME_CAPITALIZEDView)
 
-    mFIELD_NAME_CAPITALIZEDAddButton = CLASS_NAME_UNCAPITALIZEDFrameLayout.findViewById(R.id.CLASS_NAME_UNDERSCORED_add_to_FIELD_NAME_UNDERSCORED).asInstanceOf[Button]
+    mFIELD_NAME_CAPITALIZEDAddButton = CLASS_NAME_UNCAPITALIZEDFrameLayout.findView(TR.CLASS_NAME_UNDERSCORED_add_to_FIELD_NAME_UNDERSCORED)
 	mFIELD_NAME_CAPITALIZEDAddButton.setOnClickListener(new View.OnClickListener() {
     
 	  override def onClick(view: View): Unit = {

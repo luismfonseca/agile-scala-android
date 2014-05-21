@@ -1,5 +1,7 @@
 package PACKAGE_UI.CLASS_NAME_UNDERSCORED
 
+import scala.util.Try
+
 import android.app.ActionBar
 import android.app.Fragment
 import android.content.DialogInterface
@@ -18,6 +20,8 @@ import org.scaloid.common._
 import com.google.gson.Gson
 
 IMPORT_EDIT_FRAGMENT_FIELDS_DEPENDENCIES
+import PACKAGE_TYPEDRESOURCE_IMPLICITS
+import PACKAGE_TR
 import PACKAGE_R
 import PACKAGE_MODELS.CLASS_NAME_AS_IS
 IMPORT_OTHER_MODELS
@@ -82,12 +86,12 @@ RANDOM_DATA_COMMA_SEPARATED
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
 
-    val actionBarButtons = inflater.inflate(R.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
+    val actionBarButtons = inflater.inflate(TR.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
 
-    val cancelActionView = actionBarButtons.findViewById(R.id.action_cancel)
+    val cancelActionView = actionBarButtons.findView(TR.action_cancel)
     cancelActionView.setOnClickListener(mActionBarListener)
 
-    val doneActionView = actionBarButtons.findViewById(R.id.action_done)
+    val doneActionView = actionBarButtons.findView(TR.action_done)
     doneActionView.setOnClickListener(mActionBarListener)
 
     getActivity().getActionBar().setCustomView(actionBarButtons)
@@ -95,11 +99,11 @@ RANDOM_DATA_COMMA_SEPARATED
         ActionBar.DISPLAY_SHOW_CUSTOM,
         ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM)
 
-    val view = inflater.inflate(R.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
+    val view = inflater.inflate(TR.layout.fragment_CLASS_NAME_UNDERSCORED, container, false)
 
-    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(R.layout.fragment_edit_CLASS_NAME_UNDERSCORED, container, false)
+    val CLASS_NAME_UNCAPITALIZEDView = inflater.inflate(TR.layout.fragment_edit_CLASS_NAME_UNDERSCORED, container, false)
     
-    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findViewById(R.id.CLASS_NAME_UNDERSCORED_container).asInstanceOf[FrameLayout]
+    val CLASS_NAME_UNCAPITALIZEDFrameLayout = view.findView(TR.CLASS_NAME_UNDERSCORED_container)
     CLASS_NAME_UNCAPITALIZEDFrameLayout.addView(CLASS_NAME_UNCAPITALIZEDView)
 
 FRAGMENT_EDIT_ASSIGN_FIELDS

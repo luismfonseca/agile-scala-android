@@ -1,5 +1,7 @@
 package pt.testing.whaa.ui.post
 
+import scala.util.Try
+
 import android.app.ActionBar
 import android.app.Fragment
 import android.content.DialogInterface
@@ -23,6 +25,8 @@ import android.text.format.DateFormat
 import java.util.Date
 import java.util.Calendar
 
+import pt.testing.whaa.TypedResource._
+import pt.testing.whaa.TR
 import pt.testing.whaa.R
 import pt.testing.whaa.models.Post
 import pt.testing.whaa.models.Author
@@ -102,12 +106,12 @@ null,
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
 
-    val actionBarButtons = inflater.inflate(R.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
+    val actionBarButtons = inflater.inflate(TR.layout.actionbar_edit_cancel_done, new LinearLayout(getActivity()), false)
 
-    val cancelActionView = actionBarButtons.findViewById(R.id.action_cancel)
+    val cancelActionView = actionBarButtons.findView(TR.action_cancel)
     cancelActionView.setOnClickListener(mActionBarListener)
 
-    val doneActionView = actionBarButtons.findViewById(R.id.action_done)
+    val doneActionView = actionBarButtons.findView(TR.action_done)
     doneActionView.setOnClickListener(mActionBarListener)
 
     getActivity().getActionBar().setCustomView(actionBarButtons)
@@ -115,14 +119,14 @@ null,
         ActionBar.DISPLAY_SHOW_CUSTOM,
         ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM)
 
-    val view = inflater.inflate(R.layout.fragment_post, container, false)
+    val view = inflater.inflate(TR.layout.fragment_post, container, false)
 
-    val postView = inflater.inflate(R.layout.fragment_edit_post, container, false)
+    val postView = inflater.inflate(TR.layout.fragment_edit_post, container, false)
     
-    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    val postFrameLayout = view.findView(TR.post_container)
     postFrameLayout.addView(postView)
 
-    mPostDateButton = postFrameLayout.findViewById(R.id.create_post_date).asInstanceOf[Button]
+    mPostDateButton = postFrameLayout.findView(TR.create_post_date)
     mPostDateButton.onClick({
       
         val calendar = Calendar.getInstance()
@@ -147,18 +151,18 @@ null,
         }, year, month, day).show()
 
     })
-    mPostTitle = postFrameLayout.findViewById(R.id.create_post_title).asInstanceOf[TextView]
-    mPostContent = postFrameLayout.findViewById(R.id.create_post_content).asInstanceOf[TextView]
+    mPostTitle = postFrameLayout.findView(TR.create_post_title)
+    mPostContent = postFrameLayout.findView(TR.create_post_content)
 
-    val postAuthorView = inflater.inflate(R.layout.fragment_view_author, container, false)
+    val postAuthorView = inflater.inflate(TR.layout.fragment_view_author, container, false)
 
-    val authorFrameLayout = postFrameLayout.findViewById(R.id.post_author_container).asInstanceOf[FrameLayout]
+    val authorFrameLayout = postFrameLayout.findView(TR.post_author_container)
     authorFrameLayout.addView(postAuthorView)
 
-    mAuthorName = authorFrameLayout.findViewById(R.id.author_name).asInstanceOf[TextView]
-    mAuthorAge = authorFrameLayout.findViewById(R.id.author_age).asInstanceOf[TextView]
+    mAuthorName = authorFrameLayout.findView(TR.author_name)
+    mAuthorAge = authorFrameLayout.findView(TR.author_age)
 
-    mChangeAuthorButton = postFrameLayout.findViewById(R.id.post_change_author).asInstanceOf[Button]
+    mChangeAuthorButton = postFrameLayout.findView(TR.post_change_author)
     mChangeAuthorButton.onClick({
 
     val dialog = new AlertDialogBuilder("Choose the Author...")(getActivity()) {

@@ -13,8 +13,10 @@ import android.text.format.DateFormat
 import java.util.Date
 
 
-import pt.testing.whaa.models.Post
+import pt.testing.whaa.TypedResource._
+import pt.testing.whaa.TR
 import pt.testing.whaa.R
+import pt.testing.whaa.models.Post
 
 class PostListAdapter(val context: Activity, val items: Array[Post]) extends ArrayAdapter[Post](context, R.layout.item_post, items)  {
 
@@ -26,15 +28,14 @@ class PostListAdapter(val context: Activity, val items: Array[Post]) extends Arr
     val rowView =
       if (convertView == null) {
         val layoutInflater = LayoutInflater.from(context)
-        val newRowView = layoutInflater.inflate(R.layout.item_post, null)
+        val newRowView = layoutInflater.inflate(TR.layout.item_post, null)
 
         // Configure view holder
         val viewHolder = new ViewHolder(
-          newRowView.findViewById(R.id.item_post_date).asInstanceOf[TextView],
-          newRowView.findViewById(R.id.item_post_title).asInstanceOf[TextView],
-          newRowView.findViewById(R.id.item_post_content).asInstanceOf[TextView],
-
-          newRowView.findViewById(R.id.item_post_placeholder).asInstanceOf[ImageView]
+          newRowView.findView(TR.item_post_date),
+          newRowView.findView(TR.item_post_title),
+          newRowView.findView(TR.item_post_content),
+          newRowView.findView(TR.item_post_placeholder)
         )
         newRowView.setTag(viewHolder)
         newRowView
@@ -50,7 +51,6 @@ class PostListAdapter(val context: Activity, val items: Array[Post]) extends Arr
       viewHolder.date.setText(DateFormat.format("dd-MM-yyyy", items(position).date))
       viewHolder.title.setText(items(position).title)
       viewHolder.content.setText(items(position).content)
-
     }
 
     return rowView

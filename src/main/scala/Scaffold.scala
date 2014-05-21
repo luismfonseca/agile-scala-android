@@ -67,6 +67,8 @@ object Scaffold
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_UI" -> (packageName + ".ui"),
       "PACKAGE_R" -> (packageName + ".R"),
+      "PACKAGE_TR" -> (packageName + ".TR"),
+      "PACKAGE_TYPEDRESOURCE_IMPLICITS" -> (packageName + ".TypedResource._"),
       "PACKAGE_MODELS" -> (packageName + ".models")
     )
   }

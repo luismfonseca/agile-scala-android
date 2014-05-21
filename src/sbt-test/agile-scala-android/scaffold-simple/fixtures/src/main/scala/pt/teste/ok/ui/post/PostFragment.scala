@@ -22,6 +22,8 @@ import com.google.gson.Gson
 import android.text.format.DateFormat
 import java.util.Date
 
+import pt.teste.ok.TypedResource._
+import pt.teste.ok.TR
 import pt.teste.ok.R
 import pt.teste.ok.models.Post
 
@@ -80,17 +82,16 @@ class PostFragment extends Fragment {
   }
 
   override def onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View = {
-    val view = inflater.inflate(R.layout.fragment_post, container, false)
+    val view = inflater.inflate(TR.layout.fragment_post, container, false)
     
-    val postView = inflater.inflate(R.layout.fragment_view_post, container, false)
+    val postView = inflater.inflate(TR.layout.fragment_view_post, container, false)
     
-    val postFrameLayout = view.findViewById(R.id.post_container).asInstanceOf[FrameLayout]
+    val postFrameLayout = view.findView(TR.post_container)
     postFrameLayout.addView(postView)
 
-    mPostTitle = postFrameLayout.findViewById(R.id.post_title).asInstanceOf[TextView]
-    mPostNumberOfLikes = postFrameLayout.findViewById(R.id.post_number_of_likes).asInstanceOf[TextView]
-    mPostDate = postFrameLayout.findViewById(R.id.post_date).asInstanceOf[TextView]
-
+    mPostTitle = postFrameLayout.findView(TR.post_title)
+    mPostNumberOfLikes = postFrameLayout.findView(TR.post_number_of_likes)
+    mPostDate = postFrameLayout.findView(TR.post_date)
 
 
     display()

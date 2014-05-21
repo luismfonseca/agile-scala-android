@@ -1,0 +1,1 @@
+COMMA_NEW_LINE_IF_NOT_FIRST          Try(mMODEL_PREFIXFIELD_NAME_CAPITALIZED.getText().toString().toDouble).getOrElse(0.0)

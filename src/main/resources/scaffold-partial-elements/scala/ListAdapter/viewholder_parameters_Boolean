@@ -1,1 +1,1 @@
-          newRowView.findViewById(R.id.item_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED).asInstanceOf[TextView],
+          newRowView.findView(TR.item_CLASS_NAME_UNDERSCORED_FIELD_NAME_UNDERSCORED),

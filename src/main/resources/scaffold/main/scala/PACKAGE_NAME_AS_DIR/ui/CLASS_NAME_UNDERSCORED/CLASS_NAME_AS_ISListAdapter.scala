@@ -11,8 +11,10 @@ import android.widget.TextView
 
 IMPORT_MODEL_FIELDS_DEPENDENCIES
 
-import PACKAGE_MODELS.CLASS_NAME_AS_IS
+import PACKAGE_TYPEDRESOURCE_IMPLICITS
+import PACKAGE_TR
 import PACKAGE_R
+import PACKAGE_MODELS.CLASS_NAME_AS_IS
 
 class CLASS_NAME_AS_ISListAdapter(val context: Activity, val items: Array[CLASS_NAME_AS_IS]) extends ArrayAdapter[CLASS_NAME_AS_IS](context, R.layout.item_CLASS_NAME_UNDERSCORED, items)  {
 
@@ -24,12 +26,11 @@ class CLASS_NAME_AS_ISListAdapter(val context: Activity, val items: Array[CLASS_
     val rowView =
       if (convertView == null) {
         val layoutInflater = LayoutInflater.from(context)
-        val newRowView = layoutInflater.inflate(R.layout.item_CLASS_NAME_UNDERSCORED, null)
+        val newRowView = layoutInflater.inflate(TR.layout.item_CLASS_NAME_UNDERSCORED, null)
 
         // Configure view holder
         val viewHolder = new ViewHolder(
-LIST_ADAPTER_VIEWHOLDER_PARAMETERS
-          newRowView.findViewById(R.id.item_CLASS_NAME_UNDERSCORED_placeholder).asInstanceOf[ImageView]
+LIST_ADAPTER_VIEWHOLDER_PARAMETERS          newRowView.findView(TR.item_CLASS_NAME_UNDERSCORED_placeholder)
         )
         newRowView.setTag(viewHolder)
         newRowView
@@ -42,8 +43,7 @@ LIST_ADAPTER_VIEWHOLDER_PARAMETERS
     val viewHolder = rowView.getTag().asInstanceOf[ViewHolder]
     viewHolder.placeholder.setImageResource(R.drawable.ic_placeholder)
     if (items(position) != null) {
-VIEWHOLDER_DISPLAY_FIELDS
-    }
+VIEWHOLDER_DISPLAY_FIELDS    }
 
     return rowView
   }
