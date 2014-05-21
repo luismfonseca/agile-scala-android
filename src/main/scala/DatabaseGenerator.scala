@@ -294,9 +294,9 @@ object DatabaseGenerator
         field.typeSimple match {
           case "Date" =>
             """
-              |  implicit def string2Date = MappedColumnType.base[Date, String](
-              |    d => d.toString,
-              |    string => new Date()
+              |  implicit def long2Date = MappedColumnType.base[Date, Long](
+              |    date => date.getTime,
+              |    long => new Date(long)
               |  )
               |""".stripMargin
           case _ => ""
