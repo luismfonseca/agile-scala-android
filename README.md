@@ -3,7 +3,7 @@
 
 agile-scala-android is an extension for the Scala build tool [sbt][] which aims to make it as simple as possible to get started with Scala on Android.
 
-Together with several technologies, you can create and build a simple Android Scala project in a matter of seconds.
+Together with several technologies, you can create and build a simple Android Scala project in a matter of seconds. The sbt plugin [pfn/android-sdk-plugin][] is used to handle the Android building aspect, and this plugin brings more features that are added ontop of it.
 
 ## Getting started
 
@@ -56,7 +56,7 @@ To perform a migration you can use the following command:
 
     $ migrateDatabase
 
-This feature is currently under development and there are some known limitations: models can't have arrays of a primitive type; models can't have an array of themselves.
+This feature is currently under development and there are some known limitations: new tables are generated but the migration file must be created manually.
 
 
 **Scaffolding**
@@ -94,11 +94,11 @@ Now we get the following:
 </p>
 
 
-As with the database, the current main known limitation is a model with an array of primitive types. The current workaround is to create a new model and use it as the array.
+The current main known limitation is a model with an array of primitive types - a possible workaround is to create a new model and use it as the array.
 
 **Automatic Android permissions**
 
-When programming in Android, writing code that requires a specific permission is very common. However, there are 3 possible situations: (i) you remembered you needed the permission and manually added; (ii) the application crashed and you got a descriptive error message; (iii) the application crashed and you had to go to stackoverflow to get your awnser. In any of these cases, work is placed on the developer --- this is far from ideal.
+When programming in Android, writing code that requires a specific permission is very common. However, there are 3 possible situations: (i) you remembered you needed the permission and manually added; (ii) the application crashed and you got a descriptive error message; (iii) the application crashed and you had to go to Stackoverflow to get your awnser. In any of these cases, work is placed on the developer --- this is far from ideal.
 
 [PScout][] is a tool that maps the Android API function calls to the required permission(s). This plugin makes use of this information and checks if the application being developed calls a permission that is missing from the manifest.
 
@@ -132,8 +132,8 @@ And don't forget to create and run tests:
 
 
 [sbt]: https://github.com/harrah/xsbt/wiki
+[pfn/android-sdk-plugin]: https://github.com/pfn/android-sdk-plugin
 [np]: https://github.com/softprops/np
 [Ruby on Rails]: http://rubyonrails.org
 [CRUD]: http://en.wikipedia.org/wiki/Create,_read,_update_and_delete
 [PScout]: http://pscout.csl.toronto.edu/PScout-CCS2012-slides.pdf
-
