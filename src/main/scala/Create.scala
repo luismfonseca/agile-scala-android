@@ -10,7 +10,7 @@ object Create
   def templateKeys(sbtVersion: String, pluginVersion: String, packageName: String, minSdkVersion: Int) = {
     ListMap[String, String](
       "SBT_VERSION" -> sbtVersion,
-      "PLUGIN_VERSION" -> pluginVersion,
+      "PLUGIN_VERSION" -> "0.4",
       "PACKAGE_NAME_AS_DIR" -> packageName.replace('.', '/'),
       "PACKAGE_NAME" -> packageName,
       "PACKAGE_MODELS" -> (packageName + ".models"),

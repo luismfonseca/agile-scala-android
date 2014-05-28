@@ -14,7 +14,7 @@ organization := "pt.pimentelfonseca"
 
 profileName := "pt.pimentelfonseca"
 
-version := "0.3-SNAPSHOT"
+version := "0.4"
 
 //scalaVersion := "2.11.0"
 //libraryDependencies ++= Seq(
@@ -30,7 +30,9 @@ licenses := Seq("MIT License" -> url("https://raw.githubusercontent.com/luismfon
 //    scalaV = "2.10"    // Scala version compiled the plugin
 //)
 
-addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.14")
+libraryDependencies += "com.google.code.gson" % "gson" % "2.2.4"
+
+addSbtPlugin("com.hanhuy.sbt" % "android-sdk-plugin" % "1.2.16")
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
