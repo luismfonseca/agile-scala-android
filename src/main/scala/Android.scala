@@ -59,7 +59,7 @@ protected object Android
 
     val manifest = XML.loadFile(manifestFile)
 
-    val missingPermissionsXML = missingPermissions.map(permission => <permission android:name={permission}></permission>)
+    val missingPermissionsXML = missingPermissions.map(permission => <uses-permission android:name={permission}></uses-permission>)
 
     val newManifest = manifest.copy(child = missingPermissionsXML ++ manifest.child)
 

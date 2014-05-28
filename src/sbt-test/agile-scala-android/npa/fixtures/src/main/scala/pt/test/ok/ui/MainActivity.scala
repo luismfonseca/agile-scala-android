@@ -11,7 +11,7 @@ import pt.test.ok.R
 class MainActivity extends SActivity {
 
   onCreate {
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main)
   }
   
   override def onCreateOptionsMenu(menu: Menu): Boolean = {
