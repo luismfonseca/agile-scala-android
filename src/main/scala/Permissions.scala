@@ -122,7 +122,7 @@ object Permissions
 
     val intentPermissions = mappedIntentPermissions(16)
 
-    sourceFilesNoComments.foldLeft(Array[String]())
+    val intentPermissionsFound = sourceFilesNoComments.foldLeft(Array[String]())
     {
       (neededPermissions, fileContent) =>
       {
@@ -145,6 +145,15 @@ object Permissions
             }
           }
       }
+    }
+
+    if (sourceFilesNoComments.exists(_.contains("http://"))) // could also yield false-positives
+    {
+      intentPermissionsFound :+ "android.permission.INTERNET"
+    }
+    else
+    {
+      intentPermissionsFound
     }
   }
 

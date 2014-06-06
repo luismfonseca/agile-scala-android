@@ -10,7 +10,7 @@ trait Migration {
 
   def version: Long = ???
 
-  def up() = ???
+  def up()
 
-  def down() = ???
+  def down()
 }

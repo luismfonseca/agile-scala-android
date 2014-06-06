@@ -48,7 +48,7 @@ protected object Android
   {
     val manifestFile = findManifestPath(sourceDirectory)
 
-    val pemissionsXML = XML.loadFile(manifestFile).child.filter(_.label == "permission")
+    val pemissionsXML = XML.loadFile(manifestFile).child.filter(_.label == "uses-permission")
 
     pemissionsXML.map(_.attribute("http://schemas.android.com/apk/res/android", "name").getOrElse(new Text("")).head.text)
   }

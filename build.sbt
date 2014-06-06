@@ -14,7 +14,7 @@ organization := "pt.pimentelfonseca"
 
 profileName := "pt.pimentelfonseca"
 
-version := "0.5"
+version := "0.6"
 
 //scalaVersion := "2.11.0"
 //libraryDependencies ++= Seq(
